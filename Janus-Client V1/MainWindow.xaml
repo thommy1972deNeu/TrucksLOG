@@ -20,14 +20,14 @@
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
-            <Button Click="DeployCupCakes" Content="Deploy CupCakes">
+            <Button Click="DeployCupCakes" Content="Kaffeekasse">
                 <Button.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconModern Width="22"
+                            <iconPacks:PackIconSimpleIcons Width="22"
                                         Height="22"
                                         VerticalAlignment="Center"
-                                        Kind="FoodCupcake" />
+                                        Kind="BuyMeACoffee" />
                             <TextBlock Margin="4 0 0 0"
                          VerticalAlignment="Center"
                          Text="{Binding}" />
