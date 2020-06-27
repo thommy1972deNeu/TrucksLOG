@@ -139,8 +139,72 @@
         </StatusBar>
 
 
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="70" />
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="205"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="205*"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBox AcceptsReturn="True" Name="txtEditor" />
+            <!-- LKW ICONS ANFANG-->
+
+
+            <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="14" Background="Gray"/>
+            <Image Grid.Row="2" Grid.Column="2" Margin="5" Source="{iconPacks:MaterialImage Kind=CarBrakeAlert}"/>
+            <Image Grid.Row="2" Grid.Column="3" Margin="5" Source="{iconPacks:MaterialImage Kind=CarBrakeParking}"/>
+            <Image Grid.Row="2" Grid.Column="4" Margin="5" Source="{iconPacks:MaterialImage Kind=Engine}" />
+            <Image Grid.Row="2" Grid.Column="5" Margin="5" Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" />
+            <Image Grid.Row="2" Grid.Column="6" Margin="5" Source="{iconPacks:MaterialImage Kind=Battery10}" />
+            <Image Grid.Row="2" Grid.Column="7" Margin="5" Source="{iconPacks:MaterialImage Kind=CarTireAlert}" />
+            <Image Grid.Row="2" Grid.Column="8" Margin="5" Source="{iconPacks:MaterialImage Kind=HydraulicOilLevel}" />
+            <Image Grid.Row="2" Grid.Column="9" Margin="5" Source="{iconPacks:FeatherIconsImage Kind=BatteryCharging}"/>
+            <Image Grid.Row="2" Grid.Column="10" Margin="5" Source="{iconPacks:FontAwesomeImage Kind=WaterSolid}"/>
+            <!-- LKW ICONS ENDE  -->
+
+            <!--  TOUR INFORMATIONEN  -->
+            <Label Content="SPEED KM/H" Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="4" FontSize="36" HorizontalContentAlignment="Center"/>
+            <Label Content="TourInfo1" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="12" HorizontalContentAlignment="Center" FontSize="18" />
+            <Label Content="TourInfo2" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="12" HorizontalContentAlignment="Center" FontSize="18" />
+            <!-- TOUR INFORMATIONEN ENDE-->
+            
+            <!-- TEMPOLIMIT  -->
+            <Border Background="White" Grid.Row="6" Grid.Column="9" Grid.ColumnSpan="2" Grid.RowSpan="2" BorderBrush="Red" BorderThickness="20" CornerRadius="150" >
+                <Label Content="80" FontSize="65" FontWeight="Bold" Foreground="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            </Border>
+
+            <Border Grid.Column="1" Grid.Row="6" Grid.RowSpan="1" Grid.ColumnSpan="1" Background="Gray" Margin="5,5,5,0" CornerRadius="20,20,0,0">
+                <Image Source="{iconPacks:OcticonsImage Kind=Dashboard}" Grid.Row="7" Margin="10" Grid.RowSpan="1" Grid.ColumnSpan="1" Grid.Column="1" />
+            </Border>
+            
+            <Border Grid.Column="1" Grid.Row="7" Grid.RowSpan="1" Grid.ColumnSpan="1" Background="Gray" Margin="5,0,5,5" CornerRadius="0,0,20,20">
+                <Label Content="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="32"/>
+            </Border>
+            
+            
+        </Grid>
 
 
     </DockPanel>

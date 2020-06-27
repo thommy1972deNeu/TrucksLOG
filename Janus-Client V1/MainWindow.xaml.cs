@@ -48,8 +48,10 @@ namespace Janus_Client_V1
         }
 
 
-        private void TelemetryOnJobStarted(object sender, EventArgs e) =>
-    MessageBox.Show("Just started job OR loaded game with active.");
+        private void TelemetryOnJobStarted(object sender, EventArgs e)
+        {
+
+        }
 
         private void TelemetryJobCancelled(object sender, EventArgs e) =>
             MessageBox.Show("Job Cancelled");
@@ -99,7 +101,16 @@ namespace Janus_Client_V1
 
         private void Lade_Voreinstellungen()
         {
-            Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
+            if (string.IsNullOrEmpty(REG.Lesen("Config", "Farbschema")))
+            {
+                REG.Schreiben("Config", "Farbschema", "Dark.Blue");
+            } else
+            {
+                Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
+            }
+                
+
+          
         }
 
         private void LaunchGitHubSite(object sender, System.Windows.RoutedEventArgs e)
