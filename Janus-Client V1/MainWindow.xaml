@@ -6,12 +6,64 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                  mc:Ignorable="d"
-        Title="Projekt-Janus Client V1" Height="700" Width="1200">
+                 SaveWindowPosition="True"
+                 FontFamily="Oswald"
+        Title="Projekt-Janus Client V1" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png">
 
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl>
             <mah:Flyout x:Name="LeftFlyOut" Width="270">
                 <StackPanel Orientation="Vertical">
+                    <Label Content="Farbschema wählen:"/>
+                    <ComboBox x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged">
+                        <ComboBoxItem Tag="Dark.Red">Dunkel Rot</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Green">Dunkel Grün</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Blue">Dunkel Blau</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Purple">Dunkel PurPur</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Orange">Dunkel Orange</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Lime">Dunkel Limette</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Emerald">Dunkel Emerald</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Teal">Dunkel Teal</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Cyan">Dunkel Cyan</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Cobalt">Dunkel Cobald</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Indigo">Dunkel Indigo</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Violet">Dunkel Violett</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Pink">Dunkel Pink</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Magenta">Dunkel Magenta</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Crimson">Dunkel Crimson</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Amber">Dunkel Amber</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Yellow">Dunkel Gelb</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Brown">Dunkel Braun</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Olive">Dunkel Olive</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Steel">Dunkel Stahl</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Mauve">Dunkel Mauve</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Taupe">Dunkel Taupe</ComboBoxItem>
+                        <ComboBoxItem Tag="Dark.Sienna">Dunkel Wüste</ComboBoxItem>
+
+                        <ComboBoxItem Tag="Light.Red">Hell Rot</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Green">Hell Grün</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Blue">Hell Blau</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Purple">Hell PurPur</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Orange">Hell Orange</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Lime">Hell Limette</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Emerald">Hell Emerald</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Teal">Hell Teal</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Cyan">Hell Cyan</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Cobalt">Hell Cobald</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Indigo">Hell Indigo</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Violet">Hell Violett</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Pink">Hell Pink</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Magenta">Hell Magenta</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Crimson">Hell Crimson</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Amber">Hell Amber</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Yellow">Hell Gelb</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Brown">Hell Braun</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Olive">Hell Olive</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Steel">Hell Stahl</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Mauve">Hell Mauve</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Taupe">Hell Taupe</ComboBoxItem>
+                        <ComboBoxItem Tag="Light.Sienna">Hell Wüste</ComboBoxItem>
+                    </ComboBox>
 
                     <mah:ToggleSwitch Header="DarkMode" OnContent="An" OffContent="Aus" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
                     <Separator/>
@@ -35,16 +87,13 @@
                 </ToggleButton.ContentTemplate>
 
             </ToggleButton> >
-
-
-
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
 
-            <Button Click="LaunchGitHubSite" ToolTip="Open up the GitHub site">
+            <Button Click="LaunchGitHubSite" ToolTip="Open up the GitHub Site">
                 <iconPacks:PackIconModern Width="22" Height="22" Kind="SocialGithubOctocat" />
             </Button>
 
@@ -66,20 +115,35 @@
                     </DataTemplate>
                 </Button.ContentTemplate>
             </Button>
-
-
-
-
         </mah:WindowCommands>
-        
-        
-        
-        
     </mah:MetroWindow.RightWindowCommands>
 
 
 
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <StatusBar DockPanel.Dock="Bottom" Height="30" FontSize="12" HorizontalAlignment="Stretch">
+            <StatusBarItem>
+                <Label Content="{Binding TELEMETRY_VERSION}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label Content="{Binding DLL_VERSION}" />
+            </StatusBarItem>
+
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <StatusBarItem  Content="{Binding CLIENT_VERSION}"/>
+                </StackPanel>
+            </StatusBarItem>
+
+
+        </StatusBar>
+
+
+
+        <TextBox AcceptsReturn="True" Name="txtEditor" />
+
+
+    </DockPanel>
+
+
 </mah:MetroWindow>

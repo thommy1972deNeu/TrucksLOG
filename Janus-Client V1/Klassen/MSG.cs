@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Janus_Client_V1.Klassen
 {
-    public class Messages
+    public class MSG
     {
         public async void Schreiben(string titel, string text)
         {
