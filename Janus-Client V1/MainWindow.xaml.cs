@@ -75,7 +75,6 @@ namespace Janus_Client_V1
         private void TelemetryOnJobStarted(object sender, EventArgs e)
         {
             
-
             if (!Truck_Daten.CARGO_LOADED)
             {
                 Stopwatch stopWatch = new Stopwatch(); //as timeout
@@ -93,13 +92,8 @@ namespace Janus_Client_V1
                 }
             }
 
-            
-
             var ckey = REG.Lesen("Config", "CLIENT_KEY");
             REG.Schreiben("Config", "TOUR_ID", Truck_Daten.STARTORT_ID + Truck_Daten.ZIELFIRMA_ID + Truck_Daten.ZIELORT_ID);
-
-
-            MessageBox.Show(Truck_Daten.STARTFIRMA + "_" + "_" + Truck_Daten.ZIELFIRMA + ckey);
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
@@ -157,11 +151,24 @@ namespace Janus_Client_V1
 
         private void TelemetryFined(object sender, EventArgs e)
         {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("BETRAG", Truck_Daten.BETRAG.ToString());
+            post_param.Add("GRUND", Truck_Daten.GRUND);
+            string response = API.HTTPSRequestPost(API.strafe, post_param);
+            msg.Schreiben("Strafe erhalten", "Du musstest " + Truck_Daten.BETRAG + " € Strafe bezahlen");
 
         }
 
         private void TelemetryTollgate(object sender, EventArgs e)
         {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("BETRAG", Truck_Daten.MAUT_BETRAG.ToString());
+            string response = API.HTTPSRequestPost(API.tollgate, post_param);
+            msg.Schreiben("Mautstation", "Du musstest an der Mautstation" + Truck_Daten.MAUT_BETRAG + " € bezahlen");
         }
 
         private void TelemetryFerry(object sender, EventArgs e)
@@ -180,10 +187,22 @@ namespace Janus_Client_V1
 
         private void TelemetryRefuelEnd(object sender, EventArgs e)
         {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("BETRAG", Truck_Daten.TANK_BETRAG.ToString());
+            string response = API.HTTPSRequestPost(API.tanken, post_param);
+            MessageBox.Show(Truck_Daten.TANK_BETRAG.ToString());
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("BETRAG", Truck_Daten.TANK_BETRAG.ToString());
+            string response = API.HTTPSRequestPost(API.tanken, post_param);
+            MessageBox.Show(Truck_Daten.TANK_BETRAG.ToString());
         }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
@@ -207,7 +226,7 @@ namespace Janus_Client_V1
                     Truck_Daten.ZIELFIRMA_ID = data.JobValues.CompanyDestinationId;
                     Truck_Daten.LADUNG_NAME = data.JobValues.CargoValues.Name;
                     Truck_Daten.LADUNG_ID = data.JobValues.CargoValues.Id;
-                    Truck_Daten.GEWICHT = (float)data.JobValues.CargoValues.Mass;
+                    Truck_Daten.GEWICHT = (float)data.JobValues.CargoValues.Mass/1000;
                     Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
                     Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
@@ -217,6 +236,12 @@ namespace Janus_Client_V1
                     Truck_Daten.LKW_HERSTELLER_ID = data.TruckValues.ConstantsValues.BrandId;
                     Truck_Daten.SPEED = (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
                     Truck_Daten.SPIEL = data.Game.ToString();
+
+                    Truck_Daten.BETRAG = (int)data.GamePlay.FinedEvent.Amount;
+                    Truck_Daten.GRUND = data.GamePlay.FinedEvent.Offence.ToString();
+
+                    Truck_Daten.MAUT_BETRAG = (int)data.GamePlay.TollgateEvent.PayAmount;
+                    Truck_Daten.TANK_BETRAG = data.GamePlay.RefuelEvent.Amount;
 
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM/1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";

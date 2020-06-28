@@ -72,9 +72,70 @@ namespace Janus_Client_V1.Spieldaten
         private string ladung_id;
         private int frachtschaden;
 
+        // STRAFEN
+        private int betrag;
+        private string grund;
+
+        // Tollgate
+        private int maut_betrag;
+
+        // Tanken
+        private float tank_betrag;
 
 
         // -----------------------------------------------------------------------------------
+        public float TANK_BETRAG
+        {
+            get { return tank_betrag; }
+            set
+            {
+                if (tank_betrag != value)
+                {
+                    tank_betrag = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public int MAUT_BETRAG
+        {
+            get { return maut_betrag; }
+            set
+            {
+                if (maut_betrag != value)
+                {
+                    maut_betrag = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public string GRUND
+        {
+            get { return grund; }
+            set
+            {
+                if (grund != value)
+                {
+                    grund = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public int BETRAG
+        {
+            get { return betrag; }
+            set
+            {
+                if (betrag != value)
+                {
+                    betrag = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public string SPIEL
         {

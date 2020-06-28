@@ -15,7 +15,9 @@ namespace Janus_Client_V1.Klassen
         public static string job_cancel = server + "job_cancel.php";
         public static string job_update = server + "job_update.php";
         public static string job_finish = server + "job_finish.php";
-
+        public static string strafe = server + "strafe.php";
+        public static string tollgate = server + "tollgate.php";
+        public static string tanken = server + "tanken.php";
 
         public static string HTTPSRequestPost(string url, Dictionary<string, string> postParameters)
         {
