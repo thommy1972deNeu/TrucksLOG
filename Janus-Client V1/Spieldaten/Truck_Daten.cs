@@ -11,6 +11,7 @@ namespace Janus_Client_V1.Spieldaten
         private string client_version;
         private string fahrinfo_1;
         private string fahrinfo_2;
+        private string spiel;
         // Truck Daten
         private string lkw_hersteller;
         private string lkw_hersteller_id;
@@ -74,6 +75,19 @@ namespace Janus_Client_V1.Spieldaten
 
 
         // -----------------------------------------------------------------------------------
+
+        public string SPIEL
+        {
+            get { return spiel; }
+            set
+            {
+                if (spiel != value)
+                {
+                    spiel = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public string FAHRINFO_1
         {

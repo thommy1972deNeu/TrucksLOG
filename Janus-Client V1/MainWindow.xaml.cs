@@ -123,6 +123,8 @@ namespace Janus_Client_V1
             post_param.Add("GESAMT_KM", ((float)Truck_Daten.GESAMT_KM).ToString());
             post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM/1000).ToString());
             post_param.Add("STATUS", "In Auslieferung");
+            post_param.Add("SPIEL", Truck_Daten.SPIEL);
+
             string response = API.HTTPSRequestPost(API.job_started, post_param);
             job_update_timer.Start();
         }
@@ -214,6 +216,7 @@ namespace Janus_Client_V1
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
                     Truck_Daten.LKW_HERSTELLER_ID = data.TruckValues.ConstantsValues.BrandId;
                     Truck_Daten.SPEED = (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
+                    Truck_Daten.SPIEL = data.Game.ToString();
 
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM/1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
