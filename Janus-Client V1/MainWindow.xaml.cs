@@ -4,9 +4,10 @@ using Janus_Client_V1.Spieldaten;
 using SCSSdkClient;
 using SCSSdkClient.Object;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
-using Metro.Dialogs;
+using System.Windows.Threading;
 
 namespace Janus_Client_V1
 {
@@ -19,65 +20,170 @@ namespace Janus_Client_V1
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
-
+        DispatcherTimer job_update_timer = new DispatcherTimer();
         public bool InvokeRequired { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Lade_Voreinstellungen();
-            Telemetry = new SCSSdkTelemetry();
-            Telemetry.Data += Telemetry_Data;
-            Telemetry.JobStarted += TelemetryOnJobStarted;
 
-            Telemetry.JobCancelled += TelemetryJobCancelled;
-            Telemetry.JobDelivered += TelemetryJobDelivered;
-            Telemetry.Fined += TelemetryFined;
-            Telemetry.Tollgate += TelemetryTollgate;
-            Telemetry.Ferry += TelemetryFerry;
-            Telemetry.Train += TelemetryTrain;
-            Telemetry.RefuelStart += TelemetryRefuel;
-            Telemetry.RefuelEnd += TelemetryRefuelEnd;
-            Telemetry.RefuelPayed += TelemetryRefuelPayed;
+            job_update_timer.Interval = TimeSpan.FromSeconds(5);
+            job_update_timer.Tick += timer_Tick;
 
-            this.DataContext = Truck_Daten;
 
-            Truck_Daten.CLIENT_VERSION = "Client: 1.0.0";
+            if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")))
+            {
+                CLIENT_KEY_ABFRAGE form = new CLIENT_KEY_ABFRAGE();
+                form.ShowDialog();
+                return;
+            }
+            else
+            {
+
+                Lade_Voreinstellungen();
+                Telemetry = new SCSSdkTelemetry();
+                Telemetry.Data += Telemetry_Data;
+                Telemetry.JobStarted += TelemetryOnJobStarted;
+
+                Telemetry.JobCancelled += TelemetryJobCancelled;
+                Telemetry.JobDelivered += TelemetryJobDelivered;
+                Telemetry.Fined += TelemetryFined;
+                Telemetry.Tollgate += TelemetryTollgate;
+                Telemetry.Ferry += TelemetryFerry;
+                Telemetry.Train += TelemetryTrain;
+                Telemetry.RefuelStart += TelemetryRefuel;
+                Telemetry.RefuelEnd += TelemetryRefuelEnd;
+                Telemetry.RefuelPayed += TelemetryRefuelPayed;
+
+                this.DataContext = Truck_Daten;
+
+                Truck_Daten.CLIENT_VERSION = "Client: 1.0.0";
+            }
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
+            string response = API.HTTPSRequestPost(API.job_update, post_param);
+            Console.WriteLine(response);
+        }
+
+        private void TelemetryOnJobStarted(object sender, EventArgs e)
+        {
+            
+
+            if (!Truck_Daten.CARGO_LOADED)
+            {
+                Stopwatch stopWatch = new Stopwatch(); //as timeout
+                stopWatch.Start();
+                while (String.IsNullOrWhiteSpace(Truck_Daten.STARTORT) && stopWatch.ElapsedMilliseconds < 5000)
+                {
+                    Console.WriteLine("Waiting for tour data to init");
+                }
+                stopWatch.Stop();
+                Console.WriteLine("Wait for data took " + stopWatch.ElapsedMilliseconds + " ms");
+                if (String.IsNullOrWhiteSpace(Truck_Daten.STARTORT) && stopWatch.ElapsedMilliseconds < 5000)
+                {
+                    MessageBox.Show("Could not get required data. Job couldn't start.", "ERROR", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            }
+
+            
+
+            var ckey = REG.Lesen("Config", "CLIENT_KEY");
+            REG.Schreiben("Config", "TOUR_ID", Truck_Daten.STARTORT_ID + Truck_Daten.ZIELFIRMA_ID + Truck_Daten.ZIELORT_ID);
+
+
+            MessageBox.Show(Truck_Daten.STARTFIRMA + "_" + "_" + Truck_Daten.ZIELFIRMA + ckey);
+
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("STARTORT", Truck_Daten.STARTORT.ToString());
+            post_param.Add("STARTORT_ID", Truck_Daten.STARTORT_ID);
+            post_param.Add("STARTFIRMA", Truck_Daten.STARTFIRMA);
+            post_param.Add("STARTFIRMA_ID", Truck_Daten.STARTFIRMA_ID);
+            post_param.Add("ZIELORT", Truck_Daten.ZIELORT);
+            post_param.Add("ZIELORT_ID", Truck_Daten.ZIELORT_ID);
+            post_param.Add("ZIELFIRMA", Truck_Daten.ZIELFIRMA);
+            post_param.Add("ZIELFIRMA_ID", Truck_Daten.ZIELFIRMA_ID);
+            post_param.Add("LADUNG", Truck_Daten.LADUNG_NAME);
+            post_param.Add("LADUNG_ID", Truck_Daten.LADUNG_ID);
+            post_param.Add("GEWICHT", ((float)Truck_Daten.GEWICHT/1000).ToString());
+            post_param.Add("EINKOMMEN", Truck_Daten.EINKOMMEN.ToString());
+            post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
+            post_param.Add("LKW_MODELL", Truck_Daten.LKW_MODELL);
+            post_param.Add("LKW_HERSTELLER", Truck_Daten.LKW_HERSTELLER);
+            post_param.Add("LKW_HERSTELLER_ID", Truck_Daten.LKW_HERSTELLER_ID);
+            post_param.Add("GESAMT_KM", ((float)Truck_Daten.GESAMT_KM).ToString());
+            post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM/1000).ToString());
+            post_param.Add("STATUS", "In Auslieferung");
+            string response = API.HTTPSRequestPost(API.job_started, post_param);
+            job_update_timer.Start();
+        }
+
+        private void TelemetryJobCancelled(object sender, EventArgs e)
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
+
+            string response = API.HTTPSRequestPost(API.job_cancel, post_param);
+            REG.Schreiben("Config", "TOUR_ID", "");
+            job_update_timer.Stop();
 
         }
 
+        private void TelemetryJobDelivered(object sender, EventArgs e)
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
 
-        private void TelemetryOnJobStarted(object sender, EventArgs e) =>
-    MessageBox.Show("Just started job OR loaded game with active.");
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
 
-        private void TelemetryJobCancelled(object sender, EventArgs e) =>
-            MessageBox.Show("Job Cancelled");
+            string response = API.HTTPSRequestPost(API.job_finish, post_param);
+            REG.Schreiben("Config", "TOUR_ID", "");
+            job_update_timer.Stop();
+        }
+           
 
-        private void TelemetryJobDelivered(object sender, EventArgs e) =>
-            MessageBox.Show("Job Delivered");
+        private void TelemetryFined(object sender, EventArgs e)
+        {
 
-        private void TelemetryFined(object sender, EventArgs e) =>
-            MessageBox.Show("Fined");
+        }
 
-        private void TelemetryTollgate(object sender, EventArgs e) =>
-            MessageBox.Show("Tollgate");
+        private void TelemetryTollgate(object sender, EventArgs e)
+        {
+        }
 
-        private void TelemetryFerry(object sender, EventArgs e) =>
-            MessageBox.Show("Ferry");
+        private void TelemetryFerry(object sender, EventArgs e)
+        {
 
-        private void TelemetryTrain(object sender, EventArgs e) =>
-            MessageBox.Show("Train");
-        private void TelemetryRefuel(object sender, EventArgs e) =>
-            MessageBox.Show("Test");
+        }
 
-        private void TelemetryRefuelEnd(object sender, EventArgs e) =>
-            MessageBox.Show("Test2");
+        private void TelemetryTrain(object sender, EventArgs e)
+        {
+        }
+
+        private void TelemetryRefuel(object sender, EventArgs e) 
+        {
+        }
+
+
+        private void TelemetryRefuelEnd(object sender, EventArgs e)
+        {
+        }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
-            MessageBox.Show("Fuel Payed");
         }
+
         private void Telemetry_Data(SCSTelemetry data, bool updated)
         {
             try
@@ -87,7 +193,30 @@ namespace Janus_Client_V1
                     // ALLGEMEIN
                     Truck_Daten.TELEMETRY_VERSION = "Telemetry: " + data.TelemetryVersion.Major.ToString() + "." + data.TelemetryVersion.Minor.ToString();
                     Truck_Daten.DLL_VERSION = "DLL: " + data.DllVersion.ToString();
-                    
+
+                    // Tour TEST
+                    Truck_Daten.STARTORT = data.JobValues.CitySource;
+                    Truck_Daten.STARTORT_ID = data.JobValues.CitySourceId;
+                    Truck_Daten.STARTFIRMA = data.JobValues.CompanySource;
+                    Truck_Daten.STARTFIRMA_ID = data.JobValues.CompanySourceId;
+                    Truck_Daten.ZIELORT = data.JobValues.CityDestination;
+                    Truck_Daten.ZIELORT_ID = data.JobValues.CityDestinationId;
+                    Truck_Daten.ZIELFIRMA = data.JobValues.CompanyDestination;
+                    Truck_Daten.ZIELFIRMA_ID = data.JobValues.CompanyDestinationId;
+                    Truck_Daten.LADUNG_NAME = data.JobValues.CargoValues.Name;
+                    Truck_Daten.LADUNG_ID = data.JobValues.CargoValues.Id;
+                    Truck_Daten.GEWICHT = (float)data.JobValues.CargoValues.Mass;
+                    Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
+                    Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
+                    Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
+                    Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
+                    Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
+                    Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
+                    Truck_Daten.LKW_HERSTELLER_ID = data.TruckValues.ConstantsValues.BrandId;
+                    Truck_Daten.SPEED = (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
+
+                    Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
+                    Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM/1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
 
                 }
             }
@@ -100,6 +229,12 @@ namespace Janus_Client_V1
         private void Lade_Voreinstellungen()
         {
             Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
+
+            if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID")))
+                REG.Schreiben("Config", "TOUR_ID", "");
+            if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
+                REG.Schreiben("Config", "CLIENT_KEY", ""); 
+
         }
 
         private void LaunchGitHubSite(object sender, System.Windows.RoutedEventArgs e)
@@ -107,6 +242,7 @@ namespace Janus_Client_V1
             msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut...");
         }
 
+        
         private void Beta_Tester(object sender, RoutedEventArgs e)
         {
             try

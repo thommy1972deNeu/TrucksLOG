@@ -138,9 +138,43 @@
 
         </StatusBar>
 
+        <Grid x:Name="GRID_FAHRT">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="453*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="200*"/>
+            </Grid.ColumnDefinitions>
 
 
-        <TextBox AcceptsReturn="True" Name="txtEditor" />
+            <Label Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" FontSize="50" FontFamily="Oswald" FontWeight="Bold"/>
+
+            <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_2" Content="{Binding FAHRINFO_2}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
+
+        </Grid>
+
+
+
 
 
     </DockPanel>
