@@ -6,8 +6,13 @@ namespace Janus_Client_V1.Klassen
     {
         public static string Lesen(string ordner, string name)
         {
-            RegistryKey myKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Projekt-Janus\\" + ordner);
-            return (string)myKey.GetValue(name);
+            try
+            {
+                RegistryKey myKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Projekt-Janus\\" + ordner);
+                return (string)myKey.GetValue(name);
+          
+            }
+            catch { return null; }
         }
 
         public static void Schreiben(string ordner, string name, string wert)
