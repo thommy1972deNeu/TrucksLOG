@@ -67,24 +67,70 @@ namespace Janus_Client_V1.Spieldaten
         private int einkommen;
         private float gesamt_km;
         private float rest_km;
-        private float gewicht;
+        private string gewicht;
         private string ladung_name;
         private string ladung_id;
-        private int frachtschaden;
+        private double frachtschaden;
 
         // STRAFEN
-        private int betrag;
+        private int straf_betrag;
         private string grund;
 
         // Tollgate
-        private int maut_betrag;
+        private double maut_betrag;
 
         // Tanken
-        private float tank_betrag;
+        private double tank_betrag;
 
 
+        // JOB ABGABE
+        private double frachtschaden_abgabe;
+        private bool autoparking;
+        private bool autoloading;
         // -----------------------------------------------------------------------------------
-        public float TANK_BETRAG
+        public bool AUTOLOADING
+        {
+            get { return autoloading; }
+            set
+            {
+                if (autoloading != value)
+                {
+                    autoloading = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public bool AUTOPARKING
+        {
+            get { return autoparking; }
+            set
+            {
+                if (autoparking != value)
+                {
+                    autoparking = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public double FRACHTSCHADEN_ABGABE
+        {
+            get { return frachtschaden_abgabe; }
+            set
+            {
+                if (frachtschaden_abgabe != value)
+                {
+                    frachtschaden_abgabe = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public double TANK_BETRAG
         {
             get { return tank_betrag; }
             set
@@ -97,7 +143,7 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
-        public int MAUT_BETRAG
+        public double MAUT_BETRAG
         {
             get { return maut_betrag; }
             set
@@ -124,14 +170,14 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
-        public int BETRAG
+        public int STRAF_BETRAG
         {
-            get { return betrag; }
+            get { return straf_betrag; }
             set
             {
-                if (betrag != value)
+                if (straf_betrag != value)
                 {
-                    betrag = value;
+                    straf_betrag = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -187,7 +233,7 @@ namespace Janus_Client_V1.Spieldaten
                 }
             }
         }
-        public int FRACHTSCHADEN
+        public double FRACHTSCHADEN
         {
             get { return frachtschaden; }
             set
@@ -227,7 +273,7 @@ namespace Janus_Client_V1.Spieldaten
         }
 
 
-        public float GEWICHT
+        public string GEWICHT
         {
             get { return gewicht; }
             set
