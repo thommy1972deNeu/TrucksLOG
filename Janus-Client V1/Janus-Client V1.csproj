@@ -191,6 +191,7 @@
       <DependentUpon>CLIENT_KEY_ABFRAGE.xaml</DependentUpon>
     </Compile>
     <Compile Include="Klassen\API.cs" />
+    <Compile Include="Klassen\Tankpreise.cs" />
     <Compile Include="Klassen\Utilities.cs" />
     <Compile Include="Spieldaten\Truck_Daten.cs" />
     <Page Include="CLIENT_KEY_ABFRAGE.xaml">
