@@ -18,17 +18,21 @@ namespace Janus_Client_V1
     /// </summary>
     public partial class MainWindow
     {
-        public string VERSION = "1.0.1";
+        
 
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
         DispatcherTimer job_update_timer = new DispatcherTimer();
         public bool InvokeRequired { get; private set; }
+        public static string CLIENT_VERSION = "1.0.4";
+
 
         public MainWindow()
         {
             InitializeComponent();
+
+            Truck_Daten.CLIENT_VERSION = CLIENT_VERSION;
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
             job_update_timer.Tick += timer_Tick;
@@ -72,7 +76,7 @@ namespace Janus_Client_V1
             Stream stream = client.OpenRead("https://projekt-janus.de/client_updates/version.txt");
             StreamReader reader = new StreamReader(stream);
             string str = reader.ReadToEnd();
-            if (str != VERSION)
+            if (str != CLIENT_VERSION)
                 {
                     MessageBoxResult result = MessageBox.Show("Willst du das Update jetzt herunterladen ?", "Neues Update vorhanden !", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
