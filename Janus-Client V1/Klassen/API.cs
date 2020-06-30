@@ -18,6 +18,10 @@ namespace Janus_Client_V1.Klassen
         public static string strafe = server + "strafe.php";
         public static string tollgate = server + "tollgate.php";
         public static string tanken = server + "tanken.php";
+        public static string update = "https://projekt-janus.de/client_updates/version.txt";
+        public static string client = "https://projekt-janus.de/client_updates/Client-Installer.zip";
+
+
 
         public static string HTTPSRequestPost(string url, Dictionary<string, string> postParameters)
         {

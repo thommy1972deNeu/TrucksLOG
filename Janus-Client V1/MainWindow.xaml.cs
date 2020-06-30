@@ -6,6 +6,8 @@ using SCSSdkClient.Object;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -16,6 +18,7 @@ namespace Janus_Client_V1
     /// </summary>
     public partial class MainWindow
     {
+        public string VERSION = "1.0.1";
 
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
@@ -30,6 +33,7 @@ namespace Janus_Client_V1
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
             job_update_timer.Tick += timer_Tick;
 
+            UPDATER();
 
             if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")))
             {
@@ -57,9 +61,34 @@ namespace Janus_Client_V1
 
                 this.DataContext = Truck_Daten;
 
-                Truck_Daten.CLIENT_VERSION = "Client: 1.0.0";
+                
             }
         }
+
+        private void UPDATER()
+        {
+
+            WebClient client = new WebClient();
+            Stream stream = client.OpenRead("https://projekt-janus.de/client_updates/version.txt");
+            StreamReader reader = new StreamReader(stream);
+            string str = reader.ReadToEnd();
+            if (str != VERSION)
+                {
+                    MessageBoxResult result = MessageBox.Show("Willst du das Update jetzt herunterladen ?", "Neues Update vorhanden !", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                    Process.Start(API.client);
+                    Application.Current.Shutdown();
+                    
+                    }
+                    
+                }
+            
+
+
+ 
+        }
+
 
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -228,7 +257,13 @@ namespace Janus_Client_V1
                     Truck_Daten.LKW_HERSTELLER_ID = data.TruckValues.ConstantsValues.BrandId;
                     Truck_Daten.SPEED = (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
                     Truck_Daten.SPIEL = data.Game.ToString();
-
+                    Truck_Daten.KMH_MI = Truck_Daten.SPIEL == "Ets2" ? "KM/H" : "MI/H";
+                    Truck_Daten.ELEKTRIK_AN = data.TruckValues.CurrentValues.ElectricEnabled;
+                    Truck_Daten.MOTOR_AN = data.TruckValues.CurrentValues.EngineEnabled;
+                    Truck_Daten.PARKING_BRAKE = data.TruckValues.CurrentValues.MotorValues.BrakeValues.ParkingBrake;
+                    Truck_Daten.BLINKER_LINKS = data.TruckValues.CurrentValues.LightsValues.BlinkerLeftOn;
+                    Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
+                    Truck_Daten.TEMPOLIMIT = Truck_Daten.SPIEL == "Ets2" ? (int)data.NavigationValues.SpeedLimit.Kph : (int)data.NavigationValues.SpeedLimit.Mph;
                     // FRACHTSCHADEN
                     Truck_Daten.FRACHTSCHADEN = Math.Round(data.TrailerValues[0].DamageValues.Cargo * 100);
                     // STRAFE

@@ -25,11 +25,27 @@ namespace Janus_Client_V1.Spieldaten
         private string shifter_typ;
         private bool elektrik_an;
         private bool motor_an;
+        private bool licht_low;
+        private bool licht_high;
+        private bool parking_brake;
+        private bool tank_warnung;
+        private bool adblue_warnung;
+        private bool air_warnung;
+        private bool oil_warnung;
+        private bool water_warnung;
+        private bool battery_warnung;
         private int gear;
         private int speed;
+        private string kmh_mi;
         private int tempomat;
         private int rpm;
         private bool scheibenwischer;
+        private int tempolimit;
+
+        // SCHÄDEN
+        private double frachtschaden;
+        private double lkw_schaden;
+        private double trailer_schaden;
 
         // LICHTER
         private bool beam_low;
@@ -45,11 +61,7 @@ namespace Janus_Client_V1.Spieldaten
         private int fuel_max;
 
         // Warnings
-        private bool fuel_warning;
-        private bool air_warning;
-        private bool oil_warning;
-        private bool water_warning;
-        private bool battery_warning;
+
 
         // JOB
         private bool cargo_loaded;
@@ -70,7 +82,7 @@ namespace Janus_Client_V1.Spieldaten
         private string gewicht;
         private string ladung_name;
         private string ladung_id;
-        private double frachtschaden;
+        
 
         // STRAFEN
         private int straf_betrag;
@@ -89,7 +101,182 @@ namespace Janus_Client_V1.Spieldaten
         private bool autoloading;
         // -----------------------------------------------------------------------------------
 
+        public int TEMPOLIMIT
+        {
+            get { return tempolimit; }
+            set
+            {
+                if (tempolimit != value)
+                {
+                    tempolimit = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
+
+        public bool PARKING_BRAKE
+        {
+            get { return parking_brake; }
+            set
+            {
+                if (parking_brake != value)
+                {
+                    parking_brake = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+
+        public double TRAILER_SCHADEN
+        {
+            get { return trailer_schaden; }
+            set
+            {
+                if (trailer_schaden != value)
+                {
+                    trailer_schaden = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+
+        public double LKW_SCHADEN
+        {
+            get { return lkw_schaden; }
+            set
+            {
+                if (lkw_schaden != value)
+                {
+                    lkw_schaden = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public bool BATTERY_WARNUNG
+        {
+            get { return battery_warnung; }
+            set
+            {
+                if (battery_warnung != value)
+                {
+                    battery_warnung = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool WATER_WARNUNG
+        {
+            get { return water_warnung; }
+            set
+            {
+                if (water_warnung != value)
+                {
+                    water_warnung = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public bool OIL_WARNUNG
+        {
+            get { return oil_warnung; }
+            set
+            {
+                if (oil_warnung != value)
+                {
+                    oil_warnung = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool AIR_WARNUNG
+        {
+            get { return air_warnung; }
+            set
+            {
+                if (air_warnung != value)
+                {
+                    air_warnung = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public bool ADBLUE_WARNUNG
+        {
+            get { return adblue_warnung; }
+            set
+            {
+                if (adblue_warnung != value)
+                {
+                    adblue_warnung = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool TANK_WARNUNG
+        {
+            get { return tank_warnung; }
+            set
+            {
+                if (tank_warnung != value)
+                {
+                    tank_warnung = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool LICHT_HIGH
+        {
+            get { return licht_high; }
+            set
+            {
+                if (licht_high != value)
+                {
+                    licht_high = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool LICHT_LOW
+        {
+            get { return licht_low; }
+            set
+            {
+                if (licht_low != value)
+                {
+                    licht_low = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+
+        public string KMH_MI
+        {
+            get { return kmh_mi; }
+            set
+            {
+                if (kmh_mi != value)
+                {
+                    kmh_mi = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public bool AUTOLOADING
         {
@@ -692,78 +879,7 @@ namespace Janus_Client_V1.Spieldaten
 
         }
 
-        public bool BATTERY_WARNING
-        {
-            get { return battery_warning; }
-            set
-            {
-                if (battery_warning != value)
-                {
-                    battery_warning = value;
-                    NotifyPropertyChanged();
-                }
-            }
-
-        }
-
-
-        public bool WATER_WARNING
-        {
-            get { return water_warning; }
-            set
-            {
-                if (water_warning != value)
-                {
-                    water_warning = value;
-                    NotifyPropertyChanged();
-                }
-            }
-
-        }
-
-
-        public bool OIL_WARNING
-        {
-            get { return oil_warning; }
-            set
-            {
-                if (oil_warning != value)
-                {
-                    oil_warning = value;
-                    NotifyPropertyChanged();
-                }
-            }
-
-        }
-
-
-        public bool AIR_WARNING
-        {
-            get { return air_warning; }
-            set
-            {
-                if (air_warning != value)
-                {
-                    air_warning = value;
-                    NotifyPropertyChanged();
-                }
-            }
-
-        }
-
-        public bool FUEL_WARNING
-        {
-            get { return fuel_warning; }
-            set
-            {
-                if (fuel_warning != value)
-                {
-                    fuel_warning = value;
-                    NotifyPropertyChanged();
-                }
-            }
-
-        }
+     
 
         public string SHIFTER_TYP
         {
