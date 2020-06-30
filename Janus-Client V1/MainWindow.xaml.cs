@@ -221,6 +221,8 @@ namespace Janus_Client_V1
                     Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
+
+                    // LKW DATEN
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
                     Truck_Daten.LKW_HERSTELLER_ID = data.TruckValues.ConstantsValues.BrandId;

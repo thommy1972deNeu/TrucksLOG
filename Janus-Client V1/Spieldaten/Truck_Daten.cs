@@ -88,6 +88,9 @@ namespace Janus_Client_V1.Spieldaten
         private bool autoparking;
         private bool autoloading;
         // -----------------------------------------------------------------------------------
+
+
+
         public bool AUTOLOADING
         {
             get { return autoloading; }

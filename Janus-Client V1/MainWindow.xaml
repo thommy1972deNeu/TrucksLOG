@@ -143,6 +143,9 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="90"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
@@ -164,20 +167,45 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="200*"/>
             </Grid.ColumnDefinitions>
-
+            
+       
 
             <Label Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" FontSize="50" FontFamily="Oswald" FontWeight="Bold"/>
 
-            <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
-            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_2" Content="{Binding FAHRINFO_2}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
+            <!-- ICON SET -->
+            <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="12" Background="LightCyan" Padding="10" />
+            <Image Grid.Row="3" Grid.Column="1" Source="{iconPacks:MaterialImage Kind=CarElectric}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="2" Source="{iconPacks:MaterialImage Kind=Engine}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=CarLightDimmed}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="4" Source="{iconPacks:MaterialImage Kind=CarLightHigh}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="5" Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="6" Source="{iconPacks:BoxIconsImage Kind=RegularBluetooth}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="7" Source="{iconPacks:FontAwesomeImage Kind=WindSolid}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="8" Source="{iconPacks:FontAwesomeImage Kind=OilCanSolid}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="9" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3"/>
+            <Image Grid.Row="3" Grid.Column="10" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3"/>
 
 
-            <Label Grid.Row="6" Grid.Column="0" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
-            <Label Grid.Row="6" Grid.Column="1" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
-            <Label Grid.Row="6" Grid.Column="2" FontSize="16" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
+
+
+            <!-- ICON SET ENDE -->
             
+            <!-- LICENSE PLATE -->
+
+
+
+            <!-- LICENSE PLATE ENDE -->
             
-            <Label Grid.Row="7" Grid.Column="2" FontSize="16" x:Name="tanken" Content="{Binding TANK_BETRAG}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_2" Content="{Binding FAHRINFO_2}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
+
+
+            <Label Grid.Row="7" Grid.Column="0" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="7" Grid.Column="1" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="7" Grid.Column="2" FontSize="16" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
+
+            <Label Grid.Row="8" Grid.Column="0" FontSize="16" x:Name="tanken1" Content="Tankbetrag:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" FontSize="16" x:Name="tanken" Content="{Binding TANK_BETRAG}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
 
         </Grid>
 
