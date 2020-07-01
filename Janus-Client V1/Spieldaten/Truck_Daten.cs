@@ -82,7 +82,11 @@ namespace Janus_Client_V1.Spieldaten
         private string gewicht;
         private string ladung_name;
         private string ladung_id;
-        
+
+        // POSITION
+        private double pos_x;
+        private double pos_y;
+        private double pos_z;
 
         // STRAFEN
         private int straf_betrag;
@@ -92,7 +96,7 @@ namespace Janus_Client_V1.Spieldaten
         private double maut_betrag;
 
         // Tanken
-        private double tank_betrag;
+        private double liter_getankt;
 
 
         // JOB ABGABE
@@ -100,6 +104,47 @@ namespace Janus_Client_V1.Spieldaten
         private bool autoparking;
         private bool autoloading;
         // -----------------------------------------------------------------------------------
+
+        public double POS_Z
+        {
+            get { return pos_z; }
+            set
+            {
+                if (pos_z != value)
+                {
+                    pos_z = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public double POS_Y
+        {
+            get { return pos_y; }
+            set
+            {
+                if (pos_y != value)
+                {
+                    pos_y = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public double POS_X
+        {
+            get { return pos_x; }
+            set
+            {
+                if (pos_x != value)
+                {
+                    pos_x = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
 
         public int TEMPOLIMIT
         {
@@ -320,14 +365,14 @@ namespace Janus_Client_V1.Spieldaten
         }
 
 
-        public double TANK_BETRAG
+        public double LITER_GETANKT
         {
-            get { return tank_betrag; }
+            get { return liter_getankt; }
             set
             {
-                if (tank_betrag != value)
+                if (liter_getankt != value)
                 {
-                    tank_betrag = value;
+                    liter_getankt = value;
                     NotifyPropertyChanged();
                 }
             }

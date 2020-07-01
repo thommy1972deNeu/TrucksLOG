@@ -219,7 +219,10 @@ namespace Janus_Client_V1
         {
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("BETRAG", Truck_Daten.TANK_BETRAG.ToString());
+            post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
+            post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
+            post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
+            post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
             string response = API.HTTPSRequestPost(API.tanken, post_param);
         }
 
@@ -278,10 +281,15 @@ namespace Janus_Client_V1
                     Truck_Daten.MAUT_BETRAG = (double)data.GamePlay.TollgateEvent.PayAmount;
 
                     // TANKEN
-                    Truck_Daten.TANK_BETRAG = Math.Round(data.GamePlay.RefuelEvent.Amount);
+                    Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
 
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM/1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
+
+                    // POSITION
+                    Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
+                    Truck_Daten.POS_Y = data.TruckValues.Positioning.Cabin.Y;
+                    Truck_Daten.POS_Z = data.TruckValues.Positioning.Cabin.Z;
 
                     // CANCEL TOUR
 

@@ -89,7 +89,49 @@
 
                 </StackPanel>
             </mah:Flyout>
+
+
+
+            <mah:Flyout x:Name="BottomFlyOut" Height="100" Position="Bottom">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="eingabe_land" Height="30">
+                        <ComboBoxItem Tag="Belgien">Belgien</ComboBoxItem>
+                        <ComboBoxItem Tag="Bulgarien">Bulgarien</ComboBoxItem>
+                        <ComboBoxItem Tag="Deutschland" IsSelected="True">Deutschland</ComboBoxItem>
+                        <ComboBoxItem Tag="Dänemark">Dänemark</ComboBoxItem>
+                        <ComboBoxItem Tag="Estland">Estland</ComboBoxItem>
+                        <ComboBoxItem Tag="Frankreich">Frankreich</ComboBoxItem>
+                        <ComboBoxItem Tag="Finnland">Finnland</ComboBoxItem>
+                        <ComboBoxItem Tag="Großbritannien">Großbritannien</ComboBoxItem>
+                        <ComboBoxItem Tag="Italien">Italien</ComboBoxItem>
+                        <ComboBoxItem Tag="Lettland">Lettland</ComboBoxItem>
+                        <ComboBoxItem Tag="Litauen">Litauen</ComboBoxItem>
+                        <ComboBoxItem Tag="Luxemburg">Luxemburg</ComboBoxItem>
+                        <ComboBoxItem Tag="Niederland">Niederlande</ComboBoxItem>
+                        <ComboBoxItem Tag="Österreich">Österreich</ComboBoxItem>
+                        <ComboBoxItem Tag="Polen">Polen</ComboBoxItem>
+                        <ComboBoxItem Tag="Portugal">Portugal</ComboBoxItem>
+                        <ComboBoxItem Tag="Rumänien">Rumänien</ComboBoxItem>
+                        <ComboBoxItem Tag="Russland">Russland</ComboBoxItem>
+                        <ComboBoxItem Tag="Schweden">Schweden</ComboBoxItem>
+                        <ComboBoxItem Tag="Schweiz">Schweiz</ComboBoxItem>
+                        <ComboBoxItem Tag="Slowakei">Slowakai</ComboBoxItem>
+                        <ComboBoxItem Tag="Spanien">Spanien</ComboBoxItem>
+                        <ComboBoxItem Tag="Tschechien">Tschechien</ComboBoxItem>
+                        <ComboBoxItem Tag="Türkei">Türkei</ComboBoxItem>
+                        <ComboBoxItem Tag="Ungarn">Ungarn</ComboBoxItem>
+                    </ComboBox>
+
+                    <TextBox x:Name="preisangabe" Width="100" Text="1.24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Height="30" Margin="50,0,0,0"/>
+                    <Label Content="€" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
+                    <Button x:Name="preis_eintragen" Content="Preis je Liter Eintragen" Background="Green" VerticalAlignment="Center" Margin="10,0,0,0" Padding="10"/>
+                </StackPanel>
+            </mah:Flyout>
+
         </mah:FlyoutsControl>
+
+
+
     </mah:MetroWindow.Flyouts>
 
 
@@ -104,8 +146,18 @@
                         </StackPanel>
                     </DataTemplate>
                 </ToggleButton.ContentTemplate>
+            </ToggleButton>
 
-            </ToggleButton> >
+
+            <ToggleButton Content="Layers" Click="Hauptmenu_Click" IsChecked="{Binding ElementName=BottomFlyOut, Path=IsOpen}" Cursor="Hand">
+                <ToggleButton.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconFontAwesome Kind="AwardSolid" Width="25" Height="25" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ToggleButton.ContentTemplate>
+            </ToggleButton>
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
 
