@@ -1,10 +1,12 @@
 ﻿using ControlzEx.Theming;
 using Janus_Client_V1.Klassen;
 using Janus_Client_V1.Spieldaten;
+using MahApps.Metro.Controls;
 using SCSSdkClient;
 using SCSSdkClient.Object;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -18,7 +20,7 @@ namespace Janus_Client_V1
     /// </summary>
     public partial class MainWindow
     {
-        
+
 
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
@@ -26,7 +28,7 @@ namespace Janus_Client_V1
         DispatcherTimer job_update_timer = new DispatcherTimer();
         public bool InvokeRequired { get; private set; }
         public static string CLIENT_VERSION = "1.0.4";
-
+        
 
         public MainWindow()
         {
@@ -63,9 +65,12 @@ namespace Janus_Client_V1
                 Telemetry.RefuelEnd += TelemetryRefuelEnd;
                 Telemetry.RefuelPayed += TelemetryRefuelPayed;
 
+                if (REG.Lesen("Config", "Systemsounds") == "An")
+                    SoundPlayer.Sound_Willkommen(); 
+
                 this.DataContext = Truck_Daten;
 
-                
+
             }
         }
 
@@ -77,20 +82,16 @@ namespace Janus_Client_V1
             StreamReader reader = new StreamReader(stream);
             string str = reader.ReadToEnd();
             if (str != CLIENT_VERSION)
+            {
+                MessageBoxResult result = MessageBox.Show("Willst du das Update jetzt herunterladen ?", "Neues Update vorhanden !", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
                 {
-                    MessageBoxResult result = MessageBox.Show("Willst du das Update jetzt herunterladen ?", "Neues Update vorhanden !", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
-                    {
                     Process.Start(API.client);
                     Application.Current.Shutdown();
-                    
-                    }
-                    
+
                 }
-            
 
-
- 
+            }
         }
 
 
@@ -108,7 +109,7 @@ namespace Janus_Client_V1
 
         private void TelemetryOnJobStarted(object sender, EventArgs e)
         {
-            
+
             if (!Truck_Daten.CARGO_LOADED)
             {
                 Stopwatch stopWatch = new Stopwatch(); //as timeout
@@ -126,7 +127,7 @@ namespace Janus_Client_V1
                 }
             }
 
-            REG.Schreiben("Config", "TOUR_ID", Truck_Daten.STARTORT_ID + Truck_Daten.ZIELFIRMA_ID + Truck_Daten.ZIELORT_ID);
+            REG.Schreiben("Config", "TOUR_ID", GenerateString());
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
@@ -148,25 +149,32 @@ namespace Janus_Client_V1
             post_param.Add("LKW_HERSTELLER", Truck_Daten.LKW_HERSTELLER);
             post_param.Add("LKW_HERSTELLER_ID", Truck_Daten.LKW_HERSTELLER_ID);
             post_param.Add("GESAMT_KM", ((float)Truck_Daten.GESAMT_KM).ToString());
-            post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM/1000).ToString());
+            post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
             post_param.Add("SPIEL", Truck_Daten.SPIEL);
             post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
 
             string response = API.HTTPSRequestPost(API.job_started, post_param);
+
+            REG.Schreiben("Config", "Frachtmarkt", Truck_Daten.FRACHTMARKT);
+
             job_update_timer.Start();
+
+            if (REG.Lesen("Config", "Systemsounds") == "An")
+                SoundPlayer.Sound_Tour_Gestartet();
         }
 
         private void TelemetryJobCancelled(object sender, EventArgs e)
         {
             Dictionary<string, string> post_param = new Dictionary<string, string>();
-
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
-
+            post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
             string response = API.HTTPSRequestPost(API.job_cancel, post_param);
+
             REG.Schreiben("Config", "TOUR_ID", "");
             job_update_timer.Stop();
-
+            if (REG.Lesen("Config", "Systemsounds") == "An")
+                SoundPlayer.Sound_Tour_Abgebrochen();
         }
 
         private void TelemetryJobDelivered(object sender, EventArgs e)
@@ -180,8 +188,10 @@ namespace Janus_Client_V1
             string response = API.HTTPSRequestPost(API.job_finish, post_param);
             REG.Schreiben("Config", "TOUR_ID", "");
             job_update_timer.Stop();
+            if (REG.Lesen("Config", "Systemsounds") == "An")
+                SoundPlayer.Sound_Tour_Beendet();
         }
-           
+
 
         private void TelemetryFined(object sender, EventArgs e)
         {
@@ -190,6 +200,8 @@ namespace Janus_Client_V1
             post_param.Add("BETRAG", Truck_Daten.STRAF_BETRAG.ToString());
             post_param.Add("GRUND", Truck_Daten.GRUND);
             string response = API.HTTPSRequestPost(API.strafe, post_param);
+            if (REG.Lesen("Config", "Systemsounds") == "An")
+                SoundPlayer.Sound_Strafe_Erhalten();
         }
 
         private void TelemetryTollgate(object sender, EventArgs e)
@@ -198,6 +210,8 @@ namespace Janus_Client_V1
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("BETRAG", Truck_Daten.MAUT_BETRAG.ToString());
             string response = API.HTTPSRequestPost(API.tollgate, post_param);
+            if(REG.Lesen("Config", "Systemsounds") == "An")
+                    SoundPlayer.Sound_Mautstation_Passiert();
         }
 
         private void TelemetryFerry(object sender, EventArgs e)
@@ -209,7 +223,7 @@ namespace Janus_Client_V1
         {
         }
 
-        private void TelemetryRefuel(object sender, EventArgs e) 
+        private void TelemetryRefuel(object sender, EventArgs e)
         {
 
         }
@@ -224,11 +238,17 @@ namespace Janus_Client_V1
             post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
             post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
             string response = API.HTTPSRequestPost(API.tanken, post_param);
+
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
-                // GEHT NIUCHT
+            // GEHT NIUCHT
+        }
+
+        private void TelemetryRefuelStart(object sender, EventArgs e)
+        {
+            BottomFlyOut.IsOpen = !BottomFlyOut.IsOpen;
         }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
@@ -252,12 +272,12 @@ namespace Janus_Client_V1
                     Truck_Daten.ZIELFIRMA_ID = data.JobValues.CompanyDestinationId;
                     Truck_Daten.LADUNG_NAME = data.JobValues.CargoValues.Name;
                     Truck_Daten.LADUNG_ID = data.JobValues.CargoValues.Id;
-                    Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass/1000).ToString();
+                    Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass / 1000).ToString();
                     Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
                     Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
-
+                    Truck_Daten.CARGO_LOADED = data.JobValues.CargoLoaded;
                     // LKW DATEN
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
@@ -284,7 +304,7 @@ namespace Janus_Client_V1
                     Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
 
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
-                    Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM/1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
+                    Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM / 1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
 
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
@@ -292,13 +312,15 @@ namespace Janus_Client_V1
                     Truck_Daten.POS_Z = data.TruckValues.Positioning.Cabin.Z;
 
                     // CANCEL TOUR
-
+                    Truck_Daten.CANCEL_STRAFE = data.GamePlay.JobCancelled.Penalty;
 
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
                     Truck_Daten.AUTOPARKING = data.GamePlay.JobDelivered.AutoParked;
                     Truck_Daten.AUTOLOADING = data.GamePlay.JobDelivered.AutoLoaded;
+
+
 
                 }
             }
@@ -315,8 +337,9 @@ namespace Janus_Client_V1
             if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID")))
                 REG.Schreiben("Config", "TOUR_ID", "");
             if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
-                REG.Schreiben("Config", "CLIENT_KEY", ""); 
+                REG.Schreiben("Config", "CLIENT_KEY", "");
 
+            Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
         }
 
         private void LaunchGitHubSite(object sender, System.Windows.RoutedEventArgs e)
@@ -324,7 +347,7 @@ namespace Janus_Client_V1
             msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut...");
         }
 
-        
+
         private void Beta_Tester(object sender, RoutedEventArgs e)
         {
             try
@@ -334,7 +357,7 @@ namespace Janus_Client_V1
             {
                 msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1010). Bitte versuche es später erneut oder gib uns diesen Fehlercode in Discord." + ex.Message);
             }
-            
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -351,7 +374,7 @@ namespace Janus_Client_V1
             {
                 msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut..." + ex.Message);
             }
-            
+
         }
 
         private void MainWindow_Oeffnen(object sender, RoutedEventArgs e)
@@ -384,9 +407,47 @@ namespace Janus_Client_V1
         }
 
 
-      
+        private void preis_eintragen_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 
 
+        private void Systemsounds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if((string)Systemsounds.SelectedValue == "An")
+            {
+                REG.Schreiben("Config", "Systemsounds", "An");
+            }
+            if ((string)Systemsounds.SelectedValue == "Aus")
+            {
+                REG.Schreiben("Config", "Systemsounds", "Aus");
+            }
+        }
 
+
+        public static string GenerateString()
+        {
+            int length = 70;
+            string allowedChars = "abcdefghijklmnopqrstuvwxyz123456789";
+
+            byte[] bytes = new Byte[length];
+            System.Security.Cryptography.RNGCryptoServiceProvider rng = new System.Security.Cryptography.RNGCryptoServiceProvider();
+
+            rng.GetBytes(bytes);
+
+            if (null != allowedChars && String.Empty != allowedChars)
+            {
+                char[] chars = new char[length];
+                int len = allowedChars.Length;
+
+                for (int i = 0; i < length; i++)
+                    chars[i] = allowedChars[(int)bytes[i] % len];
+
+                return new string(chars);
+            }
+
+            return System.Text.Encoding.Default.GetString(bytes);
+        }
     }
 }

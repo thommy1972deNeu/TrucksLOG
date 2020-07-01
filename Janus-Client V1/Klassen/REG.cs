@@ -12,7 +12,7 @@ namespace Janus_Client_V1.Klassen
                 return (string)myKey.GetValue(name);
           
             }
-            catch { return null; }
+            catch { return ""; }
         }
 
         public static void Schreiben(string ordner, string name, string wert)

@@ -34,7 +34,7 @@
             <mah:Flyout x:Name="LeftFlyOut" Width="270">
                 <StackPanel Orientation="Vertical">
                     <Label Content="Farbschema wählen:"/>
-                    <ComboBox x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged">
+                    <ComboBox x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged" Margin="0,0,0,20">
                         <ComboBoxItem Tag="Dark.Red">Dunkel Rot</ComboBoxItem>
                         <ComboBoxItem Tag="Dark.Green">Dunkel Grün</ComboBoxItem>
                         <ComboBoxItem Tag="Dark.Blue">Dunkel Blau</ComboBoxItem>
@@ -83,9 +83,12 @@
                         <ComboBoxItem Tag="Light.Taupe">Hell Taupe</ComboBoxItem>
                         <ComboBoxItem Tag="Light.Sienna">Hell Wüste</ComboBoxItem>
                     </ComboBox>
-
-                    <mah:ToggleSwitch Header="DarkMode" OnContent="An" OffContent="Aus" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
-                    <Separator/>
+         
+                    <Label Content="System-Sounds:"/>
+                    <ComboBox x:Name="Systemsounds" SelectedValuePath="Tag" SelectionChanged="Systemsounds_SelectionChanged" Margin="0,0,0,20">
+                        <ComboBoxItem Tag="An">An</ComboBoxItem>
+                        <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
+                    </ComboBox>
 
                 </StackPanel>
             </mah:Flyout>
@@ -94,7 +97,7 @@
 
             <mah:Flyout x:Name="BottomFlyOut" Height="100" Position="Bottom">
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox x:Name="eingabe_land" Height="30">
+                    <ComboBox x:Name="eingabe_land" Height="30" SelectedValue="Tag">
                         <ComboBoxItem Tag="Belgien">Belgien</ComboBoxItem>
                         <ComboBoxItem Tag="Bulgarien">Bulgarien</ComboBoxItem>
                         <ComboBoxItem Tag="Deutschland" IsSelected="True">Deutschland</ComboBoxItem>
@@ -124,7 +127,7 @@
 
                     <TextBox x:Name="preisangabe" Width="100" Text="1.24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Height="30" Margin="50,0,0,0"/>
                     <Label Content="€" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
-                    <Button x:Name="preis_eintragen" Content="Preis je Liter Eintragen" Background="Green" VerticalAlignment="Center" Margin="10,0,0,0" Padding="10"/>
+                    <Button x:Name="preis_eintragen" Content="Preis je Liter Eintragen" Background="Green" VerticalAlignment="Center" Margin="10,0,0,0" Padding="10" Click="preis_eintragen_Click"/>
                 </StackPanel>
             </mah:Flyout>
 
@@ -279,9 +282,9 @@
 
 
             <!-- LICENSE PLATE ENDE -->
-            
-            <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
-            <Label Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_2" Content="{Binding FAHRINFO_2}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
+
+            <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
+            <Label Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="12" FontSize="16" x:Name="INFO_LBL_2" Content="{Binding FAHRINFO_2}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
 
             
             <Border Background="LightGray" BorderBrush="red" BorderThickness="0,5,5,5" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" CornerRadius="0,20,20,0"/>

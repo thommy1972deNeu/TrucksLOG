@@ -12,6 +12,8 @@ namespace Janus_Client_V1.Spieldaten
         private string fahrinfo_1;
         private string fahrinfo_2;
         private string spiel;
+        private bool soundan;
+
         // Truck Daten
         private string lkw_hersteller;
         private string lkw_hersteller_id;
@@ -63,6 +65,9 @@ namespace Janus_Client_V1.Spieldaten
         // Warnings
 
 
+        // JOB_CANCEL
+        private double cancel_strafe;
+
         // JOB
         private bool cargo_loaded;
         private bool spezial_job;
@@ -104,6 +109,31 @@ namespace Janus_Client_V1.Spieldaten
         private bool autoparking;
         private bool autoloading;
         // -----------------------------------------------------------------------------------
+
+        public double CANCEL_STRAFE
+        {
+            get { return cancel_strafe; }
+            set
+            {
+                if (cancel_strafe != value)
+                {
+                    cancel_strafe = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public bool SOUNDAN
+        {
+            get { return soundan; }
+            set
+            {
+                if (soundan != value)
+                {
+                    soundan = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public double POS_Z
         {
