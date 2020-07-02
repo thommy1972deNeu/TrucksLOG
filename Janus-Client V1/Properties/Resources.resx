@@ -118,11 +118,26 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ATS_Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ATS_Logo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ets2_logo_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ets2_logo_.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Mautstation_Passiert" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Mautstation_Passiert.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="road_1303617_640" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\road-1303617_640.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="scs_telemetry" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\scs-telemetry.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Strafe_Erhalten" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Strafe_Erhalten.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="szjBrQbB_400x400" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\szjBrQbB_400x400.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Tour_Abgebrochen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tour_Abgebrochen.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

@@ -50,27 +50,39 @@ namespace Janus_Client_V1
             else
             {
 
-                Lade_Voreinstellungen();
-                Telemetry = new SCSSdkTelemetry();
-                Telemetry.Data += Telemetry_Data;
-                Telemetry.JobStarted += TelemetryOnJobStarted;
-
-                Telemetry.JobCancelled += TelemetryJobCancelled;
-                Telemetry.JobDelivered += TelemetryJobDelivered;
-                Telemetry.Fined += TelemetryFined;
-                Telemetry.Tollgate += TelemetryTollgate;
-                Telemetry.Ferry += TelemetryFerry;
-                Telemetry.Train += TelemetryTrain;
-                Telemetry.RefuelStart += TelemetryRefuel;
-                Telemetry.RefuelEnd += TelemetryRefuelEnd;
-                Telemetry.RefuelPayed += TelemetryRefuelPayed;
-
-                if (REG.Lesen("Config", "Systemsounds") == "An")
-                    SoundPlayer.Sound_Willkommen(); 
-
-                this.DataContext = Truck_Daten;
+                if (string.IsNullOrEmpty(REG.Lesen("Config", "ETS2_PFAD")))
+                {
+                    PfadAngabe pf = new PfadAngabe();
+                    pf.ShowDialog();
+                    return;
+                }
+                else
+                {
 
 
+
+                    Lade_Voreinstellungen();
+                    Telemetry = new SCSSdkTelemetry();
+                    Telemetry.Data += Telemetry_Data;
+                    Telemetry.JobStarted += TelemetryOnJobStarted;
+
+                    Telemetry.JobCancelled += TelemetryJobCancelled;
+                    Telemetry.JobDelivered += TelemetryJobDelivered;
+                    Telemetry.Fined += TelemetryFined;
+                    Telemetry.Tollgate += TelemetryTollgate;
+                    Telemetry.Ferry += TelemetryFerry;
+                    Telemetry.Train += TelemetryTrain;
+                    Telemetry.RefuelStart += TelemetryRefuel;
+                    Telemetry.RefuelEnd += TelemetryRefuelEnd;
+                    Telemetry.RefuelPayed += TelemetryRefuelPayed;
+
+                    if (REG.Lesen("Config", "Systemsounds") == "An")
+                        SoundPlayer.Sound_Willkommen();
+
+                    this.DataContext = Truck_Daten;
+
+
+                }
             }
         }
 

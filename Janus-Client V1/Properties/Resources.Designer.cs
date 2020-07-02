@@ -61,6 +61,26 @@ namespace Janus_Client_V1.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ATS_Logo {
+            get {
+                object obj = ResourceManager.GetObject("ATS_Logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ets2_logo_ {
+            get {
+                object obj = ResourceManager.GetObject("ets2_logo_", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Mautstation_Passiert {
@@ -70,11 +90,41 @@ namespace Janus_Client_V1.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap road_1303617_640 {
+            get {
+                object obj = ResourceManager.GetObject("road_1303617_640", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        internal static byte[] scs_telemetry {
+            get {
+                object obj = ResourceManager.GetObject("scs_telemetry", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Strafe_Erhalten {
             get {
                 return ResourceManager.GetStream("Strafe_Erhalten", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap szjBrQbB_400x400 {
+            get {
+                object obj = ResourceManager.GetObject("szjBrQbB_400x400", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
