@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Janus_Client_V1"
         mc:Ignorable="d"
-        Title="Spielpfade angeben..." Height="450" Width="800">
+        Title="Spielpfade angeben..." Height="450" Width="800" Closing="Window_Closing">
     <Window.Background>
         <ImageBrush ImageSource="road-1303617_640.jpg" Opacity="0.2"/>
     </Window.Background>
@@ -39,7 +39,12 @@
             </StackPanel>
 
 
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
+                <Button x:Name="abbrechen" Content="Abbrechen" Width="100" Height="30" Click="abbrechen_click" Margin="0,0,20,0" />
+
+           
+        </StackPanel>
 
 
         </StackPanel>

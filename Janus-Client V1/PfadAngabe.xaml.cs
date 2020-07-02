@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Janus_Client_V1.Klassen;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Janus_Client_V1
 {
@@ -20,6 +10,8 @@ namespace Janus_Client_V1
     /// </summary>
     public partial class PfadAngabe : Window
     {
+        MSG msg = new MSG();
+
         public PfadAngabe()
         {
             InitializeComponent();
@@ -30,7 +22,7 @@ namespace Janus_Client_V1
         private void tmp_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog open_tmp = new OpenFileDialog();
-
+            open_tmp.ShowDialog();
         }
 
         private void ets_suchen_btn_Click(object sender, RoutedEventArgs e)
@@ -41,6 +33,20 @@ namespace Janus_Client_V1
         private void ats_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (pfad_ets.Text == "")
+            {
+                MessageBox.Show("Der Pfad zu Eurotruck Simulator 2 wurde nicht angegeben!", "Fehler", MessageBoxButton.OK, (MessageBoxImage)MessageBoxIcon.Error);
+                e.Cancel = true;
+            }
+        }
+
+        private void abbrechen_click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }

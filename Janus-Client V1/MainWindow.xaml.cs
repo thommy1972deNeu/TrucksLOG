@@ -52,12 +52,11 @@ namespace Janus_Client_V1
 
                 if (string.IsNullOrEmpty(REG.Lesen("Config", "ETS2_PFAD")))
                 {
-                    PfadAngabe pf = new PfadAngabe();
-                    pf.ShowDialog();
-                    return;
+                   // PfadAngabe pf = new PfadAngabe();
+                   // pf.ShowDialog();
+                   // return;
                 }
-                else
-                {
+              
 
 
 
@@ -82,7 +81,7 @@ namespace Janus_Client_V1
                     this.DataContext = Truck_Daten;
 
 
-                }
+                
             }
         }
 
@@ -112,7 +111,6 @@ namespace Janus_Client_V1
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("GEWICHT", Truck_Daten.GEWICHT.ToString());
             post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
             post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
             string response = API.HTTPSRequestPost(API.job_update, post_param);
@@ -169,10 +167,9 @@ namespace Janus_Client_V1
 
             REG.Schreiben("Config", "Frachtmarkt", Truck_Daten.FRACHTMARKT);
 
+            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Gestartet();
             job_update_timer.Start();
 
-            if (REG.Lesen("Config", "Systemsounds") == "An")
-                SoundPlayer.Sound_Tour_Gestartet();
         }
 
         private void TelemetryJobCancelled(object sender, EventArgs e)
@@ -184,9 +181,11 @@ namespace Janus_Client_V1
             string response = API.HTTPSRequestPost(API.job_cancel, post_param);
 
             REG.Schreiben("Config", "TOUR_ID", "");
+            
+            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Abgebrochen();
+
             job_update_timer.Stop();
-            if (REG.Lesen("Config", "Systemsounds") == "An")
-                SoundPlayer.Sound_Tour_Abgebrochen();
+
         }
 
         private void TelemetryJobDelivered(object sender, EventArgs e)
@@ -199,9 +198,10 @@ namespace Janus_Client_V1
 
             string response = API.HTTPSRequestPost(API.job_finish, post_param);
             REG.Schreiben("Config", "TOUR_ID", "");
+            
+            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Beendet();
+
             job_update_timer.Stop();
-            if (REG.Lesen("Config", "Systemsounds") == "An")
-                SoundPlayer.Sound_Tour_Beendet();
         }
 
 
@@ -212,8 +212,7 @@ namespace Janus_Client_V1
             post_param.Add("BETRAG", Truck_Daten.STRAF_BETRAG.ToString());
             post_param.Add("GRUND", Truck_Daten.GRUND);
             string response = API.HTTPSRequestPost(API.strafe, post_param);
-            if (REG.Lesen("Config", "Systemsounds") == "An")
-                SoundPlayer.Sound_Strafe_Erhalten();
+            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Strafe_Erhalten();
         }
 
         private void TelemetryTollgate(object sender, EventArgs e)
@@ -222,8 +221,7 @@ namespace Janus_Client_V1
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("BETRAG", Truck_Daten.MAUT_BETRAG.ToString());
             string response = API.HTTPSRequestPost(API.tollgate, post_param);
-            if(REG.Lesen("Config", "Systemsounds") == "An")
-                    SoundPlayer.Sound_Mautstation_Passiert();
+            if(REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
         }
 
         private void TelemetryFerry(object sender, EventArgs e)
@@ -326,6 +324,9 @@ namespace Janus_Client_V1
                     // CANCEL TOUR
                     Truck_Daten.CANCEL_STRAFE = data.GamePlay.JobCancelled.Penalty;
 
+                    // Sonstiges
+                    Truck_Daten.LKW_SCHADEN = (int)data.TruckValues.CurrentValues.DamageValues.WheelsAvg;
+                    Truck_Daten.TRAILER_SCHADEN = (int)data.TrailerValues[0].DamageValues.Wheels;
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;

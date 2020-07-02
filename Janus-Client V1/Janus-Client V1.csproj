@@ -29,7 +29,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>https://projekt-janus.de/client_updates/</UpdateUrl>
     <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationVersion>1.0.4.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -289,9 +289,9 @@
     <Folder Include="Sonstiges\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Willkommen.wav.wav">
+    <EmbeddedResource Include="Resources\Willkommen.wav.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Tour_Gestartet.wav">
