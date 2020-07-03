@@ -44,7 +44,7 @@ namespace Janus_Client_V1.Spieldaten
         private int rpm;
         private bool scheibenwischer;
         private int tempolimit;
-
+        private bool trailer_attached;
         // SCHÄDEN
         private double frachtschaden;
         private double lkw_schaden;
@@ -99,7 +99,7 @@ namespace Janus_Client_V1.Spieldaten
         private string grund;
 
         // Tollgate
-        private double maut_betrag;
+        private int maut_betrag;
 
         // Tanken
         private double liter_getankt;
@@ -110,6 +110,20 @@ namespace Janus_Client_V1.Spieldaten
         private bool autoparking;
         private bool autoloading;
         // -----------------------------------------------------------------------------------
+
+        public bool TRAILER_ATTACHED
+        {
+            get { return trailer_attached; }
+            set
+            {
+                if (trailer_attached != value)
+                {
+                    trailer_attached = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
 
         public string EURO_DOLLAR
         {
@@ -422,7 +436,7 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
-        public double MAUT_BETRAG
+        public int MAUT_BETRAG
         {
             get { return maut_betrag; }
             set

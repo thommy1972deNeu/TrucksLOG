@@ -51,6 +51,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_05084AAF2C544005862B9CAF02E032F9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_05E16326E4B331A86DC72178C8B29DF8"
         "OwnerKey" = "8:_A3847AFF0BA54434942383DA7128574E"
         "MsmSig" = "8:_UNDEFINED"
@@ -2559,6 +2565,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_05084AAF2C544005862B9CAF02E032F9"
+            {
+            "SourcePath" = "8:E:\\Downloads\\uninstall_102922.ico"
+            "TargetName" = "8:uninstall_102922.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_9E08D05F6AA944B0A2BB6FABD489FDEC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_05E16326E4B331A86DC72178C8B29DF8"
@@ -7423,7 +7449,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Projekt-JANUS! - Client"
         "ProductCode" = "8:{5E7E344B-6F39-49A1-8F45-3ED58ACA3B2B}"
-        "PackageCode" = "8:{AB99DFA5-0242-49D6-87BC-9602D9A4E5B9}"
+        "PackageCode" = "8:{B9D0A8EA-E523-4821-8DD7-F5495F6FCAFC}"
         "UpgradeCode" = "8:{0DD4DA25-D3B7-4300-8D2E-60C046A610DF}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -7440,7 +7466,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Der Game Client von Projekt-Janus.de"
         "ARPURLINFOABOUT" = "8:https://projekt-janus.de"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_05084AAF2C544005862B9CAF02E032F9"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"

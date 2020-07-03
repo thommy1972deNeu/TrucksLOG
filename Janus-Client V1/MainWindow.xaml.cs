@@ -34,12 +34,12 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
 
-            BottomFlyOut.IsOpen = !BottomFlyOut.IsOpen;
+            
 
             Truck_Daten.CLIENT_VERSION = CLIENT_VERSION;
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
-            job_update_timer.Tick += timer_Tick;
+            
 
             UPDATER();
 
@@ -166,10 +166,11 @@ namespace Janus_Client_V1
             post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
 
             string response = API.HTTPSRequestPost(API.job_started, post_param);
-
+            Console.WriteLine(response);
             REG.Schreiben("Config", "Frachtmarkt", Truck_Daten.FRACHTMARKT);
 
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Gestartet();
+            job_update_timer.Tick += timer_Tick;
             job_update_timer.Start();
 
         }
@@ -181,9 +182,9 @@ namespace Janus_Client_V1
             post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
             post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
             string response = API.HTTPSRequestPost(API.job_cancel, post_param);
+            Console.WriteLine(response);
 
             REG.Schreiben("Config", "TOUR_ID", "");
-            
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Abgebrochen();
 
             job_update_timer.Stop();
@@ -199,8 +200,9 @@ namespace Janus_Client_V1
             post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN_ABGABE.ToString());
 
             string response = API.HTTPSRequestPost(API.job_finish, post_param);
+            Console.WriteLine(response);
+
             REG.Schreiben("Config", "TOUR_ID", "");
-            
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Beendet();
 
             job_update_timer.Stop();
@@ -223,6 +225,8 @@ namespace Janus_Client_V1
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("BETRAG", Truck_Daten.MAUT_BETRAG.ToString());
             string response = API.HTTPSRequestPost(API.tollgate, post_param);
+            Console.WriteLine(response);
+
             if(REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
         }
 
@@ -314,10 +318,10 @@ namespace Janus_Client_V1
                     Truck_Daten.GRUND = data.GamePlay.FinedEvent.Offence.ToString();
 
                     // MAUTSTATION
-                    Truck_Daten.MAUT_BETRAG = (double)data.GamePlay.TollgateEvent.PayAmount;
+                    Truck_Daten.MAUT_BETRAG = (int)data.GamePlay.TollgateEvent.PayAmount;
 
                     // TANKEN
-                    Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
+                    Truck_Daten.LITER_GETANKT = (int)data.GamePlay.RefuelEvent.Amount;
 
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM / 1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
@@ -331,8 +335,10 @@ namespace Janus_Client_V1
                     Truck_Daten.CANCEL_STRAFE = data.GamePlay.JobCancelled.Penalty;
 
                     // Sonstiges
-                    Truck_Daten.LKW_SCHADEN = (int)data.TruckValues.CurrentValues.DamageValues.WheelsAvg;
-                    Truck_Daten.TRAILER_SCHADEN = (int)data.TrailerValues[0].DamageValues.Wheels;
+                    Truck_Daten.LKW_SCHADEN = Convert.ToInt32(data.TruckValues.CurrentValues.DamageValues.WheelsAvg * 100);
+                    Truck_Daten.TRAILER_SCHADEN = Convert.ToInt32(data.TrailerValues[0].DamageValues.Wheels * 100);
+
+            
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
