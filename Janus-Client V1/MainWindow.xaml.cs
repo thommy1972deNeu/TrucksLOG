@@ -34,6 +34,8 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
 
+            BottomFlyOut.IsOpen = !BottomFlyOut.IsOpen;
+
             Truck_Daten.CLIENT_VERSION = CLIENT_VERSION;
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
@@ -270,7 +272,7 @@ namespace Janus_Client_V1
                     // ALLGEMEIN
                     Truck_Daten.TELEMETRY_VERSION = "Telemetry: " + data.TelemetryVersion.Major.ToString() + "." + data.TelemetryVersion.Minor.ToString();
                     Truck_Daten.DLL_VERSION = "DLL: " + data.DllVersion.ToString();
-
+                    Truck_Daten.EURO_DOLLAR = Truck_Daten.SPIEL == "Ets2" ? "€" : "$";
                     // Tour TEST
                     Truck_Daten.STARTORT = data.JobValues.CitySource;
                     Truck_Daten.STARTORT_ID = data.JobValues.CitySourceId;
@@ -300,6 +302,10 @@ namespace Janus_Client_V1
                     Truck_Daten.PARKING_BRAKE = data.TruckValues.CurrentValues.MotorValues.BrakeValues.ParkingBrake;
                     Truck_Daten.BLINKER_LINKS = data.TruckValues.CurrentValues.LightsValues.BlinkerLeftOn;
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
+                    Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
+                    Truck_Daten.LICHT_HIGH = data.TruckValues.CurrentValues.LightsValues.BeamHigh;
+                    Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
+
                     Truck_Daten.TEMPOLIMIT = Truck_Daten.SPIEL == "Ets2" ? (int)data.NavigationValues.SpeedLimit.Kph : (int)data.NavigationValues.SpeedLimit.Mph;
                     // FRACHTSCHADEN
                     Truck_Daten.FRACHTSCHADEN = Math.Round(data.TrailerValues[0].DamageValues.Cargo * 100);
@@ -332,8 +338,6 @@ namespace Janus_Client_V1
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
                     Truck_Daten.AUTOPARKING = data.GamePlay.JobDelivered.AutoParked;
                     Truck_Daten.AUTOLOADING = data.GamePlay.JobDelivered.AutoLoaded;
-
-
 
                 }
             }

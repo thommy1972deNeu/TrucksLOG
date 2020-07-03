@@ -13,6 +13,7 @@ namespace Janus_Client_V1.Spieldaten
         private string fahrinfo_2;
         private string spiel;
         private bool soundan;
+        private string euro_dollar;
 
         // Truck Daten
         private string lkw_hersteller;
@@ -52,7 +53,7 @@ namespace Janus_Client_V1.Spieldaten
         // LICHTER
         private bool beam_low;
         private bool beam_high;
-        private bool brake_light;
+        private bool bremslicht;
         private bool reverse_light;
         private bool blinker_links;
         private bool blinker_rechts;
@@ -109,6 +110,19 @@ namespace Janus_Client_V1.Spieldaten
         private bool autoparking;
         private bool autoloading;
         // -----------------------------------------------------------------------------------
+
+        public string EURO_DOLLAR
+        {
+            get { return euro_dollar; }
+            set
+            {
+                if (euro_dollar != value)
+                {
+                    euro_dollar = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public double CANCEL_STRAFE
         {
@@ -782,14 +796,14 @@ namespace Janus_Client_V1.Spieldaten
 
         }
 
-        public bool BRAKE_LIGHT
+        public bool BREMSLICHT
         {
-            get { return brake_light; }
+            get { return bremslicht; }
             set
             {
-                if (brake_light != value)
+                if (bremslicht != value)
                 {
-                    brake_light = value;
+                    bremslicht = value;
                     NotifyPropertyChanged();
                 }
             }
