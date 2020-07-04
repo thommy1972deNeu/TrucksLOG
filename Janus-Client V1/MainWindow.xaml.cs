@@ -45,9 +45,9 @@ namespace Janus_Client_V1
 
                 if (string.IsNullOrEmpty(REG.Lesen("Config", "ETS2_PFAD")))
                 {
-                    // PfadAngabe pf = new PfadAngabe();
-                    // pf.ShowDialog();
-                    // return;
+                     PfadAngabe pf = new PfadAngabe();
+                     pf.ShowDialog();
+                    return;
                 }
 
 

@@ -33,7 +33,7 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                 <Image x:Name="tmp_logo" Source="szjBrQbB_400x400.png"  Width="100" Height="100" Margin="0,0,10,0"/>
-                <TextBox x:Name="pfad_tmp" Width="400" Height="30" Margin="0,0,10,0"/>
+                <TextBox x:Name="pfad_tmp" Width="400" Height="30" Margin="0,0,10,0" Loaded="pfad_tmp_Loaded"/>
                 <Button x:Name="tmp_suchen_btn" Content="Suchen" Width="100" Height="30" Click="tmp_suchen_btn_Click" />
                
             </StackPanel>
