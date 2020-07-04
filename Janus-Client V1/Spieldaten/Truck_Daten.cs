@@ -44,7 +44,7 @@ namespace Janus_Client_V1.Spieldaten
         private int rpm;
         private bool scheibenwischer;
         private int tempolimit;
-        private bool trailer_attached;
+        private bool trailer_angehangen;
         // SCHÄDEN
         private double frachtschaden;
         private double lkw_schaden;
@@ -88,7 +88,7 @@ namespace Janus_Client_V1.Spieldaten
         private string gewicht;
         private string ladung_name;
         private string ladung_id;
-
+        private int gef_strecke;
         // POSITION
         private double pos_x;
         private double pos_y;
@@ -102,7 +102,7 @@ namespace Janus_Client_V1.Spieldaten
         private int maut_betrag;
 
         // Tanken
-        private double liter_getankt;
+        private float liter_getankt;
 
 
         // JOB ABGABE
@@ -110,15 +110,27 @@ namespace Janus_Client_V1.Spieldaten
         private bool autoparking;
         private bool autoloading;
         // -----------------------------------------------------------------------------------
-
-        public bool TRAILER_ATTACHED
+        public int GEF_STRECKE
         {
-            get { return trailer_attached; }
+            get { return gef_strecke; }
             set
             {
-                if (trailer_attached != value)
+                if (gef_strecke != value)
                 {
-                    trailer_attached = value;
+                    gef_strecke = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool TRAILER_ANGEHANGEN
+        {
+            get { return trailer_angehangen; }
+            set
+            {
+                if (trailer_angehangen != value)
+                {
+                    trailer_angehangen = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -423,7 +435,7 @@ namespace Janus_Client_V1.Spieldaten
         }
 
 
-        public double LITER_GETANKT
+        public float LITER_GETANKT
         {
             get { return liter_getankt; }
             set

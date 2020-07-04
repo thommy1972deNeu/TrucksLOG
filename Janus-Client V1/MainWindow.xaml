@@ -92,6 +92,10 @@
                         <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
                     </ComboBox>
 
+                    <Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
+
+       
+
                 </StackPanel>
             </mah:Flyout>
 
@@ -139,11 +143,7 @@
                        
                        
                     </StackPanel>
-                    <Button x:Name="preis_eintragen" Height="40" Width="407" Content="Preis je Liter Eintragen" Background="Green" HorizontalAlignment="Left" Margin="0,20,0,0" Padding="10" Click="preis_eintragen_Click"/>
-
-
-
-
+                    <Button x:Name="preis_eintragen" Height="40" Width="407" Content="Preis je Liter eintragen:" Background="Green" HorizontalAlignment="Left" Margin="0,20,0,0" Padding="10" Click="Preis_eintragen_Click"/>
 
                 </StackPanel>
 
@@ -212,6 +212,8 @@
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
 
+    
+    
 
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom" Height="30" FontSize="12" HorizontalAlignment="Stretch">
@@ -251,7 +253,8 @@
                 <RowDefinition Height="453*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="22*"/>
+                <ColumnDefinition Width="190"/>
+                <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
@@ -267,10 +270,8 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="27*"/>
+                <ColumnDefinition Width="190"/>
             </Grid.ColumnDefinitions>
-
 
 
             <Label Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" FontSize="50" FontFamily="Oswald" FontWeight="Bold"/>
@@ -311,17 +312,17 @@
 
 
             <Border Background="LightGray" BorderBrush="red" BorderThickness="0,5,5,5" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="3" CornerRadius="0,20,20,0"/>
-            <Label Grid.Row="10" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ATTACHED, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="10" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ATTACHED, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="10" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ATTACHED, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="10" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="10" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="10" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
 
             <Label Grid.Row="8" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="LKW_SCHADEN_1" Content="LKW-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" />
             <Label Grid.Row="8" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="LKW_SCHADEN_2" Content="{Binding LKW_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
             <Label Grid.Row="8" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="LKW_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
 
-            <Label Grid.Row="9" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="TRAILER_SCHADEN_1" Content="Trailer-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ATTACHED, Converter={StaticResource trailer_attached}}" />
-            <Label Grid.Row="9" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="TRAILERSCHADEN_2" Content="{Binding TRAILER_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ATTACHED, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="9" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="TRAILER_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ATTACHED, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="9" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="TRAILER_SCHADEN_1" Content="Trailer-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" />
+            <Label Grid.Row="9" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="TRAILERSCHADEN_2" Content="{Binding TRAILER_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="9" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="TRAILER_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
 
             <!-- TEMPOLIMIT -->
             <Border x:Name="TEMPOLIMIT" BorderBrush="Red" BorderThickness="20" CornerRadius="150" Grid.Row="1" Grid.Column="0" Height="150" Width="150" Grid.RowSpan="3" VerticalAlignment="Top" Grid.ColumnSpan="1" Background="White">
@@ -338,7 +339,7 @@
             <Label Foreground="Black" Content="{Binding LKW_HERSTELLER}" Grid.Row="8" Grid.Column="17" Grid.RowSpan="2" FontSize="24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
             <Label Foreground="Black" Content="{Binding LKW_MODELL}" Grid.Row="10" Grid.Column="17" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" />
 
-            <Image Source="{iconPacks:MaterialImage Kind=TruckTrailer}" HorizontalAlignment="Right" Height="30" Grid.Row="10" Grid.Column="15" Visibility="{Binding TRAILER_ATTACHED, Converter={StaticResource trailer_attached}}"/>
+            <Image Source="{iconPacks:MaterialImage Kind=TruckTrailer}" HorizontalAlignment="Right" Height="30" Grid.Row="10" Grid.Column="15" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
             <Image Source="{iconPacks:FontAwesomeImage Kind=TruckSolid}" HorizontalAlignment="Left" Height="30" Grid.Row="10" Grid.Column="16"/>
 
 

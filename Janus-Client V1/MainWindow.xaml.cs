@@ -1,47 +1,38 @@
 ﻿using ControlzEx.Theming;
 using Janus_Client_V1.Klassen;
 using Janus_Client_V1.Spieldaten;
-using MahApps.Metro.Controls;
 using SCSSdkClient;
 using SCSSdkClient.Object;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Net;
 using System.Windows;
 using System.Windows.Threading;
 
 namespace Janus_Client_V1
 {
-    /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow
     {
-
-
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
+
         DispatcherTimer job_update_timer = new DispatcherTimer();
+
+
         public bool InvokeRequired { get; private set; }
-        public static string CLIENT_VERSION = "1.0.4";
-        
+
 
         public MainWindow()
         {
             InitializeComponent();
+            Logging.Make_Log_File();
 
-            
 
-            Truck_Daten.CLIENT_VERSION = CLIENT_VERSION;
+            Logging.WriteClientLog("Version: " + Truck_Daten.CLIENT_VERSION);
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
-            
-
-            UPDATER();
 
             if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")))
             {
@@ -54,58 +45,40 @@ namespace Janus_Client_V1
 
                 if (string.IsNullOrEmpty(REG.Lesen("Config", "ETS2_PFAD")))
                 {
-                   // PfadAngabe pf = new PfadAngabe();
-                   // pf.ShowDialog();
-                   // return;
+                    // PfadAngabe pf = new PfadAngabe();
+                    // pf.ShowDialog();
+                    // return;
                 }
-              
 
 
 
-                    Lade_Voreinstellungen();
-                    Telemetry = new SCSSdkTelemetry();
-                    Telemetry.Data += Telemetry_Data;
-                    Telemetry.JobStarted += TelemetryOnJobStarted;
 
-                    Telemetry.JobCancelled += TelemetryJobCancelled;
-                    Telemetry.JobDelivered += TelemetryJobDelivered;
-                    Telemetry.Fined += TelemetryFined;
-                    Telemetry.Tollgate += TelemetryTollgate;
-                    Telemetry.Ferry += TelemetryFerry;
-                    Telemetry.Train += TelemetryTrain;
-                    Telemetry.RefuelStart += TelemetryRefuel;
-                    Telemetry.RefuelEnd += TelemetryRefuelEnd;
-                    Telemetry.RefuelPayed += TelemetryRefuelPayed;
+                Lade_Voreinstellungen();
+                Telemetry = new SCSSdkTelemetry();
+                Telemetry.Data += Telemetry_Data;
+                Telemetry.JobStarted += TelemetryOnJobStarted;
 
-                    if (REG.Lesen("Config", "Systemsounds") == "An")
-                        SoundPlayer.Sound_Willkommen();
+                Telemetry.JobCancelled += TelemetryJobCancelled;
+                Telemetry.JobDelivered += TelemetryJobDelivered;
+                Telemetry.Fined += TelemetryFined;
+                Telemetry.Tollgate += TelemetryTollgate;
+                Telemetry.Ferry += TelemetryFerry;
+                Telemetry.Train += TelemetryTrain;
+                Telemetry.RefuelStart += TelemetryRefuel;
+                Telemetry.RefuelEnd += TelemetryRefuelEnd;
+                Telemetry.RefuelPayed += TelemetryRefuelPayed;
 
-                    this.DataContext = Truck_Daten;
+                if (REG.Lesen("Config", "Systemsounds") == "An")
+                    SoundPlayer.Sound_Willkommen();
+
+                this.DataContext = Truck_Daten;
 
 
-                
+
             }
         }
 
-        private void UPDATER()
-        {
 
-            WebClient client = new WebClient();
-            Stream stream = client.OpenRead("https://projekt-janus.de/client_updates/version.txt");
-            StreamReader reader = new StreamReader(stream);
-            string str = reader.ReadToEnd();
-            if (str != CLIENT_VERSION)
-            {
-                MessageBoxResult result = MessageBox.Show("Willst du das Update jetzt herunterladen ?", "Neues Update vorhanden !", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    Process.Start(API.client);
-                    Application.Current.Shutdown();
-
-                }
-
-            }
-        }
 
 
         private void timer_Tick(object sender, EventArgs e)
@@ -117,6 +90,7 @@ namespace Janus_Client_V1
             post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
             string response = API.HTTPSRequestPost(API.job_update, post_param);
             Console.WriteLine(response);
+            Logging.WriteClientLog("Tour Update:" + response);
         }
 
         private void TelemetryOnJobStarted(object sender, EventArgs e)
@@ -173,6 +147,7 @@ namespace Janus_Client_V1
             job_update_timer.Tick += timer_Tick;
             job_update_timer.Start();
 
+            Logging.WriteClientLog("Tour gestartet: " + response);
         }
 
         private void TelemetryJobCancelled(object sender, EventArgs e)
@@ -183,12 +158,11 @@ namespace Janus_Client_V1
             post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
             string response = API.HTTPSRequestPost(API.job_cancel, post_param);
             Console.WriteLine(response);
-
             REG.Schreiben("Config", "TOUR_ID", "");
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Abgebrochen();
 
             job_update_timer.Stop();
-
+            Logging.WriteClientLog("Tour abgebrochen: " + response);
         }
 
         private void TelemetryJobDelivered(object sender, EventArgs e)
@@ -198,6 +172,7 @@ namespace Janus_Client_V1
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
             post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN_ABGABE.ToString());
+            post_param.Add("STRECKE", Truck_Daten.GEF_STRECKE.ToString());
 
             string response = API.HTTPSRequestPost(API.job_finish, post_param);
             Console.WriteLine(response);
@@ -206,6 +181,7 @@ namespace Janus_Client_V1
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Beendet();
 
             job_update_timer.Stop();
+            Logging.WriteClientLog("Tour Abgeliefert: " + response);
         }
 
 
@@ -217,6 +193,7 @@ namespace Janus_Client_V1
             post_param.Add("GRUND", Truck_Daten.GRUND);
             string response = API.HTTPSRequestPost(API.strafe, post_param);
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Strafe_Erhalten();
+            Logging.WriteClientLog("Strafe erhalten: " + response);
         }
 
         private void TelemetryTollgate(object sender, EventArgs e)
@@ -227,21 +204,23 @@ namespace Janus_Client_V1
             string response = API.HTTPSRequestPost(API.tollgate, post_param);
             Console.WriteLine(response);
 
-            if(REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
+            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
+            Logging.WriteClientLog("Maut durchfahren: " + response);
         }
 
         private void TelemetryFerry(object sender, EventArgs e)
         {
-
+            Logging.WriteClientLog("Fähre genommen");
         }
 
         private void TelemetryTrain(object sender, EventArgs e)
         {
+            Logging.WriteClientLog("Zug genommen!");
         }
 
         private void TelemetryRefuel(object sender, EventArgs e)
         {
-
+            Logging.WriteClientLog("TelemetryRefuel-EVENT");
         }
 
 
@@ -254,16 +233,17 @@ namespace Janus_Client_V1
             post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
             post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
             string response = API.HTTPSRequestPost(API.tanken, post_param);
-
+            Logging.WriteClientLog("TelemetryRefuelEnd-EVENT: " + response);
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
-            // GEHT NIUCHT
+            Logging.WriteClientLog("TelemetryRefuelPayed-EVENT: ");
         }
 
         private void TelemetryRefuelStart(object sender, EventArgs e)
         {
+            Logging.WriteClientLog("TelemetryRefuelStart-EVENT");
             BottomFlyOut.IsOpen = !BottomFlyOut.IsOpen;
         }
 
@@ -294,6 +274,7 @@ namespace Janus_Client_V1
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
                     Truck_Daten.CARGO_LOADED = data.JobValues.CargoLoaded;
+                    Truck_Daten.GEF_STRECKE = (int)data.GamePlay.JobDelivered.DistanceKm;
                     // LKW DATEN
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
@@ -309,7 +290,7 @@ namespace Janus_Client_V1
                     Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
                     Truck_Daten.LICHT_HIGH = data.TruckValues.CurrentValues.LightsValues.BeamHigh;
                     Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
-
+                    Truck_Daten.TRAILER_ANGEHANGEN = data.TrailerValues[0].Attached;
                     Truck_Daten.TEMPOLIMIT = Truck_Daten.SPIEL == "Ets2" ? (int)data.NavigationValues.SpeedLimit.Kph : (int)data.NavigationValues.SpeedLimit.Mph;
                     // FRACHTSCHADEN
                     Truck_Daten.FRACHTSCHADEN = Math.Round(data.TrailerValues[0].DamageValues.Cargo * 100);
@@ -321,7 +302,7 @@ namespace Janus_Client_V1
                     Truck_Daten.MAUT_BETRAG = (int)data.GamePlay.TollgateEvent.PayAmount;
 
                     // TANKEN
-                    Truck_Daten.LITER_GETANKT = (int)data.GamePlay.RefuelEvent.Amount;
+                    Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
 
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM / 1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
@@ -338,7 +319,7 @@ namespace Janus_Client_V1
                     Truck_Daten.LKW_SCHADEN = Convert.ToInt32(data.TruckValues.CurrentValues.DamageValues.WheelsAvg * 100);
                     Truck_Daten.TRAILER_SCHADEN = Convert.ToInt32(data.TrailerValues[0].DamageValues.Wheels * 100);
 
-            
+
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
@@ -363,6 +344,7 @@ namespace Janus_Client_V1
                 REG.Schreiben("Config", "CLIENT_KEY", "");
 
             Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
+            Logging.WriteClientLog("Voreinstellungen geladen !");
         }
 
         private void LaunchGitHubSite(object sender, System.Windows.RoutedEventArgs e)
@@ -430,15 +412,15 @@ namespace Janus_Client_V1
         }
 
 
-        private void preis_eintragen_Click(object sender, RoutedEventArgs e)
+        private void Preis_eintragen_Click(object sender, RoutedEventArgs e)
         {
-
+            Logging.WriteClientLog("Preis eintragen CLICK-EVENT");
         }
 
 
         private void Systemsounds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if((string)Systemsounds.SelectedValue == "An")
+            if ((string)Systemsounds.SelectedValue == "An")
             {
                 REG.Schreiben("Config", "Systemsounds", "An");
             }
@@ -472,5 +454,14 @@ namespace Janus_Client_V1
 
             return System.Text.Encoding.Default.GetString(bytes);
         }
+
+
+        private void LOG_ORDNER_OEFFNEN(object sender, RoutedEventArgs e)
+        {
+            Process.Start(Config.LogRoot);
+        }
     }
+
+
 }
+
