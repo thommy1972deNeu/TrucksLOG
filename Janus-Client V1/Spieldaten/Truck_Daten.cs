@@ -14,6 +14,9 @@ namespace Janus_Client_V1.Spieldaten
         private string spiel;
         private bool soundan;
         private string euro_dollar;
+        private string ets_pfad;
+        private string ats_pfad;
+        private string tmp_pfad;
 
         // Truck Daten
         private string lkw_hersteller;
@@ -94,6 +97,9 @@ namespace Janus_Client_V1.Spieldaten
         private double pos_y;
         private double pos_z;
 
+        // Job Abgabe
+        private double abgabe_gef_strecke;
+
         // STRAFEN
         private int straf_betrag;
         private string grund;
@@ -102,7 +108,7 @@ namespace Janus_Client_V1.Spieldaten
         private int maut_betrag;
 
         // Tanken
-        private float liter_getankt;
+        private double liter_getankt;
 
 
         // JOB ABGABE
@@ -110,6 +116,62 @@ namespace Janus_Client_V1.Spieldaten
         private bool autoparking;
         private bool autoloading;
         // -----------------------------------------------------------------------------------
+
+        public double ABGABE_GEF_STRECKE
+        {
+            get { return abgabe_gef_strecke; }
+            set
+            {
+                if (abgabe_gef_strecke != value)
+                {
+                    abgabe_gef_strecke = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public string TMP_PFAD
+        {
+            get { return tmp_pfad; }
+            set
+            {
+                if (tmp_pfad != value)
+                {
+                    tmp_pfad = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public string ATS_PFAD
+        {
+            get { return ats_pfad; }
+            set
+            {
+                if (ats_pfad != value)
+                {
+                    ats_pfad = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public string ETS_PFAD
+        {
+            get { return ets_pfad; }
+            set
+            {
+                if (ets_pfad != value)
+                {
+                    ets_pfad = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public int GEF_STRECKE
         {
             get { return gef_strecke; }
@@ -435,7 +497,7 @@ namespace Janus_Client_V1.Spieldaten
         }
 
 
-        public float LITER_GETANKT
+        public double LITER_GETANKT
         {
             get { return liter_getankt; }
             set

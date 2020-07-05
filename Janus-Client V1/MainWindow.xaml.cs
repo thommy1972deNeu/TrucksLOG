@@ -14,6 +14,7 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
+        public string CLIENT_VERSION = "1.0.4";
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
@@ -30,7 +31,7 @@ namespace Janus_Client_V1
             Logging.Make_Log_File();
 
 
-            Logging.WriteClientLog("Version: " + Truck_Daten.CLIENT_VERSION);
+            Logging.WriteClientLog("Version: " + CLIENT_VERSION);
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
 
@@ -43,17 +44,15 @@ namespace Janus_Client_V1
             else
             {
 
-                if (string.IsNullOrEmpty(REG.Lesen("Config", "ETS2_PFAD")))
+                if (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
                 {
-                     PfadAngabe pf = new PfadAngabe();
+                     Pfad_Angeben pf = new Pfad_Angeben();
                      pf.ShowDialog();
                     return;
                 }
 
-
-
-
                 Lade_Voreinstellungen();
+
                 Telemetry = new SCSSdkTelemetry();
                 Telemetry.Data += Telemetry_Data;
                 Telemetry.JobStarted += TelemetryOnJobStarted;
@@ -68,12 +67,31 @@ namespace Janus_Client_V1
                 Telemetry.RefuelEnd += TelemetryRefuelEnd;
                 Telemetry.RefuelPayed += TelemetryRefuelPayed;
 
+                /* DEAKTIVIERT FÜR PATTI
                 if (REG.Lesen("Config", "Systemsounds") == "An")
                     SoundPlayer.Sound_Willkommen();
+                */
 
-                this.DataContext = Truck_Daten;
+                try
+                {
+                    ets2_content.Content = REG.Lesen("Pfade", "ETS2_PFAD") != "" ? "OK" : "Fehlerhaft";
+                    ats_content.Content = REG.Lesen("Pfade", "ATS_PFAD") != "" ? "OK" : "Fehlerhaft";
+                    tmp_content.Content = REG.Lesen("Pfade", "TMP_PFAD") != "" ? "OK" : "Fehlerhaft";
+                    status_bar_version.Content = "Client Version: " + CLIENT_VERSION;
+                    Logging.WriteClientLog("Pfade aus REG gelesen und in Seitenmenü angezeigt !");
+                } catch (Exception ex)
+                {
+                    Logging.WriteClientLog("Fehler beim laden der Pfade aus Registry" + ex.Message);
+                }
 
-
+                try
+                {
+                    this.DataContext = Truck_Daten;
+                } catch (Exception ex)
+                {
+                    Logging.WriteClientLog("Fehler beim setzen des DataContext" + ex.Message);
+                }
+                
 
             }
         }
@@ -89,7 +107,6 @@ namespace Janus_Client_V1
             post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
             post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
             string response = API.HTTPSRequestPost(API.job_update, post_param);
-            Console.WriteLine(response);
             Logging.WriteClientLog("Tour Update:" + response);
         }
 
@@ -112,42 +129,57 @@ namespace Janus_Client_V1
                     return;
                 }
             }
+            if(REG.Lesen("Config", "TOUR_ID") == "")
+            {
+                try
+                {
+                    REG.Schreiben("Config", "TOUR_ID", GenerateString());
+                } catch (Exception ex)
+                {
+                    Logging.WriteClientLog("Fehler beim Schreiben TOUR_ID mit GENERATE STRING(): " + ex.Message);
+                }
+               
+            }
+            
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("STARTORT", Truck_Daten.STARTORT.ToString());
+                post_param.Add("STARTORT_ID", Truck_Daten.STARTORT_ID);
+                post_param.Add("STARTFIRMA", Truck_Daten.STARTFIRMA);
+                post_param.Add("STARTFIRMA_ID", Truck_Daten.STARTFIRMA_ID);
+                post_param.Add("ZIELORT", Truck_Daten.ZIELORT);
+                post_param.Add("ZIELORT_ID", Truck_Daten.ZIELORT_ID);
+                post_param.Add("ZIELFIRMA", Truck_Daten.ZIELFIRMA);
+                post_param.Add("ZIELFIRMA_ID", Truck_Daten.ZIELFIRMA_ID);
+                post_param.Add("LADUNG", Truck_Daten.LADUNG_NAME);
+                post_param.Add("LADUNG_ID", Truck_Daten.LADUNG_ID);
+                post_param.Add("GEWICHT", Truck_Daten.GEWICHT.ToString());
+                post_param.Add("EINKOMMEN", Truck_Daten.EINKOMMEN.ToString());
+                post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
+                post_param.Add("LKW_MODELL", Truck_Daten.LKW_MODELL);
+                post_param.Add("LKW_HERSTELLER", Truck_Daten.LKW_HERSTELLER);
+                post_param.Add("LKW_HERSTELLER_ID", Truck_Daten.LKW_HERSTELLER_ID);
+                post_param.Add("GESAMT_KM", ((float)Truck_Daten.GESAMT_KM).ToString());
+                post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
+                post_param.Add("SPIEL", Truck_Daten.SPIEL);
+                post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
 
-            REG.Schreiben("Config", "TOUR_ID", GenerateString());
+                string response = API.HTTPSRequestPost(API.job_started, post_param);
+                Console.WriteLine(response);
+                REG.Schreiben("Config", "Frachtmarkt", Truck_Daten.FRACHTMARKT);
 
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("STARTORT", Truck_Daten.STARTORT.ToString());
-            post_param.Add("STARTORT_ID", Truck_Daten.STARTORT_ID);
-            post_param.Add("STARTFIRMA", Truck_Daten.STARTFIRMA);
-            post_param.Add("STARTFIRMA_ID", Truck_Daten.STARTFIRMA_ID);
-            post_param.Add("ZIELORT", Truck_Daten.ZIELORT);
-            post_param.Add("ZIELORT_ID", Truck_Daten.ZIELORT_ID);
-            post_param.Add("ZIELFIRMA", Truck_Daten.ZIELFIRMA);
-            post_param.Add("ZIELFIRMA_ID", Truck_Daten.ZIELFIRMA_ID);
-            post_param.Add("LADUNG", Truck_Daten.LADUNG_NAME);
-            post_param.Add("LADUNG_ID", Truck_Daten.LADUNG_ID);
-            post_param.Add("GEWICHT", Truck_Daten.GEWICHT.ToString());
-            post_param.Add("EINKOMMEN", Truck_Daten.EINKOMMEN.ToString());
-            post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
-            post_param.Add("LKW_MODELL", Truck_Daten.LKW_MODELL);
-            post_param.Add("LKW_HERSTELLER", Truck_Daten.LKW_HERSTELLER);
-            post_param.Add("LKW_HERSTELLER_ID", Truck_Daten.LKW_HERSTELLER_ID);
-            post_param.Add("GESAMT_KM", ((float)Truck_Daten.GESAMT_KM).ToString());
-            post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
-            post_param.Add("SPIEL", Truck_Daten.SPIEL);
-            post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
-
-            string response = API.HTTPSRequestPost(API.job_started, post_param);
-            Console.WriteLine(response);
-            REG.Schreiben("Config", "Frachtmarkt", Truck_Daten.FRACHTMARKT);
-
-            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Gestartet();
-            job_update_timer.Tick += timer_Tick;
-            job_update_timer.Start();
-
-            Logging.WriteClientLog("Tour gestartet: " + response);
+                if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Gestartet();
+                job_update_timer.Tick += timer_Tick;
+                job_update_timer.Start();
+                Logging.WriteClientLog("Tour gestartet: " + response);
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("Fehler beim Schreiben TOUR_ID mit GENERATE STRING(): " + ex.Message);
+            }
         }
 
         private void TelemetryJobCancelled(object sender, EventArgs e)
@@ -160,7 +192,6 @@ namespace Janus_Client_V1
             Console.WriteLine(response);
             REG.Schreiben("Config", "TOUR_ID", "");
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Abgebrochen();
-
             job_update_timer.Stop();
             Logging.WriteClientLog("Tour abgebrochen: " + response);
         }
@@ -168,11 +199,10 @@ namespace Janus_Client_V1
         private void TelemetryJobDelivered(object sender, EventArgs e)
         {
             Dictionary<string, string> post_param = new Dictionary<string, string>();
-
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
-            post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN_ABGABE.ToString());
-            post_param.Add("STRECKE", Truck_Daten.GEF_STRECKE.ToString());
+            post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
+            post_param.Add("STRECKE", Truck_Daten.ABGABE_GEF_STRECKE.ToString());
 
             string response = API.HTTPSRequestPost(API.job_finish, post_param);
             Console.WriteLine(response);
@@ -220,31 +250,35 @@ namespace Janus_Client_V1
 
         private void TelemetryRefuel(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("TelemetryRefuel-EVENT");
+            
         }
 
 
         private void TelemetryRefuelEnd(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
-            post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
-            post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
-            post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
-            string response = API.HTTPSRequestPost(API.tanken, post_param);
-            Logging.WriteClientLog("TelemetryRefuelEnd-EVENT: " + response);
+           
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
+           
+
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
+            post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
+            post_param.Add("POS_Y", Truck_Daten.POS_X.ToString());
+            post_param.Add("POS_Z", Truck_Daten.POS_X.ToString());
+
+            string response = API.HTTPSRequestPost(API.tanken, post_param);
             Logging.WriteClientLog("TelemetryRefuelPayed-EVENT: ");
         }
 
         private void TelemetryRefuelStart(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("TelemetryRefuelStart-EVENT");
-            BottomFlyOut.IsOpen = !BottomFlyOut.IsOpen;
+
+           
+           
         }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
@@ -257,6 +291,13 @@ namespace Janus_Client_V1
                     Truck_Daten.TELEMETRY_VERSION = "Telemetry: " + data.TelemetryVersion.Major.ToString() + "." + data.TelemetryVersion.Minor.ToString();
                     Truck_Daten.DLL_VERSION = "DLL: " + data.DllVersion.ToString();
                     Truck_Daten.EURO_DOLLAR = Truck_Daten.SPIEL == "Ets2" ? "€" : "$";
+
+                    // PFADE für Seitenmenü
+                    Truck_Daten.ETS_PFAD = REG.Lesen("Pfade", "ETS2_PFAD");
+                    Truck_Daten.ATS_PFAD = REG.Lesen("PFADE", "ATS_PFAD");
+                    Truck_Daten.TMP_PFAD = REG.Lesen("Pfade", "TMP_PFAD");
+
+
                     // Tour TEST
                     Truck_Daten.STARTORT = data.JobValues.CitySource;
                     Truck_Daten.STARTORT_ID = data.JobValues.CitySourceId;
@@ -291,9 +332,9 @@ namespace Janus_Client_V1
                     Truck_Daten.LICHT_HIGH = data.TruckValues.CurrentValues.LightsValues.BeamHigh;
                     Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
                     Truck_Daten.TRAILER_ANGEHANGEN = data.TrailerValues[0].Attached;
-                    Truck_Daten.TEMPOLIMIT = Truck_Daten.SPIEL == "Ets2" ? (int)data.NavigationValues.SpeedLimit.Kph : (int)data.NavigationValues.SpeedLimit.Mph;
+                    Truck_Daten.TEMPOLIMIT = (int)(Truck_Daten.SPIEL == "Ets2" ? Math.Round(data.NavigationValues.SpeedLimit.Kph) : (int)data.NavigationValues.SpeedLimit.Mph);
                     // FRACHTSCHADEN
-                    Truck_Daten.FRACHTSCHADEN = Math.Round(data.TrailerValues[0].DamageValues.Cargo * 100);
+                    Truck_Daten.FRACHTSCHADEN = data.JobValues.CargoValues.CargoDamage * 100;
                     // STRAFE
                     Truck_Daten.STRAF_BETRAG = (int)data.GamePlay.FinedEvent.Amount;
                     Truck_Daten.GRUND = data.GamePlay.FinedEvent.Offence.ToString();
@@ -323,9 +364,9 @@ namespace Janus_Client_V1
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
+                    Truck_Daten.ABGABE_GEF_STRECKE = data.GamePlay.JobDelivered.DistanceKm;
                     Truck_Daten.AUTOPARKING = data.GamePlay.JobDelivered.AutoParked;
                     Truck_Daten.AUTOLOADING = data.GamePlay.JobDelivered.AutoLoaded;
-
                 }
             }
             catch
@@ -336,15 +377,23 @@ namespace Janus_Client_V1
 
         private void Lade_Voreinstellungen()
         {
-            Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
+            try
+            {
+                Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
-            if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID")))
-                REG.Schreiben("Config", "TOUR_ID", "");
-            if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
-                REG.Schreiben("Config", "CLIENT_KEY", "");
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID")))
+                    REG.Schreiben("Config", "TOUR_ID", "");
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
+                    REG.Schreiben("Config", "CLIENT_KEY", "");
 
-            Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
-            Logging.WriteClientLog("Voreinstellungen geladen !");
+                Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
+                Logging.WriteClientLog("Voreinstellungen geladen !");
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("Fehler beim Laden der Voreinstellungen " + ex.Message);
+            }
+
+
         }
 
         private void LaunchGitHubSite(object sender, System.Windows.RoutedEventArgs e)
@@ -374,7 +423,7 @@ namespace Janus_Client_V1
         {
             try
             {
-                Process.Start("https://projekt-janus.de/?q=qite8qjA36J3EYMRAffT04CVpymrigEwWqLHJ6dYTJzGTPNbYhTKBiXMV8OVFuXtMg3BPsoNpehvZMpuCous8axNJBjQ6jQWiSeD");
+                Process.Start("https://paypal.me/ErIstWiederDa/2,00");
             } catch (Exception ex)
             {
                 msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut..." + ex.Message);
@@ -459,6 +508,16 @@ namespace Janus_Client_V1
         private void LOG_ORDNER_OEFFNEN(object sender, RoutedEventArgs e)
         {
             Process.Start(Config.LogRoot);
+        }
+
+        private void spende_paypal(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://paypal.me/ErIstWiederDa/2,00");
+        }
+
+        private void patreon_link(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://www.patreon.com/projektjanus");
         }
     }
 

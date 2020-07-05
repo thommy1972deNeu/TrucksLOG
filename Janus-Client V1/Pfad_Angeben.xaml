@@ -1,0 +1,69 @@
+﻿<Window x:Class="Janus_Client_V1.Pfad_Angeben"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Janus_Client_V1"
+        mc:Ignorable="d"
+        Title="Spielpfade angeben..." Height="404.062" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    <Window.Background>
+        <ImageBrush ImageSource="road-1303617_640.jpg" Opacity="0.2"/>
+    </Window.Background>
+    <Grid>
+        <Label Content="Bitte gib deine Spielpfade an:" FontFamily="Oswald" FontSize="26" Foreground="White" Height="50" Width="350" Margin="225,10,217,359"/>
+
+        <StackPanel Orientation="Vertical">
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,60,0,0">
+                <Image x:Name="ats_logo" Source="ATS_Logo.jpg" Width="65" Height="59" Margin="0,0,10,0" OpacityMask="White"/>
+                <TextBox x:Name="pfad_ats" Width="400" Height="30" Margin="0,0,10,0" VerticalContentAlignment="Center"/>
+                <Button x:Name="ats_suchen_btn" Content="Suchen" Width="100" Height="30" Click="ats_suchen_btn_Click"/>
+
+
+            </StackPanel>
+
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Image x:Name="ets_logo" Source="ets2_logo_.png" Width="65" Margin="0,0,10,0" />
+                <TextBox x:Name="pfad_ets" Width="400" Height="30" Margin="0,0,10,0" VerticalContentAlignment="Center" />
+                <Button x:Name="ets_suchen_btn" Content="Suchen" Width="100" Height="30" Click="ets_suchen_btn_Click"/>
+
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Image x:Name="tmp_logo" Source="szjBrQbB_400x400.png"  Width="65" Margin="0,0,10,0"/>
+                <TextBox x:Name="pfad_tmp" Width="400" Height="30" Margin="0,0,10,0" Loaded="pfad_tmp_Loaded" VerticalContentAlignment="Center"/>
+                <Button x:Name="tmp_suchen" Content="Suchen" Width="100" Height="30" Click="tmp_suchen_btn_Click" />
+
+            </StackPanel>
+
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50">
+
+                <Button x:Name="absende" Content="Absenden" Width="100" Height="30" Click="ok_click" Margin="0,0,100,0" Foreground="Black" >
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="White" Offset="0.006"/>
+                            <GradientStop Color="#FF0AE245" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+
+                <Button x:Name="abbrechen" Content="Abbrechen" Width="100" Height="30" Click="abbrechen_click" Margin="0,0,0,0" >
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF765050" Offset="0"/>
+                            <GradientStop Color="Red" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+
+
+            </StackPanel>
+
+
+        </StackPanel>
+
+    </Grid>
+</Window>
