@@ -14,10 +14,11 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.0.4";
+        public string CLIENT_VERSION = "1.0.7";
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
+        public int refueling;
 
         DispatcherTimer job_update_timer = new DispatcherTimer();
 
@@ -236,50 +237,63 @@ namespace Janus_Client_V1
 
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
             Logging.WriteClientLog("Maut durchfahren: " + response);
+
+
+
         }
 
         private void TelemetryFerry(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("Fähre genommen");
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("SOURCE_NAME", Truck_Daten.FERRY_SOURCE_NAME);
+            post_param.Add("TARGET_NAME", Truck_Daten.FERRY_TARGET_NAME);
+            post_param.Add("PAY_AMOUNT", Truck_Daten.FERRY_PAY_AMOUNT.ToString());
+
+            string response = API.HTTPSRequestPost(API.transport, post_param);
+            Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
+
         }
 
         private void TelemetryTrain(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("Zug genommen!");
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("SOURCE_NAME", Truck_Daten.TRAIN_SOURCE_NAME.ToString());
+            post_param.Add("TARGET_NAME", Truck_Daten.TRAIN_TARGET_NAME.ToString());
+            post_param.Add("PAY_AMOUNT", Truck_Daten.TRAIN_PAY_AMOUNT.ToString());
+
+            string response = API.HTTPSRequestPost(API.transport, post_param);
+            Logging.WriteClientLog("[INFO] TRANSPORT - TRAIN - EVENT: " + response);
         }
 
         private void TelemetryRefuel(object sender, EventArgs e)
         {
-            
+            Logging.WriteClientLog("Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString() + " - " + refueling.ToString());
         }
 
 
         private void TelemetryRefuelEnd(object sender, EventArgs e)
         {
-           
+            Logging.WriteClientLog("Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString() + " - " + refueling.ToString());
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
-           
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
+            post_param.Add("TEST_LITER", refueling.ToString());
             post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
-            post_param.Add("POS_Y", Truck_Daten.POS_X.ToString());
-            post_param.Add("POS_Z", Truck_Daten.POS_X.ToString());
+            post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
+            post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
 
             string response = API.HTTPSRequestPost(API.tanken, post_param);
-            Logging.WriteClientLog("TelemetryRefuelPayed-EVENT: ");
+            Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
+            
         }
 
-        private void TelemetryRefuelStart(object sender, EventArgs e)
-        {
-
-           
-           
-        }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
         {
@@ -335,6 +349,7 @@ namespace Janus_Client_V1
                     Truck_Daten.TEMPOLIMIT = (int)(Truck_Daten.SPIEL == "Ets2" ? Math.Round(data.NavigationValues.SpeedLimit.Kph) : (int)data.NavigationValues.SpeedLimit.Mph);
                     // FRACHTSCHADEN
                     Truck_Daten.FRACHTSCHADEN = data.JobValues.CargoValues.CargoDamage * 100;
+                    Truck_Daten.FRACHTSCHADEN2 = Math.Round(Truck_Daten.FRACHTSCHADEN, 1);
                     // STRAFE
                     Truck_Daten.STRAF_BETRAG = (int)data.GamePlay.FinedEvent.Amount;
                     Truck_Daten.GRUND = data.GamePlay.FinedEvent.Offence.ToString();
@@ -342,8 +357,7 @@ namespace Janus_Client_V1
                     // MAUTSTATION
                     Truck_Daten.MAUT_BETRAG = (int)data.GamePlay.TollgateEvent.PayAmount;
 
-                    // TANKEN
-                    Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
+                    
 
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM / 1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
@@ -367,6 +381,20 @@ namespace Janus_Client_V1
                     Truck_Daten.ABGABE_GEF_STRECKE = data.GamePlay.JobDelivered.DistanceKm;
                     Truck_Daten.AUTOPARKING = data.GamePlay.JobDelivered.AutoParked;
                     Truck_Daten.AUTOLOADING = data.GamePlay.JobDelivered.AutoLoaded;
+
+
+                    // TANKEN
+                    Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
+
+                    // Transport FERRY
+                    Truck_Daten.FERRY_SOURCE_NAME = data.GamePlay.FerryEvent.SourceName;
+                    Truck_Daten.FERRY_TARGET_NAME = data.GamePlay.FerryEvent.TargetName;
+                    Truck_Daten.FERRY_PAY_AMOUNT = (int)data.GamePlay.FerryEvent.PayAmount;
+
+                    // Transport TRAIN
+                    Truck_Daten.TRAIN_SOURCE_NAME = data.GamePlay.TrainEvent.SourceName;
+                    Truck_Daten.TRAIN_TARGET_NAME = data.GamePlay.TrainEvent.TargetName;
+                    Truck_Daten.TRAIN_PAY_AMOUNT = (int)data.GamePlay.TrainEvent.PayAmount;
                 }
             }
             catch
@@ -519,7 +547,11 @@ namespace Janus_Client_V1
         {
             Process.Start("https://www.patreon.com/projektjanus");
         }
+
+
+
     }
+
 
 
 }

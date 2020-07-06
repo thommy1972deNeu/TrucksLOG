@@ -50,6 +50,7 @@ namespace Janus_Client_V1.Spieldaten
         private bool trailer_angehangen;
         // SCHÄDEN
         private double frachtschaden;
+        private double frachtschaden2;
         private double lkw_schaden;
         private double trailer_schaden;
 
@@ -108,14 +109,107 @@ namespace Janus_Client_V1.Spieldaten
         private int maut_betrag;
 
         // Tanken
-        private double liter_getankt;
+        private float liter_getankt;
 
 
         // JOB ABGABE
         private double frachtschaden_abgabe;
         private bool autoparking;
         private bool autoloading;
+
+
+        // TRANSPORT FERRY
+        private int ferry_pay_amount;
+        private string ferry_source_name;
+        private string ferry_target_name;
+        // TRANSPORT TRAIN
+        private int train_pay_amount;
+        private string train_source_name;
+        private string train_target_name;
+
         // -----------------------------------------------------------------------------------
+
+        public string TRAIN_TARGET_NAME
+        {
+            get { return train_target_name; }
+            set
+            {
+                if (train_target_name != value)
+                {
+                    train_target_name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public string TRAIN_SOURCE_NAME
+        {
+            get { return train_source_name; }
+            set
+            {
+                if (train_source_name != value)
+                {
+                    train_source_name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public int TRAIN_PAY_AMOUNT
+        {
+            get { return train_pay_amount; }
+            set
+            {
+                if (train_pay_amount != value)
+                {
+                    train_pay_amount = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string FERRY_TARGET_NAME
+        {
+            get { return ferry_target_name; }
+            set
+            {
+                if (ferry_target_name != value)
+                {
+                    ferry_target_name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public string FERRY_SOURCE_NAME
+        {
+            get { return ferry_source_name; }
+            set
+            {
+                if (ferry_source_name != value)
+                {
+                    ferry_source_name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public int FERRY_PAY_AMOUNT
+        {
+            get { return ferry_pay_amount; }
+            set
+            {
+                if (ferry_pay_amount != value)
+                {
+                    ferry_pay_amount = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public double ABGABE_GEF_STRECKE
         {
@@ -497,7 +591,7 @@ namespace Janus_Client_V1.Spieldaten
         }
 
 
-        public double LITER_GETANKT
+        public float LITER_GETANKT
         {
             get { return liter_getankt; }
             set
@@ -608,6 +702,19 @@ namespace Janus_Client_V1.Spieldaten
                 if (frachtschaden != value)
                 {
                     frachtschaden = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public double FRACHTSCHADEN2
+        {
+            get { return frachtschaden2; }
+            set
+            {
+                if (frachtschaden2 != value)
+                {
+                    frachtschaden2 = value;
                     NotifyPropertyChanged();
                 }
             }

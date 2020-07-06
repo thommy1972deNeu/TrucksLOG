@@ -10,16 +10,17 @@ namespace Janus_Client_V1
     /// </summary>
     public partial class Pfad_Angeben : Window
     {
-
-        MSG msg = new MSG();
         public string startupPath;
         private string initial_ETS;
         private string initial_ATS;
         private string initial_TMP;
+
         public Pfad_Angeben()
         {
             InitializeComponent();
-
+            REG.Schreiben("Pfade", "ETS2_PFAD", "");
+            REG.Schreiben("Pfade", "ATS_PFAD", "");
+            REG.Schreiben("Pfade", "TMP_PFAD", "");
         }
 
         private void tmp_suchen_btn_Click(object sender, RoutedEventArgs e)
@@ -35,48 +36,61 @@ namespace Janus_Client_V1
         private void ets_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
             var ets = new Microsoft.Win32.OpenFileDialog();
+            ets.Filter = "Euro Truck Simulator 2 (.exe)|eurotrucks2.exe|All Files (*.*)|*.*";
             ets.InitialDirectory = initial_ETS;
             var result_ets = ets.ShowDialog();
             if (result_ets == false) return;
+
             REG.Schreiben("Pfade", "ETS2_PFAD", ets.FileName); ;
             pfad_ets.Text = ets.FileName;
 
-            /*
+           
+           
             string ordner = pfad_ets.Text.Substring(0, pfad_ets.Text.Length - 15);
-            if(Directory.Exists(ordner + "\\plugins"))
-            {
-                File.Copy("Resources\\scs-telemetry.dll", ordner + "\\plugins\\scs-telemetry.dll", true);
-            } else
-            {
-                Directory.CreateDirectory(ordner + "\\plugins");
-                File.Copy("Resources\\scs-telemetry.dll", ordner + "\\plugins\\scs-telemetry.dll", true);
-            }
-            */
 
+            if (!File.Exists(ordner + @"\plugins\scs-telemetry.dll"))
+            {
+                if (Directory.Exists(ordner + "\\plugins"))
+                {
+                    File.Copy(@"Resources\scs-telemetry.dll", ordner + @"\plugins\scs-telemetry.dll", true);
+                }
+                else
+                {
+                    Directory.CreateDirectory(ordner + "\\plugins");
+                    File.Copy("Resources\\scs-telemetry.dll", ordner + "\\plugins\\scs-telemetry.dll", true);
+                }
+            }
         }
 
 
         private void ats_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
             var ats = new Microsoft.Win32.OpenFileDialog();
+            ats.Filter = "American Truck Simulator (.exe)|amtrucks.exe|All Files (*.*)|*.*";
             ats.InitialDirectory = initial_ATS;
             var result_ats = ats.ShowDialog();
             if (result_ats == false) return;
+
             REG.Schreiben("Pfade", "ATS_PFAD", ats.FileName);
             pfad_ats.Text = ats.FileName;
 
-            /*
+            
             string ordner = pfad_ats.Text.Substring(0, pfad_ats.Text.Length - 12);
-            if (Directory.Exists(ordner + "\\plugins"))
+
+
+            if (!File.Exists(ordner + @"\plugins\scs-telemetry.dll"))
             {
-                File.Copy("Resources\\scs-telemetry.dll", ordner + "\\plugins\\scs-telemetry.dll", true);
+
+                if (Directory.Exists(ordner + "\\plugins"))
+                {
+                    File.Copy("Resources\\scs-telemetry.dll", ordner + "\\plugins\\scs-telemetry.dll", true);
+                }
+                else
+                {
+                    Directory.CreateDirectory(ordner + "\\plugins");
+                    File.Copy("Resources\\scs-telemetry.dll", ordner + "\\plugins\\scs-telemetry.dll", true);
+                }
             }
-            else
-            {
-                Directory.CreateDirectory(ordner + "\\plugins");
-                File.Copy("Resources\\scs-telemetry.dll", ordner + "\\plugins\\scs-telemetry.dll", true);
-            }
-            */
 
         }
 
@@ -128,7 +142,10 @@ namespace Janus_Client_V1
                 REG.Schreiben("Pfade", "ETS2_PFAD", pfad_ets.Text);
                 REG.Schreiben("Pfade", "ATS_PFAD", pfad_ats.Text);
                 REG.Schreiben("Pfade", "TMP_PFAD", pfad_tmp.Text);
-                this.Close();
+
+                MessageBox.Show("Der Client wird jetzt einmal neu gestartet!", "Reload", MessageBoxButton.OK, MessageBoxImage.Information);
+                System.Windows.Forms.Application.Restart();
+                System.Windows.Application.Current.Shutdown();
             }
         }
 
