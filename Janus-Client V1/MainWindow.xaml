@@ -344,7 +344,7 @@
             <!-- LICENSE PLATE ENDE -->
 
 
-            <Label Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="14" FontSize="16" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
+            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="24" FontSize="16" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
 
 
             <Border Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,5,5,2" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="4" CornerRadius="0,20,20,0"/>
@@ -376,10 +376,10 @@
                 <mah:MetroProgressBar 
                     Minimum="0" 
                     Height="50"
-                    Maximum="{Binding GESAMT_KM}" 
-                    Value="{Binding REST_KM}" 
-                    Name="pbStatus" Background="#FF005527" Foreground="Red" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" />
-                <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" 
+                    Maximum="{Binding GESAMT_KM_SA}" 
+                    Value="{Binding REST_KM_SA}" 
+                    Name="pbStatus" Foreground="Red" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="2" />
+                <TextBlock Text="{Binding REST_KM_SA, StringFormat={}{0:0} KM}" 
            HorizontalAlignment="Center" 
                            FontSize="30"
                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"

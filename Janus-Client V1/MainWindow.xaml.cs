@@ -16,7 +16,7 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.0.8";
+        public string CLIENT_VERSION = "1.0.9";
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
@@ -335,8 +335,13 @@ namespace Janus_Client_V1
                     Truck_Daten.LADUNG_NAME = data.JobValues.CargoValues.Name;
                     Truck_Daten.LADUNG_ID = data.JobValues.CargoValues.Id;
                     Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass / 1000).ToString();
+
                     Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
                     Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
+
+                    Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1000;
+                    Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
+
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
                     Truck_Daten.CARGO_LOADED = data.JobValues.CargoLoaded;
@@ -368,7 +373,7 @@ namespace Janus_Client_V1
                     // MAUTSTATION
                     Truck_Daten.MAUT_BETRAG = (int)data.GamePlay.TollgateEvent.PayAmount;
 
-                    
+
 
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM / 1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";

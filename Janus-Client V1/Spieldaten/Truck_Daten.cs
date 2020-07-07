@@ -127,6 +127,10 @@ namespace Janus_Client_V1.Spieldaten
         private string train_source_name;
         private string train_target_name;
 
+
+        // Strdckenverlauf
+        private int rest_km_sa;
+        private int gesamt_km_sa;
         // -----------------------------------------------------------------------------------
 
         public string TRAIN_TARGET_NAME
@@ -690,6 +694,32 @@ namespace Janus_Client_V1.Spieldaten
                 if (rest_km != value)
                 {
                     rest_km = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public int REST_KM_SA
+        {
+            get { return rest_km_sa; }
+            set
+            {
+                if (rest_km_sa != value)
+                {
+                    rest_km_sa = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public int GESAMT_KM_SA
+        {
+            get { return gesamt_km_sa; }
+            set
+            {
+                if (gesamt_km_sa != value)
+                {
+                    gesamt_km_sa = value;
                     NotifyPropertyChanged();
                 }
             }
