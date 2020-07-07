@@ -1,11 +1,13 @@
 ﻿using ControlzEx.Theming;
 using Janus_Client_V1.Klassen;
 using Janus_Client_V1.Spieldaten;
+using MahApps.Metro.Controls.Dialogs;
 using SCSSdkClient;
 using SCSSdkClient.Object;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -14,11 +16,12 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.0.7";
+        public string CLIENT_VERSION = "1.0.8";
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
         public int refueling;
+    
 
         DispatcherTimer job_update_timer = new DispatcherTimer();
 
@@ -30,6 +33,8 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
             Logging.Make_Log_File();
+
+
 
 
             Logging.WriteClientLog("Version: " + CLIENT_VERSION);
@@ -213,6 +218,10 @@ namespace Janus_Client_V1
 
             job_update_timer.Stop();
             Logging.WriteClientLog("Tour Abgeliefert: " + response);
+
+
+            
+
         }
 
 
@@ -220,11 +229,13 @@ namespace Janus_Client_V1
         {
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
             post_param.Add("BETRAG", Truck_Daten.STRAF_BETRAG.ToString());
             post_param.Add("GRUND", Truck_Daten.GRUND);
             string response = API.HTTPSRequestPost(API.strafe, post_param);
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Strafe_Erhalten();
             Logging.WriteClientLog("Strafe erhalten: " + response);
+
         }
 
         private void TelemetryTollgate(object sender, EventArgs e)

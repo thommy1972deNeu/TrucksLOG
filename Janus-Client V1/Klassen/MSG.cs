@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Janus_Client_V1.Klassen
 {
@@ -16,5 +17,6 @@ namespace Janus_Client_V1.Klassen
             var metroWindow = (Application.Current.MainWindow as MetroWindow);
             await metroWindow.ShowMessageAsync(titel, text);
         }
+
     }
 }
