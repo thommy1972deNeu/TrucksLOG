@@ -9,7 +9,8 @@
                  SaveWindowPosition="True"
                  FontFamily="Oswald"
                  x:Name="Hauptfenster"
-        Title="Projekt-Janus Client V1" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png">
+                  TitleBarHeight="50"
+                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="job_angenommen" />
@@ -35,127 +36,154 @@
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl>
             <mah:Flyout x:Name="LeftFlyOut" Width="270">
+                <ScrollViewer Name="scrlMain"
+                    CanContentScroll="True"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Auto"
+                    VerticalAlignment="Stretch">
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="Farbschema wählen:" HorizontalAlignment="Center"/>
+                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged" Margin="0,0,0,20">
+                            <ComboBoxItem Tag="Dark.Red">Dunkel Rot</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Green">Dunkel Grün</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Blue">Dunkel Blau</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Purple">Dunkel PurPur</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Orange">Dunkel Orange</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Lime">Dunkel Limette</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Emerald">Dunkel Emerald</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Teal">Dunkel Teal</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Cyan">Dunkel Cyan</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Cobalt">Dunkel Cobald</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Indigo">Dunkel Indigo</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Violet">Dunkel Violett</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Pink">Dunkel Pink</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Magenta">Dunkel Magenta</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Crimson">Dunkel Crimson</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Amber">Dunkel Amber</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Yellow">Dunkel Gelb</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Brown">Dunkel Braun</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Olive">Dunkel Olive</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Steel">Dunkel Stahl</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Mauve">Dunkel Mauve</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Taupe">Dunkel Taupe</ComboBoxItem>
+                            <ComboBoxItem Tag="Dark.Sienna">Dunkel Wüste</ComboBoxItem>
+
+                            <ComboBoxItem Tag="Light.Red">Hell Rot</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Green">Hell Grün</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Blue">Hell Blau</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Purple">Hell PurPur</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Orange">Hell Orange</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Lime">Hell Limette</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Emerald">Hell Emerald</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Teal">Hell Teal</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Cyan">Hell Cyan</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Cobalt">Hell Cobald</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Indigo">Hell Indigo</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Violet">Hell Violett</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Pink">Hell Pink</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Magenta">Hell Magenta</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Crimson">Hell Crimson</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Amber">Hell Amber</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Yellow">Hell Gelb</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Brown">Hell Braun</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Olive">Hell Olive</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Steel">Hell Stahl</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Mauve">Hell Mauve</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Taupe">Hell Taupe</ComboBoxItem>
+                            <ComboBoxItem Tag="Light.Sienna">Hell Wüste</ComboBoxItem>
+                        </ComboBox>
+
+                        <Label Content="System-Sounds:" HorizontalAlignment="Center"/>
+                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Systemsounds" SelectedValuePath="Tag" SelectionChanged="Systemsounds_SelectionChanged" Margin="0,0,0,20">
+                            <ComboBoxItem Tag="An">An</ComboBoxItem>
+                            <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
+                        </ComboBox>
+
+                        <Label Content="Hintergrundbild:" HorizontalAlignment="Center"/>
+                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" Margin="0,0,0,20">
+                            <ComboBoxItem Tag="pj_1.png">Janus 1</ComboBoxItem>
+                            <ComboBoxItem Tag="div_1.jpg">Divers 1</ComboBoxItem>
+                            <ComboBoxItem Tag="div_2.jpg">Divers 2</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_1.jpg">LKW 1</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_2.jpg">LKW 2</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_3.jpg">LKW 3</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_4.jpg">LKW 4</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_5.jpg">LKW 5</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_6.jpg">LKW 6</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_7.jpg">LKW 7</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_8.jpg">LKW 7</ComboBoxItem>
+                            <ComboBoxItem Tag="lkw_9.jpg">LKW 7</ComboBoxItem>
+                            <ComboBoxItem Tag="woman_1.jpg">Frau 1</ComboBoxItem>
+                            <ComboBoxItem Tag="woman_2.jpg">Frau 2</ComboBoxItem>
+                            <ComboBoxItem Tag="woman_3.jpg">Frau 3</ComboBoxItem>
+                            <ComboBoxItem Tag="woman_4.jpg">Frau 4</ComboBoxItem>
+                            <ComboBoxItem Tag="woman_5.jpg">Frau 5</ComboBoxItem>
+                            <ComboBoxItem Tag="woman_6.jpg">Frau 6</ComboBoxItem>
+                            <ComboBoxItem Tag="woman_7.jpg">Frau 7</ComboBoxItem>
+                        </ComboBox>
+
+                        <Label HorizontalAlignment="Center" Content="Background-Transparenz:"/>
+                        <Slider x:Name="bg_opacity" Maximum="1" Minimum="0.1" Value="{Binding Path=BG_OPACITY, Mode=TwoWay}" ValueChanged="bg_opacity_ValueChanged"  TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft"  Width="200" Margin="0,0,0,30"/>
+
+                        <Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
+
+                        <Separator Margin="0,20,0,20"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="ETS2-Pfad:" Margin="0,0,20,0"/>
+                            <Label x:Name="ets2_content"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="ATS-Pfad:" Margin="0,0,20,0"/>
+                            <Label x:Name="ats_content"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="TMP-Pfad:" Margin="0,0,20,0"/>
+                            <Label x:Name="tmp_content"/>
+                        </StackPanel>
+
+                        <Separator Margin="0,20,0,20"/>
+
+                        <Button Width="230" Height="70" Background="{DynamicResource MahApps.Brushes.Accent}" Click="Spende_einen_Kaffee">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="50" HorizontalAlignment="Left" Source="{iconPacks:BoxIconsImage Kind=LogosPaypal}"/>
+                                <TextBlock Width="160" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0">Spende uns einen Kaffee</TextBlock>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Width="230" Height="70" Background="{DynamicResource MahApps.Brushes.Accent}" Click="patreon_link" Margin="0,10,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="50" HorizontalAlignment="Left" Source="{iconPacks:BoxIconsImage Kind=LogosPatreon}"/>
+                                <TextBlock Width="160" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap">Werde Unterstützer des Projekts</TextBlock>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </mah:Flyout>
+
+            <mah:Flyout x:Name="RightFlyOut" Width="600" Position="Right" Foreground="White">
+                <mah:Flyout.Background>
+                    <ImageBrush ImageSource="bg2.png"/>
+                </mah:Flyout.Background>
                 <StackPanel Orientation="Vertical">
-                    <Label Content="Farbschema wählen:" HorizontalAlignment="Center"/>
-                    <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged" Margin="0,0,0,20">
-                        <ComboBoxItem Tag="Dark.Red">Dunkel Rot</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Green">Dunkel Grün</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Blue">Dunkel Blau</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Purple">Dunkel PurPur</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Orange">Dunkel Orange</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Lime">Dunkel Limette</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Emerald">Dunkel Emerald</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Teal">Dunkel Teal</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Cyan">Dunkel Cyan</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Cobalt">Dunkel Cobald</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Indigo">Dunkel Indigo</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Violet">Dunkel Violett</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Pink">Dunkel Pink</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Magenta">Dunkel Magenta</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Crimson">Dunkel Crimson</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Amber">Dunkel Amber</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Yellow">Dunkel Gelb</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Brown">Dunkel Braun</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Olive">Dunkel Olive</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Steel">Dunkel Stahl</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Mauve">Dunkel Mauve</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Taupe">Dunkel Taupe</ComboBoxItem>
-                        <ComboBoxItem Tag="Dark.Sienna">Dunkel Wüste</ComboBoxItem>
-
-                        <ComboBoxItem Tag="Light.Red">Hell Rot</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Green">Hell Grün</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Blue">Hell Blau</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Purple">Hell PurPur</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Orange">Hell Orange</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Lime">Hell Limette</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Emerald">Hell Emerald</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Teal">Hell Teal</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Cyan">Hell Cyan</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Cobalt">Hell Cobald</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Indigo">Hell Indigo</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Violet">Hell Violett</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Pink">Hell Pink</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Magenta">Hell Magenta</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Crimson">Hell Crimson</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Amber">Hell Amber</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Yellow">Hell Gelb</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Brown">Hell Braun</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Olive">Hell Olive</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Steel">Hell Stahl</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Mauve">Hell Mauve</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Taupe">Hell Taupe</ComboBoxItem>
-                        <ComboBoxItem Tag="Light.Sienna">Hell Wüste</ComboBoxItem>
-                    </ComboBox>
-
-                    <Label Content="System-Sounds:" HorizontalAlignment="Center"/>
-                    <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Systemsounds" SelectedValuePath="Tag" SelectionChanged="Systemsounds_SelectionChanged" Margin="0,0,0,20">
-                        <ComboBoxItem Tag="An">An</ComboBoxItem>
-                        <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
-                    </ComboBox>
-
-                    <Label Content="Hintergrundbild:" HorizontalAlignment="Center"/>
-                    <ComboBox Width="200" HorizontalContentAlignment="Center" Padding="10" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" Margin="0,0,0,20">
-                        <ComboBoxItem Tag="pj_1.png">Janus 1</ComboBoxItem>
-                        <ComboBoxItem Tag="div_1.jpg">Divers 1</ComboBoxItem>
-                        <ComboBoxItem Tag="div_2.jpg">Divers 2</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_1.jpg">LKW 1</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_2.jpg">LKW 2</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_3.jpg">LKW 3</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_4.jpg">LKW 4</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_5.jpg">LKW 5</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_6.jpg">LKW 6</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_7.jpg">LKW 7</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_8.jpg">LKW 7</ComboBoxItem>
-                        <ComboBoxItem Tag="lkw_9.jpg">LKW 7</ComboBoxItem>
-                        <ComboBoxItem Tag="woman_1.jpg">Frau 1</ComboBoxItem>
-                        <ComboBoxItem Tag="woman_2.jpg">Frau 2</ComboBoxItem>
-                        <ComboBoxItem Tag="woman_3.jpg">Frau 3</ComboBoxItem>
-                        <ComboBoxItem Tag="woman_4.jpg">Frau 4</ComboBoxItem>
-                        <ComboBoxItem Tag="woman_5.jpg">Frau 5</ComboBoxItem>
-                        <ComboBoxItem Tag="woman_6.jpg">Frau 6</ComboBoxItem>
-                        <ComboBoxItem Tag="woman_7.jpg">Frau 7</ComboBoxItem>
-                    </ComboBox>
-                    
-                    
-                    <Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
-
-                    <Separator Margin="0,20,0,20"/>
-
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="ETS2-Pfad:" Margin="0,0,20,0"/>
-                        <Label x:Name="ets2_content"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="ATS-Pfad:" Margin="0,0,20,0"/>
-                        <Label x:Name="ats_content"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="TMP-Pfad:" Margin="0,0,20,0"/>
-                        <Label x:Name="tmp_content"/>
-                    </StackPanel>
-
-                    <Separator Margin="0,20,0,20"/>
-
-                    <Button Width="230" Height="70" Background="{DynamicResource MahApps.Brushes.Accent}" Click="Spende_einen_Kaffee">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Height="50" HorizontalAlignment="Left" Source="{iconPacks:BoxIconsImage Kind=LogosPaypal}"/>
-                            <TextBlock Width="160" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0">Spende uns einen Kaffee</TextBlock>
-                        </StackPanel>
+                    <Label FontSize="20" x:Name="credit_text" Margin="30,0,0,0"/>
+                    <Button Width="300" Click="Andras_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="Images/Panel_Werbung.jpg"/>
+                            </StackPanel>
+                        </Button.Content>
                     </Button>
-
-                    <Button Width="230" Height="70" Background="{DynamicResource MahApps.Brushes.Accent}" Click="patreon_link" Margin="0,10,0,0">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Height="50" HorizontalAlignment="Left" Source="{iconPacks:BoxIconsImage Kind=LogosPatreon}"/>
-                            <TextBlock Width="160" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap">Werde Unterstützer des Projekts</TextBlock>
-                        </StackPanel>
-                    </Button>
-
+                   
                 </StackPanel>
+              
+
+
             </mah:Flyout>
 
 
-
-            <mah:Flyout x:Name="BottomFlyOut" Height="180" Position="Bottom" Background="Orange" Foreground="Black">
+                <mah:Flyout x:Name="BottomFlyOut" Height="180" Position="Bottom" Background="Orange" Foreground="Black">
 
 
 
@@ -219,13 +247,13 @@
                 <ToggleButton.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconFontAwesome Kind="BarsSolid" Width="25" Height="25" />
+                            <iconPacks:PackIconFontAwesome Kind="BarsSolid" Width="100" Height="25" />
                         </StackPanel>
                     </DataTemplate>
                 </ToggleButton.ContentTemplate>
             </ToggleButton>
 
-
+            <!--
             <ToggleButton Content="Layers" Click="Hauptmenu_Click" IsChecked="{Binding ElementName=BottomFlyOut, Path=IsOpen}" Cursor="Hand">
                 <ToggleButton.ContentTemplate>
                     <DataTemplate>
@@ -235,6 +263,18 @@
                     </DataTemplate>
                 </ToggleButton.ContentTemplate>
             </ToggleButton>
+            -->
+
+            <ToggleButton Content="Layers" Click="Oeffne_Credits" IsChecked="{Binding ElementName=RightFlyOut, Path=IsOpen}" Cursor="Hand">
+                <ToggleButton.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconFontAwesome Kind="HandsHelpingSolid" Width="100" Height="30" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ToggleButton.ContentTemplate>
+            </ToggleButton>
+
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
 
@@ -247,16 +287,8 @@
             </Button>
              -->
 
-            <Button Click="Spende_einen_Kaffee" Content="Kaffeekasse">
-                <Button.ContentTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconSimpleIcons Width="22" Height="22" VerticalAlignment="Center" Kind="BuyMeACoffee" ToolTip="Spende dem Programmierer einen Kaffee"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </Button.ContentTemplate>
-            </Button>
-
+            
+            
             <!--
             <Button Click="Beta_Tester" Content="Beta-Tester werden...">
                 <Button.ContentTemplate>

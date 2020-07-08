@@ -17,7 +17,7 @@ namespace Janus_Client_V1.Spieldaten
         private string ets_pfad;
         private string ats_pfad;
         private string tmp_pfad;
-
+        private double bg_opacity;
         // Truck Daten
         private string lkw_hersteller;
         private string lkw_hersteller_id;
@@ -499,6 +499,18 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
+        public double BG_OPACITY
+        {
+            get { return bg_opacity; }
+            set
+            {
+                if (bg_opacity != value)
+                {
+                    bg_opacity = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public bool TANK_WARNUNG
         {
             get { return tank_warnung; }

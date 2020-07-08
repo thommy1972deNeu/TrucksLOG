@@ -37,7 +37,13 @@ namespace Janus_Client_V1
             InitializeComponent();
             Logging.Make_Log_File();
 
-
+            credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
+            credit_text.Content += " - Quasselboy Patti" + Environment.NewLine;
+            credit_text.Content += " - Daniel1983" + Environment.NewLine;
+            credit_text.Content += " - [MBTransporte] MaxS730" + Environment.NewLine + Environment.NewLine; ;
+            credit_text.Content += "Einen Extra Dank an Quasselbox Patti der mich" + Environment.NewLine + "seit Anbeginn der Zeit unterstützt." + Environment.NewLine;
+            credit_text.Content +=  Environment.NewLine;
+            credit_text.Content += "Unser(e) Live-Streamer:" + Environment.NewLine;
 
 
             Logging.WriteClientLog("Version: " + CLIENT_VERSION);
@@ -61,6 +67,7 @@ namespace Janus_Client_V1
                 }
 
                 Lade_Voreinstellungen();
+
 
                 Telemetry = new SCSSdkTelemetry();
                 Telemetry.Data += Telemetry_Data;
@@ -428,8 +435,12 @@ namespace Janus_Client_V1
             {
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
+                    REG.Schreiben("Config", "BG_OPACITY", "1");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID")))
                     REG.Schreiben("Config", "TOUR_ID", "");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
                     REG.Schreiben("Config", "CLIENT_KEY", "");
 
@@ -443,6 +454,11 @@ namespace Janus_Client_V1
                 {
                     Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
                 }
+
+
+                bg_opacity.Value = Convert.ToDouble(REG.Lesen("Config", "BG_OPACITY"));
+                this.Hauptfenster.Background.Opacity = Convert.ToDouble(REG.Lesen("Config", "BG_OPACITY"));
+
 
 
                 Logging.WriteClientLog("Voreinstellungen geladen !");
@@ -596,6 +612,33 @@ namespace Janus_Client_V1
             {
                 Logging.WriteClientLog("Designer: Konnte den Background " + (string)(Background_WEchsler.SelectedValue) + " nicht laden." + ex.Message + ex.StackTrace);
             }
+        }
+
+        private void Oeffne_Credits(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void Andras_Click(object sender, RoutedEventArgs e)
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("LINK", "Andras.tv");
+            post_param.Add("USER", REG.Lesen("Config", "CLIENT_KEY"));
+            string response = API.HTTPSRequestPost(API.link_click, post_param);
+
+            Process.Start("https://www.twitch.tv/andras_tv");
+        }
+
+        private void bg_opacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            try
+            {
+                this.Hauptfenster.Background.Opacity = bg_opacity.Value;
+
+                REG.Schreiben("Config", "BG_OPACITY", bg_opacity.Value.ToString());
+                Truck_Daten.BG_OPACITY = bg_opacity.Value;
+            } catch { }
+
         }
     }
 

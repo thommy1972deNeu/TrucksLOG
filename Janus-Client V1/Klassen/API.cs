@@ -19,6 +19,7 @@ namespace Janus_Client_V1.Klassen
         public static string tollgate = server + "tollgate.php";
         public static string tanken = server + "tanken.php";
         public static string transport = server + "transport.php";
+        public static string link_click = server + "link_click.php";
         public static string versionFile_Link = "https://projekt-janus.de/client_updates/version.txt";
 
         public static string HTTPSRequestPost(string url, Dictionary<string, string> postParameters)
