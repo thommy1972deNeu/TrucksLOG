@@ -8,6 +8,7 @@
                  mc:Ignorable="d"
                  SaveWindowPosition="True"
                  FontFamily="Oswald"
+                 x:Name="Hauptfenster"
         Title="Projekt-Janus Client V1" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png">
 
     <Window.Resources>
@@ -28,9 +29,7 @@
         <BooleanToVisibilityConverter x:Key="parking_brake" />
         <BooleanToVisibilityConverter x:Key="trailer_attached" />
     </Window.Resources>
-    <mah:MetroWindow.Background>
-        <ImageBrush ImageSource="Images/woman_4.jpg"/>
-    </mah:MetroWindow.Background>
+
 
 
     <mah:MetroWindow.Flyouts>
@@ -94,6 +93,30 @@
                         <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
                     </ComboBox>
 
+                    <Label Content="Hintergrundbild:" HorizontalAlignment="Center"/>
+                    <ComboBox Width="200" HorizontalContentAlignment="Center" Padding="10" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" Margin="0,0,0,20">
+                        <ComboBoxItem Tag="pj_1.png">Janus 1</ComboBoxItem>
+                        <ComboBoxItem Tag="div_1.jpg">Divers 1</ComboBoxItem>
+                        <ComboBoxItem Tag="div_2.jpg">Divers 2</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_1.jpg">LKW 1</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_2.jpg">LKW 2</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_3.jpg">LKW 3</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_4.jpg">LKW 4</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_5.jpg">LKW 5</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_6.jpg">LKW 6</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_7.jpg">LKW 7</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_8.jpg">LKW 7</ComboBoxItem>
+                        <ComboBoxItem Tag="lkw_9.jpg">LKW 7</ComboBoxItem>
+                        <ComboBoxItem Tag="woman_1.jpg">Frau 1</ComboBoxItem>
+                        <ComboBoxItem Tag="woman_2.jpg">Frau 2</ComboBoxItem>
+                        <ComboBoxItem Tag="woman_3.jpg">Frau 3</ComboBoxItem>
+                        <ComboBoxItem Tag="woman_4.jpg">Frau 4</ComboBoxItem>
+                        <ComboBoxItem Tag="woman_5.jpg">Frau 5</ComboBoxItem>
+                        <ComboBoxItem Tag="woman_6.jpg">Frau 6</ComboBoxItem>
+                        <ComboBoxItem Tag="woman_7.jpg">Frau 7</ComboBoxItem>
+                    </ComboBox>
+                    
+                    
                     <Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
 
                     <Separator Margin="0,20,0,20"/>
@@ -316,16 +339,16 @@
 
             <!-- ICON SET -->
             <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="16" Background="Orange" Padding="10" CornerRadius="30"/>
-            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=CarElectric}" Margin="3" Visibility="{Binding ELEKTRIK_AN, Converter={StaticResource elektrik_an}}" />
-            <Image Grid.Row="3" Grid.Column="4" Source="{iconPacks:MaterialImage Kind=Engine}" Margin="3" Visibility="{Binding MOTOR_AN, Converter={StaticResource motor_an}}"/>
-            <Image Grid.Row="3" Grid.Column="5" Source="{iconPacks:MaterialImage Kind=CarLightDimmed}" Margin="3" Visibility="{Binding LICHT_LOW, Converter={StaticResource licht_low}}"/>
-            <Image Grid.Row="3" Grid.Column="6" Source="{iconPacks:MaterialImage Kind=CarLightHigh}" Margin="3" Visibility="{Binding LICHT_HIGH, Converter={StaticResource licht_high}}"/>
-            <Image Grid.Row="3" Grid.Column="7" Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Margin="3" Visibility="{Binding TANK_WARNUNG, Converter={StaticResource tank_warnung}}"/>
-            <Image Grid.Row="3" Grid.Column="8" Source="{iconPacks:MaterialImage Kind=CarBrakeAlert}" Margin="3" Visibility="{Binding BREMSLICHT, Converter={StaticResource bremslicht}}"/>
-            <Image Grid.Row="3" Grid.Column="9" Source="{iconPacks:FontAwesomeImage Kind=WindSolid}" Margin="3" Visibility="{Binding AIR_WARNUNG, Converter={StaticResource air_warnung}}"/>
-            <Image Grid.Row="3" Grid.Column="10" Source="{iconPacks:FontAwesomeImage Kind=OilCanSolid}" Margin="3" Visibility="{Binding OIL_WARNUNG, Converter={StaticResource oil_warnung}}"/>
-            <Image Grid.Row="3" Grid.Column="11" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3" Visibility="{Binding WATER_WARNUNG, Converter={StaticResource water_warnung}}"/>
-            <Image Grid.Row="3" Grid.Column="12" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3" Visibility="{Binding BATTERY_WARNUNG, Converter={StaticResource battery_warnung}}"/>
+            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=CarElectric}" Margin="3" Visibility="{Binding ELEKTRIK_AN, Converter={StaticResource elektrik_an}}" ToolTip="Zündung an" />
+            <Image Grid.Row="3" Grid.Column="4" Source="{iconPacks:MaterialImage Kind=Engine}" Margin="3" Visibility="{Binding MOTOR_AN, Converter={StaticResource motor_an}}" ToolTip="Motor an"/>
+            <Image Grid.Row="3" Grid.Column="5" Source="{iconPacks:MaterialImage Kind=CarLightDimmed}" Margin="3" Visibility="{Binding LICHT_LOW, Converter={StaticResource licht_low}}" ToolTip="Abblendlicht an"/>
+            <Image Grid.Row="3" Grid.Column="6" Source="{iconPacks:MaterialImage Kind=CarLightHigh}" Margin="3" Visibility="{Binding LICHT_HIGH, Converter={StaticResource licht_high}}" ToolTip="Hauptlicht an"/>
+            <Image Grid.Row="3" Grid.Column="7" Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Margin="3" Visibility="{Binding TANK_WARNUNG, Converter={StaticResource tank_warnung}}" ToolTip="Tankwarnung"/>
+            <Image Grid.Row="3" Grid.Column="8" Source="{iconPacks:MaterialImage Kind=CarBrakeAlert}" Margin="3" Visibility="{Binding BREMSLICHT, Converter={StaticResource bremslicht}}" ToolTip="Bremse"/>
+            <Image Grid.Row="3" Grid.Column="9" Source="{iconPacks:FontAwesomeImage Kind=WindSolid}" Margin="3" Visibility="{Binding AIR_WARNUNG, Converter={StaticResource air_warnung}}" ToolTip="Luftdruck gering"/>
+            <Image Grid.Row="3" Grid.Column="10" Source="{iconPacks:FontAwesomeImage Kind=OilCanSolid}" Margin="3" Visibility="{Binding OIL_WARNUNG, Converter={StaticResource oil_warnung}}" ToolTip="Ölstand niedrig"/>
+            <Image Grid.Row="3" Grid.Column="11" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3" Visibility="{Binding WATER_WARNUNG, Converter={StaticResource water_warnung}}" ToolTip="Temperatur zu hoch"/>
+            <Image Grid.Row="3" Grid.Column="12" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3" Visibility="{Binding BATTERY_WARNUNG, Converter={StaticResource battery_warnung}}" ToolTip="Batterie fast leer"/>
 
             <!-- BLINKER -->
             <Border Background="LightGray" BorderBrush="White" Grid.Row="1" Grid.Column="6" CornerRadius="20" Visibility="{Binding BLINKER_LINKS, Converter={StaticResource blinker_links}}"/>
@@ -351,8 +374,7 @@
             <Label Grid.Row="10" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
             <Label Grid.Row="10" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
             <Label Grid.Row="10" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="11" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="TankTest" Content="{Binding refueling}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
-
+         
             <Label Grid.Row="8" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="LKW_SCHADEN_1" Content="LKW-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" />
             <Label Grid.Row="8" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="LKW_SCHADEN_2" Content="{Binding LKW_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
             <Label Grid.Row="8" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="LKW_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>

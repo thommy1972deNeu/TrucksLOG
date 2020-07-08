@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Threading;
 
 namespace Janus_Client_V1
@@ -431,11 +434,26 @@ namespace Janus_Client_V1
                     REG.Schreiben("Config", "CLIENT_KEY", "");
 
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
+
+                if(string.IsNullOrWhiteSpace(REG.Lesen("Config", "Background")))
+                {
+                    Background_WEchsler.SelectedValue = "pj_1.png";
+                    REG.Schreiben("Config", "Background", "pj_1.png");
+                } else
+                {
+                    Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
+                }
+
+
                 Logging.WriteClientLog("Voreinstellungen geladen !");
+
+
+
             } catch (Exception ex)
             {
                 Logging.WriteClientLog("Fehler beim Laden der Voreinstellungen " + ex.Message);
             }
+
 
 
         }
@@ -564,8 +582,21 @@ namespace Janus_Client_V1
             Process.Start("https://www.patreon.com/projektjanus");
         }
 
+        private void Background_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            REG.Schreiben("Config", "Background", (string)(Background_WEchsler.SelectedValue));
+            try
+            {
+                ImageBrush myBrush = new ImageBrush();
+                myBrush.ImageSource = new BitmapImage(new Uri(BaseUriHelper.GetBaseUri(this), "Images/" + (string)Background_WEchsler.SelectedValue));
+                this.Hauptfenster.Background = myBrush;
 
-
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("Designer: Konnte den Background " + (string)(Background_WEchsler.SelectedValue) + " nicht laden." + ex.Message + ex.StackTrace);
+            }
+        }
     }
 
 
