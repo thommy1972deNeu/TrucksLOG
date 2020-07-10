@@ -10,7 +10,7 @@
                  FontFamily="Oswald"
                  x:Name="Hauptfenster"
                   TitleBarHeight="50"
-                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize">
+                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="job_angenommen" />
@@ -29,6 +29,7 @@
         <BooleanToVisibilityConverter x:Key="battery_warnung" />
         <BooleanToVisibilityConverter x:Key="parking_brake" />
         <BooleanToVisibilityConverter x:Key="trailer_attached" />
+
     </Window.Resources>
 
 
@@ -284,11 +285,12 @@
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
 
-            <!--
-            <Button Click="LaunchGitHubSite" ToolTip="Open up the GitHub Site">
-                <iconPacks:PackIconModern Width="22" Height="22" Kind="SocialGithubOctocat" />
+
+            <Button Click="Minimize_Window" ToolTip="Minimiere das Fenster">
+                <iconPacks:PackIconModern Width="22" Height="22" Kind="WindowMinimize" />
             </Button>
-             -->
+
+
 
 
 
@@ -308,9 +310,8 @@
     </mah:MetroWindow.RightWindowCommands>
 
 
-
-
     <DockPanel>
+
         <StatusBar DockPanel.Dock="Bottom" Height="30" FontSize="12" HorizontalAlignment="Stretch">
             <StatusBarItem>
                 <Label Content="{Binding TELEMETRY_VERSION}" />
@@ -324,8 +325,6 @@
                     <StatusBarItem x:Name="status_bar_version"/>
                 </StackPanel>
             </StatusBarItem>
-
-
         </StatusBar>
 
         <Grid x:Name="GRID_FAHRT">
@@ -365,7 +364,7 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="190"/>
+                <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
 
 
@@ -387,7 +386,7 @@
 
             <!-- TANKANZEIGE -->
             <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="12" Grid.ColumnSpan="4" VerticalAlignment="Center">
-                <mah:MetroProgressBar Height="50" Minimum="1" Maximum="1000" Value="800" BorderBrush="Black" BorderThickness="1">
+                <mah:MetroProgressBar Height="50" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
                     <mah:MetroProgressBar.Foreground>
                         <LinearGradientBrush EndPoint="0,1" StartPoint="1,0">
                             <GradientStop Color="#FF3AFF00"/>
@@ -395,7 +394,14 @@
                         </LinearGradientBrush>
                     </mah:MetroProgressBar.Foreground>
                 </mah:MetroProgressBar>
-                <Label Content="100%" Margin="0,-50,0,0" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+              
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Image Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Width="30" Height="30" Margin="10,-50,0,0"/>
+                    <Label Content="458" Margin="5,-50,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                    <Label Content="L" Margin="0,-50,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                </StackPanel>
+
+
             </StackPanel>
 
 

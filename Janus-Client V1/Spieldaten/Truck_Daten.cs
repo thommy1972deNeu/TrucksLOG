@@ -9,6 +9,7 @@ namespace Janus_Client_V1.Spieldaten
         private string telemetry_version;
         private string dll_version;
         private string client_version;
+        private bool sdk_active;
         private string fahrinfo_1;
         private string fahrinfo_2;
         private string spiel;
@@ -67,7 +68,8 @@ namespace Janus_Client_V1.Spieldaten
         // FUEL / ADBLUE
         private int fuel;
         private int fuel_max;
-
+        private int fuel_gerade;
+        private string liter_gallonen;
         // Warnings
 
 
@@ -134,6 +136,46 @@ namespace Janus_Client_V1.Spieldaten
         private int rest_km_sa;
         private int gesamt_km_sa;
         // -----------------------------------------------------------------------------------
+        public bool SDK_AKTIVE
+        {
+            get { return sdk_active; }
+            set
+            {
+                if (sdk_active != value)
+                {
+                    sdk_active = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string LITER_GALLONEN
+        {
+            get { return liter_gallonen; }
+            set
+            {
+                if (liter_gallonen != value)
+                {
+                    liter_gallonen = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public int FUEL_GERADE
+        {
+            get { return fuel_gerade; }
+            set
+            {
+                if (fuel_gerade != value)
+                {
+                    fuel_gerade = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
         public int GEWICHT2
         {
             get { return gewicht2; }

@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:Janus_Client_V1"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
+        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
@@ -18,7 +20,8 @@
             <FontFamily x:Key="MahApps.Fonts.Family.Control">pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto</FontFamily>
             <FontFamily x:Key="MahApps.Fonts.Family.ToggleSwitch">pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto</FontFamily>
             <FontFamily x:Key="MahApps.Fonts.Family.ToggleSwitch.Header">pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto</FontFamily>
-
+            
         </ResourceDictionary>
+
     </Application.Resources>
 </Application>

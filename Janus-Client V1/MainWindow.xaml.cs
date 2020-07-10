@@ -20,7 +20,7 @@ namespace Janus_Client_V1
     public partial class MainWindow
     {
         public string CLIENT_VERSION = "1.1.0";
-        MSG msg = new MSG();
+        readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
         public int refueling;
@@ -45,7 +45,6 @@ namespace Janus_Client_V1
             credit_text.Content +=  Environment.NewLine;
             credit_text.Content += "Unser(e) Live-Streamer:" + Environment.NewLine;
 
-
             Logging.WriteClientLog("Version: " + CLIENT_VERSION);
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
@@ -67,6 +66,9 @@ namespace Janus_Client_V1
                 }
 
                 Lade_Voreinstellungen();
+
+                System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
+
 
 
                 Telemetry = new SCSSdkTelemetry();
@@ -434,6 +436,9 @@ namespace Janus_Client_V1
 
                     // TANKEN
                     Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
+                    Truck_Daten.FUEL_MAX = (int)data.TruckValues.ConstantsValues.CapacityValues.Fuel;
+                    Truck_Daten.FUEL_GERADE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount;
+                    Truck_Daten.LITER_GALLONEN = (Truck_Daten.SPIEL == "Ets2") ? " L" : " Gal.";
 
                     // Transport FERRY
                     Truck_Daten.FERRY_SOURCE_NAME = data.GamePlay.FerryEvent.SourceName;
@@ -495,11 +500,6 @@ namespace Janus_Client_V1
 
 
 
-        }
-
-        private void LaunchGitHubSite(object sender, System.Windows.RoutedEventArgs e)
-        {
-            msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut...");
         }
 
 
@@ -677,6 +677,16 @@ namespace Janus_Client_V1
             ImageBrush myBrush = new ImageBrush();
             myBrush.ImageSource = new BitmapImage(new Uri(bild.FileName));
             this.Hauptfenster.Background = myBrush;
+        }
+
+        private void Minimize_Window(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 
