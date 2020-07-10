@@ -19,7 +19,7 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.0.9";
+        public string CLIENT_VERSION = "1.1.0";
         MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
@@ -41,7 +41,7 @@ namespace Janus_Client_V1
             credit_text.Content += " - Quasselboy Patti" + Environment.NewLine;
             credit_text.Content += " - Daniel1983" + Environment.NewLine;
             credit_text.Content += " - [MBTransporte] MaxS730" + Environment.NewLine + Environment.NewLine; ;
-            credit_text.Content += "Einen Extra Dank an Quasselbox Patti der mich" + Environment.NewLine + "seit Anbeginn der Zeit unterstützt." + Environment.NewLine;
+            credit_text.Content += "Einen Extra Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der Zeit unterstützt." + Environment.NewLine;
             credit_text.Content +=  Environment.NewLine;
             credit_text.Content += "Unser(e) Live-Streamer:" + Environment.NewLine;
 
@@ -344,7 +344,10 @@ namespace Janus_Client_V1
                     Truck_Daten.ZIELFIRMA_ID = data.JobValues.CompanyDestinationId;
                     Truck_Daten.LADUNG_NAME = data.JobValues.CargoValues.Name;
                     Truck_Daten.LADUNG_ID = data.JobValues.CargoValues.Id;
+
+                    // Gewicht
                     Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass / 1000).ToString();
+                    Truck_Daten.GEWICHT2 = (int)(data.JobValues.CargoValues.Mass / 1000);
 
                     Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
                     Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
@@ -368,14 +371,25 @@ namespace Janus_Client_V1
                     Truck_Daten.PARKING_BRAKE = data.TruckValues.CurrentValues.MotorValues.BrakeValues.ParkingBrake;
                     Truck_Daten.BLINKER_LINKS = data.TruckValues.CurrentValues.LightsValues.BlinkerLeftOn;
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
-                    Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
-                    Truck_Daten.LICHT_HIGH = data.TruckValues.CurrentValues.LightsValues.BeamHigh;
+
+                    int i = (int)data.TruckValues.CurrentValues.LightsValues.AuxFront;
+                    if (i == 0)
+                        Truck_Daten.LICHT_LOW = false; Truck_Daten.LICHT_HIGH = false;
+                    if (i == 1)
+                        Truck_Daten.LICHT_LOW = true; Truck_Daten.LICHT_HIGH = false;
+                    if (i ==2)
+                        Truck_Daten.LICHT_LOW = true; Truck_Daten.LICHT_HIGH = true;
+
                     Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
                     Truck_Daten.TRAILER_ANGEHANGEN = data.TrailerValues[0].Attached;
-                    Truck_Daten.TEMPOLIMIT = (int)(Truck_Daten.SPIEL == "Ets2" ? Math.Round(data.NavigationValues.SpeedLimit.Kph) : (int)data.NavigationValues.SpeedLimit.Mph);
+                    Truck_Daten.TEMPOLIMIT = (int)(Truck_Daten.SPIEL == "Ets2" ? Math.Round(data.NavigationValues.SpeedLimit.Kph) : Math.Round(data.NavigationValues.SpeedLimit.Mph));
+                    Truck_Daten.AIR_WARNUNG = data.TruckValues.CurrentValues.DashboardValues.WarningValues.AirPressure;
+
+
                     // FRACHTSCHADEN
                     Truck_Daten.FRACHTSCHADEN = data.JobValues.CargoValues.CargoDamage * 100;
                     Truck_Daten.FRACHTSCHADEN2 = Math.Round(Truck_Daten.FRACHTSCHADEN, 1);
+
                     // STRAFE
                     Truck_Daten.STRAF_BETRAG = (int)data.GamePlay.FinedEvent.Amount;
                     Truck_Daten.GRUND = data.GamePlay.FinedEvent.Offence.ToString();
@@ -384,9 +398,8 @@ namespace Janus_Client_V1
                     Truck_Daten.MAUT_BETRAG = (int)data.GamePlay.TollgateEvent.PayAmount;
 
 
-
-                    Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
-                    Truck_Daten.FAHRINFO_2 = "Du musst noch " + (int)Truck_Daten.REST_KM / 1000 + " KM von insgesamt " + Truck_Daten.GESAMT_KM + " KM fahren";
+                    // Fahrtinfo
+                    Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT2 + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
 
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
@@ -398,16 +411,26 @@ namespace Janus_Client_V1
 
                     // Sonstiges
                     Truck_Daten.LKW_SCHADEN = Convert.ToInt32(data.TruckValues.CurrentValues.DamageValues.WheelsAvg * 100);
-                    Truck_Daten.TRAILER_SCHADEN = Convert.ToInt32(data.TrailerValues[0].DamageValues.Wheels * 100);
 
+                    // SCAHDENSBERECHNUNG LKW
+                    double schaden1 = data.TruckValues.CurrentValues.DamageValues.Cabin;
+                    double schaden2 = data.TruckValues.CurrentValues.DamageValues.Chassis;
+                    double schaden3 = data.TruckValues.CurrentValues.DamageValues.Engine;
+                    double schaden4 = data.TruckValues.CurrentValues.DamageValues.Transmission;
+                    double schaden5 = data.TruckValues.CurrentValues.DamageValues.WheelsAvg;
+                    Truck_Daten.LKW_SCHADEN = Convert.ToInt32(schaden1 + schaden2 + schaden3 + schaden4 + schaden5 * 100);
 
+                    // SCAHDENSBERECHNUNG TRAILER
+                    double tschaden1 = data.TrailerValues[0].DamageValues.Chassis;
+                    double tschaden2 = data.TrailerValues[0].DamageValues.Wheels;
+                    double tschaden3 = data.TrailerValues[0].DamageValues.Cargo;
+                    Truck_Daten.TRAILER_SCHADEN = Convert.ToInt32(tschaden1 + tschaden2 + tschaden3 * 100);
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
                     Truck_Daten.ABGABE_GEF_STRECKE = data.GamePlay.JobDelivered.DistanceKm;
                     Truck_Daten.AUTOPARKING = data.GamePlay.JobDelivered.AutoParked;
                     Truck_Daten.AUTOLOADING = data.GamePlay.JobDelivered.AutoLoaded;
-
 
                     // TANKEN
                     Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
@@ -639,6 +662,21 @@ namespace Janus_Client_V1
                 Truck_Daten.BG_OPACITY = bg_opacity.Value;
             } catch { }
 
+        }
+
+        private void OPEN_BG_FILE(object sender, RoutedEventArgs e)
+        {
+            var bild = new Microsoft.Win32.OpenFileDialog();
+            bild.Filter = "Alle Bilder|*.jpg;*.png;|Alle Dateien|*.*";
+            bild.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures);
+            var result_bild = bild.ShowDialog();
+            if (result_bild == false) return;
+
+            REG.Schreiben("Config", "Background", bild.FileName);
+
+            ImageBrush myBrush = new ImageBrush();
+            myBrush.ImageSource = new BitmapImage(new Uri(bild.FileName));
+            this.Hauptfenster.Background = myBrush;
         }
     }
 

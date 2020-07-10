@@ -31,6 +31,7 @@ namespace Janus_Client_V1.Spieldaten
         private string shifter_typ;
         private bool elektrik_an;
         private bool motor_an;
+        private int aux_light;
         private bool licht_low;
         private bool licht_high;
         private bool parking_brake;
@@ -90,6 +91,7 @@ namespace Janus_Client_V1.Spieldaten
         private float gesamt_km;
         private float rest_km;
         private string gewicht;
+        private int gewicht2;
         private string ladung_name;
         private string ladung_id;
         private int gef_strecke;
@@ -132,6 +134,35 @@ namespace Janus_Client_V1.Spieldaten
         private int rest_km_sa;
         private int gesamt_km_sa;
         // -----------------------------------------------------------------------------------
+        public int GEWICHT2
+        {
+            get { return gewicht2; }
+            set
+            {
+                if (gewicht2 != value)
+                {
+                    gewicht2 = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public int AUX_LIGHT
+        {
+            get { return aux_light; }
+            set
+            {
+                if (aux_light != value)
+                {
+                    aux_light = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+
 
         public string TRAIN_TARGET_NAME
         {
