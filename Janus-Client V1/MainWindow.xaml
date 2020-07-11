@@ -29,7 +29,7 @@
         <BooleanToVisibilityConverter x:Key="battery_warnung" />
         <BooleanToVisibilityConverter x:Key="parking_brake" />
         <BooleanToVisibilityConverter x:Key="trailer_attached" />
-
+        <BooleanToVisibilityConverter x:Key="SDK_Aktiv" />
     </Window.Resources>
 
 
@@ -175,7 +175,7 @@
                     <Button Width="300" Click="Andras_Click">
                         <Button.Content>
                             <StackPanel Orientation="Vertical">
-                                <Image Source="Images/Panel_Werbung.jpg"/>
+                                <Image Source="Images/Panel_Werbung.jpg" Cursor="Hand"/>
                             </StackPanel>
                         </Button.Content>
                     </Button>
@@ -257,18 +257,6 @@
                 </ToggleButton.ContentTemplate>
             </ToggleButton>
 
-            <!--
-            <ToggleButton Content="Layers" Click="Hauptmenu_Click" IsChecked="{Binding ElementName=BottomFlyOut, Path=IsOpen}" Cursor="Hand">
-                <ToggleButton.ContentTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconFontAwesome Kind="AwardSolid" Width="25" Height="25" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ToggleButton.ContentTemplate>
-            </ToggleButton>
-            -->
-
             <ToggleButton Content="Layers" Click="Oeffne_Credits" IsChecked="{Binding ElementName=RightFlyOut, Path=IsOpen}" Cursor="Hand">
                 <ToggleButton.ContentTemplate>
                     <DataTemplate>
@@ -289,22 +277,6 @@
             <Button Click="Minimize_Window" ToolTip="Minimiere das Fenster">
                 <iconPacks:PackIconModern Width="22" Height="22" Kind="WindowMinimize" />
             </Button>
-
-
-
-
-
-            <!--
-            <Button Click="Beta_Tester" Content="Beta-Tester werden...">
-                <Button.ContentTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconMaterial Width="22" Height="22" VerticalAlignment="Center" Kind="AbTesting" ToolTip="Werde Beta-Tester und erhalte Zugang zu zahlreichen Features !" />
-                        </StackPanel>
-                    </DataTemplate>
-                </Button.ContentTemplate>
-            </Button>
-            -->
 
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
@@ -367,7 +339,16 @@
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
 
-
+            
+            <!-- WAITING ZONE -->
+         
+            <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.Badged.Background}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <Image Source="/Images/pj_2.png" Grid.Row="8" Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="20" Height="200" Width="800" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+           
+            <!-- WAITING ZONE ENDE-->
+            
             <Label Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
             <Label Grid.Row="2" Grid.Column="7" Grid.ColumnSpan="4" x:Name="KMH_MI_LBL" Content="{Binding KMH_MI}" VerticalContentAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
 

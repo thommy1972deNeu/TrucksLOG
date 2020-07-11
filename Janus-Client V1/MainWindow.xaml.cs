@@ -19,7 +19,7 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.1.0";
+        public string CLIENT_VERSION = "1.1.1";
         readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
@@ -66,6 +66,8 @@ namespace Janus_Client_V1
                 }
 
                 Lade_Voreinstellungen();
+                TelemetryInstaller.check_ETS();
+                TelemetryInstaller.check_ATS();
 
                 System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
 
@@ -328,6 +330,7 @@ namespace Janus_Client_V1
                     Truck_Daten.TELEMETRY_VERSION = "Telemetry: " + data.TelemetryVersion.Major.ToString() + "." + data.TelemetryVersion.Minor.ToString();
                     Truck_Daten.DLL_VERSION = "DLL: " + data.DllVersion.ToString();
                     Truck_Daten.EURO_DOLLAR = Truck_Daten.SPIEL == "Ets2" ? "€" : "$";
+                    Truck_Daten.SDK_AKTIVE = !data.SdkActive;
 
                     // PFADE für Seitenmenü
                     Truck_Daten.ETS_PFAD = REG.Lesen("Pfade", "ETS2_PFAD");
@@ -361,6 +364,7 @@ namespace Janus_Client_V1
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
                     Truck_Daten.CARGO_LOADED = data.JobValues.CargoLoaded;
                     Truck_Daten.GEF_STRECKE = (int)data.GamePlay.JobDelivered.DistanceKm;
+
                     // LKW DATEN
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
@@ -374,13 +378,9 @@ namespace Janus_Client_V1
                     Truck_Daten.BLINKER_LINKS = data.TruckValues.CurrentValues.LightsValues.BlinkerLeftOn;
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
 
-                    int i = (int)data.TruckValues.CurrentValues.LightsValues.AuxFront;
-                    if (i == 0)
-                        Truck_Daten.LICHT_LOW = false; Truck_Daten.LICHT_HIGH = false;
-                    if (i == 1)
-                        Truck_Daten.LICHT_LOW = true; Truck_Daten.LICHT_HIGH = false;
-                    if (i ==2)
-                        Truck_Daten.LICHT_LOW = true; Truck_Daten.LICHT_HIGH = true;
+                    Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.Parking;
+                    Truck_Daten.LICHT_HIGH = data.TruckValues.CurrentValues.LightsValues.BeamLow;
+
 
                     Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
                     Truck_Daten.TRAILER_ANGEHANGEN = data.TrailerValues[0].Attached;
@@ -422,7 +422,7 @@ namespace Janus_Client_V1
                     double schaden5 = data.TruckValues.CurrentValues.DamageValues.WheelsAvg;
                     Truck_Daten.LKW_SCHADEN = Convert.ToInt32(schaden1 + schaden2 + schaden3 + schaden4 + schaden5 * 100);
 
-                    // SCAHDENSBERECHNUNG TRAILER
+                    // SCHADENSBERECHNUNG TRAILER
                     double tschaden1 = data.TrailerValues[0].DamageValues.Chassis;
                     double tschaden2 = data.TrailerValues[0].DamageValues.Wheels;
                     double tschaden3 = data.TrailerValues[0].DamageValues.Cargo;

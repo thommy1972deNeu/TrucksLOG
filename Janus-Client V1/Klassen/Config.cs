@@ -8,6 +8,9 @@ namespace Janus_Client_V1.Klassen
 {
     public class Config
     {
+        // ALLGEMEIN
+        public static string dll_Version = "10";
+
         // LOGGING
         public static string LogRoot = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Projekt-JANUS";
         public static string ClientLogFileName = @"\Client_Log.txt";

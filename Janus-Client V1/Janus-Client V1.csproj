@@ -212,6 +212,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="VdfConverter, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VdfConverter.1.0.1\lib\netstandard2.0\VdfConverter.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -227,6 +230,7 @@
     <Compile Include="Klassen\API.cs" />
     <Compile Include="Klassen\Config.cs" />
     <Compile Include="Klassen\Logging.cs" />
+    <Compile Include="Klassen\RegistryHandler.cs" />
     <Compile Include="Klassen\SoundPlayer.cs" />
     <Compile Include="Klassen\Tankpreise.cs" />
     <Compile Include="Klassen\TelemetryInstaller.cs" />
@@ -416,6 +420,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\pj_2.png" />
     <Content Include="Images\Truck_Left_Green_26321.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
