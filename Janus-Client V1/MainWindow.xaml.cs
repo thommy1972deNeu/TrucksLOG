@@ -19,7 +19,7 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.1.1";
+        public string CLIENT_VERSION = "1.1.3";
         readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
@@ -36,6 +36,8 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
             Logging.Make_Log_File();
+      
+
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
             credit_text.Content += " - Quasselboy Patti" + Environment.NewLine;
@@ -66,8 +68,13 @@ namespace Janus_Client_V1
                 }
 
                 Lade_Voreinstellungen();
-                TelemetryInstaller.check_ETS();
-                TelemetryInstaller.check_ATS();
+
+                try
+                {
+                    TelemetryInstaller.check_ETS();
+                    TelemetryInstaller.check_ATS();
+
+                } catch { }
 
                 System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
 
@@ -191,7 +198,8 @@ namespace Janus_Client_V1
                 Console.WriteLine(response);
                 REG.Schreiben("Config", "Frachtmarkt", Truck_Daten.FRACHTMARKT);
 
-                if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Gestartet();
+                SoundPlayer.Sound_Tour_Gestartet();
+
                 job_update_timer.Tick += timer_Tick;
                 job_update_timer.Start();
                 Logging.WriteClientLog("Tour gestartet: " + response);
@@ -211,7 +219,7 @@ namespace Janus_Client_V1
             string response = API.HTTPSRequestPost(API.job_cancel, post_param);
             Console.WriteLine(response);
             REG.Schreiben("Config", "TOUR_ID", "");
-            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Abgebrochen();
+            SoundPlayer.Sound_Tour_Abgebrochen();
             job_update_timer.Stop();
             Logging.WriteClientLog("Tour abgebrochen: " + response);
         }
@@ -228,14 +236,10 @@ namespace Janus_Client_V1
             Console.WriteLine(response);
 
             REG.Schreiben("Config", "TOUR_ID", "");
-            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Tour_Beendet();
+            SoundPlayer.Sound_Tour_Beendet();
 
             job_update_timer.Stop();
             Logging.WriteClientLog("Tour Abgeliefert: " + response);
-
-
-            
-
         }
 
 
@@ -262,8 +266,6 @@ namespace Janus_Client_V1
 
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
             Logging.WriteClientLog("Maut durchfahren: " + response);
-
-
 
         }
 
@@ -294,13 +296,13 @@ namespace Janus_Client_V1
 
         private void TelemetryRefuel(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString() + " - " + refueling.ToString());
+            Logging.WriteClientLog("Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
 
         private void TelemetryRefuelEnd(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString() + " - " + refueling.ToString());
+            Logging.WriteClientLog("Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
@@ -308,11 +310,7 @@ namespace Janus_Client_V1
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
-            post_param.Add("TEST_LITER", refueling.ToString());
-            post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
-            post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
-            post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
+            post_param.Add("LITER", (Truck_Daten.LITER_GETANKT).ToString());
 
             string response = API.HTTPSRequestPost(API.tanken, post_param);
             Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
@@ -334,7 +332,7 @@ namespace Janus_Client_V1
 
                     // PFADE für Seitenmenü
                     Truck_Daten.ETS_PFAD = REG.Lesen("Pfade", "ETS2_PFAD");
-                    Truck_Daten.ATS_PFAD = REG.Lesen("PFADE", "ATS_PFAD");
+                    Truck_Daten.ATS_PFAD = REG.Lesen("Pfade", "ATS_PFAD");
                     Truck_Daten.TMP_PFAD = REG.Lesen("Pfade", "TMP_PFAD");
 
 
@@ -688,6 +686,7 @@ namespace Janus_Client_V1
         {
             Application.Current.Shutdown();
         }
+
     }
 
 

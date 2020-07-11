@@ -69,15 +69,13 @@ namespace Janus_Client_V1.Klassen
                     if (File.Exists(SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder86 + @"plugins\scs-telemetry.dll"))
                         File.Delete(SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder86 + @"plugins\scs-telemetry.dll");
                     File.Copy(@"Resources/scs-telemetry.dll", SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder86 + @"plugins\scs-telemetry.dll");
-                    REG.Schreiben("Pfade", "ETS2_PFAD", SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder86 + "eurotrucks2.exe");
-
+     
                     if (!Directory.Exists(SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder64 + "plugins"))
                         Directory.CreateDirectory(SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder64 + "plugins");
                     if (File.Exists(SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder64 + @"plugins\scs-telemetry.dll"))
                         File.Delete(SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder64 + @"plugins\scs-telemetry.dll");
                     File.Copy(@"Resources/scs-telemetry.dll", SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder64 + @"plugins\scs-telemetry.dll");
-                    REG.Schreiben("Pfade", "ETS2_PFAD", SteamInstallPath + @"\steamapps\common\Euro Truck Simulator 2\bin\" + Folder64 + "eurotrucks2.exe");
-
+          
                 }
             }
             else
@@ -143,16 +141,13 @@ namespace Janus_Client_V1.Klassen
                     if (File.Exists(SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder86 + @"plugins\scs-telemetry.dll"))
                         File.Delete(SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder86 + @"plugins\scs-telemetry.dll");
                     File.Copy(@"Resources/scs-telemetry.dll", SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder86 + @"plugins\scs-telemetry.dll");
-                    REG.Schreiben("Pfade", "ATS_PFAD", SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder86 + "amtrucks.exe");
-
+            
                     if (!Directory.Exists(SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder64 + "plugins"))
                         Directory.CreateDirectory(SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder64 + "plugins");
                     if (File.Exists(SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder64 + @"plugins\scs-telemetry.dll"))
                         File.Delete(SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder64 + @"plugins\scs-telemetry.dll");
                     File.Copy(@"Resources/scs-telemetry.dll", SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder64 + @"plugins\scs-telemetry.dll");
-                    REG.Schreiben("Pfade", "ATS_PFAD", SteamInstallPath + @"\steamapps\common\American Truck Simulator\bin\" + Folder64 + "amtrucks.exe");
-
-
+    
                 }
             }
             else

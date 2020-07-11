@@ -186,10 +186,21 @@
 
             </mah:Flyout>
 
+            <mah:Flyout x:Name="UpdatesFlyOut" Width="600" Position="Right" Foreground="White">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Updates des Clients:" FontSize="20"/>
+                    <Label Content="11.07.2020 - Telemetry wird automatisch in die Ordner kopiert"/>
+                    <Label Content="11.07.2020 - Wartebildschirm wenn das Spiel aus ist"/>
 
+                </StackPanel>
+
+
+
+            </mah:Flyout>
+            
+            
+            
             <mah:Flyout x:Name="BottomFlyOut" Height="180" Position="Bottom" Background="Orange" Foreground="Black">
-
-
 
                 <StackPanel Orientation="Vertical">
                     <Label Content="Bitte gib das Land und den Tankpreis ein !" Foreground="Black" FontSize="26"/>
@@ -247,7 +258,7 @@
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
 
-            <ToggleButton Content="Layers" Click="Hauptmenu_Click" IsChecked="{Binding ElementName=LeftFlyOut, Path=IsOpen}" Cursor="Hand">
+            <ToggleButton Content="Layers" ToolTip="Hauptmenü" Click="Hauptmenu_Click" IsChecked="{Binding ElementName=LeftFlyOut, Path=IsOpen}" Cursor="Hand">
                 <ToggleButton.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -257,7 +268,7 @@
                 </ToggleButton.ContentTemplate>
             </ToggleButton>
 
-            <ToggleButton Content="Layers" Click="Oeffne_Credits" IsChecked="{Binding ElementName=RightFlyOut, Path=IsOpen}" Cursor="Hand">
+            <ToggleButton Content="Layers" ToolTip="CREDITS" Click="Oeffne_Credits" IsChecked="{Binding ElementName=RightFlyOut, Path=IsOpen}" Cursor="Hand">
                 <ToggleButton.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -272,7 +283,16 @@
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
-
+            
+            <ToggleButton Content="Layers" ToolTip="Zeige Client-Updates" IsChecked="{Binding ElementName=UpdatesFlyOut, Path=IsOpen}" Cursor="Hand">
+                <ToggleButton.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconModern Kind="VisualstudioNews" Width="100" Height="25" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ToggleButton.ContentTemplate>
+            </ToggleButton>
 
             <Button Click="Minimize_Window" ToolTip="Minimiere das Fenster">
                 <iconPacks:PackIconModern Width="22" Height="22" Kind="WindowMinimize" />
@@ -346,7 +366,7 @@
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Image Source="/Images/pj_2.png" Grid.Row="8" Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="20" Height="200" Width="800" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-           
+          
             <!-- WAITING ZONE ENDE-->
             
             <Label Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
@@ -378,7 +398,7 @@
               
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Image Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Width="30" Height="30" Margin="10,-50,0,0"/>
-                    <Label Content="458" Margin="5,-50,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                    <Label Content="{Binding FUEL_GERADE}" Margin="5,-50,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
                     <Label Content="L" Margin="0,-50,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
                 </StackPanel>
 
