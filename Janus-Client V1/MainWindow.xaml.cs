@@ -7,6 +7,7 @@ using SCSSdkClient.Object;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -19,7 +20,7 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.1.4";
+        public string CLIENT_VERSION = "1.1.5";
         readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
@@ -36,7 +37,7 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
             Logging.Make_Log_File();
-      
+            kopiere_telemetry();
 
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
@@ -124,6 +125,35 @@ namespace Janus_Client_V1
         }
 
 
+        private void kopiere_telemetry()
+        {
+            string pfad_ets = REG.Lesen("Pfade", "ETS2_PFAD"); 
+            pfad_ets = pfad_ets.Substring(0, pfad_ets.Length - 15);
+
+            string pfad_ats = REG.Lesen("Pfade", "ATS_Pfad"); 
+            pfad_ats = pfad_ats.Substring(0, pfad_ats.Length - 12);
+
+            MessageBox.Show(pfad_ets);
+
+            if (!Directory.Exists(pfad_ets + @"plugins"))
+            {
+                Directory.CreateDirectory(pfad_ets + "\\plugins");
+                File.Copy(@"Resources\scs-telemetry.dll", pfad_ets + @"plugins\scs-telemetry.dll", true);
+            } else
+            {
+                File.Copy(@"Resources\scs-telemetry.dll", pfad_ets + @"plugins\scs-telemetry.dll", true);
+            }
+
+            if (!Directory.Exists(pfad_ats + @"plugins"))
+            {
+                Directory.CreateDirectory(pfad_ats + "\\plugins");
+                File.Copy(@"Resources\scs-telemetry.dll", pfad_ats + @"plugins\scs-telemetry.dll", true);
+            } else
+            {
+                File.Copy(@"Resources\scs-telemetry.dll", pfad_ats + @"plugins\scs-telemetry.dll", true);
+            }
+
+        }
 
 
         private void timer_Tick(object sender, EventArgs e)
