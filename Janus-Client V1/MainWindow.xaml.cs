@@ -19,12 +19,12 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.1.3";
+        public string CLIENT_VERSION = "1.1.4";
         readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
         public int refueling;
-    
+        public string tour_id_tanken;
 
         DispatcherTimer job_update_timer = new DispatcherTimer();
 
@@ -307,14 +307,23 @@ namespace Janus_Client_V1
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
+            if(string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID"))) {
+                tour_id_tanken = "0";
+            } else
+            {
+                tour_id_tanken = REG.Lesen("Config", "TOUR_ID");
+            }
 
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("LITER", (Truck_Daten.LITER_GETANKT).ToString());
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("TOUR_ID", tour_id_tanken);
+                post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
+                post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
+                post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
+                post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
 
-            string response = API.HTTPSRequestPost(API.tanken, post_param);
-            Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
-            
+                string response = API.HTTPSRequestPost(API.tanken, post_param);
+                Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
         }
 
 

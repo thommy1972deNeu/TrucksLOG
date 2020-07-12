@@ -182,7 +182,7 @@
     </Reference>
     <Reference Include="SCSSdkClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\scs-sdk-plugin3\scs-client\C#\SCSSdkClient\bin\Release\SCSSdkClient.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\NEUE TELE\SCSSdkClient.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -375,11 +375,6 @@
     <None Include="Resources\Werbebanner_Client.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\scs-telemetry.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\woman_4.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -422,6 +417,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\scs-telemetry.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Images\pj_2.png" />
     <Content Include="Images\Truck_Left_Green_26321.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
