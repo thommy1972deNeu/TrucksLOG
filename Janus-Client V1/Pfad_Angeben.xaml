@@ -50,7 +50,7 @@
                     </Button.Background>
                 </Button>
 
-                <Button x:Name="abbrechen" Content="Abbrechen" Width="100" Height="30" Click="abbrechen_click" Margin="0,0,0,0" >
+                <Button x:Name="abbrechen" Content=" Client Beenden" Width="100" Height="30" Click="abbrechen_click" Margin="0,0,0,0" >
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF765050" Offset="0"/>

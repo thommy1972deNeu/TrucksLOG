@@ -18,9 +18,34 @@ namespace Janus_Client_V1
         public Pfad_Angeben()
         {
             InitializeComponent();
-            REG.Schreiben("Pfade", "ETS2_PFAD", "");
-            REG.Schreiben("Pfade", "ATS_PFAD", "");
-            REG.Schreiben("Pfade", "TMP_PFAD", "");
+            if(string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
+            {
+                REG.Schreiben("Pfade", "ETS2_PFAD", "");
+            } else
+            {
+                pfad_ets.Text = REG.Lesen("Pfade", "ETS2_PFAD");
+            }
+           
+
+            if (string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD")))
+            {
+                REG.Schreiben("Pfade", "ATS_PFAD", "");
+            }
+            else
+            {
+                pfad_ets.Text = REG.Lesen("Pfade", "ATS_PFAD");
+            }
+
+
+            if (string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD")))
+            {
+                REG.Schreiben("Pfade", "ATS_PFAD", "");
+            }
+            else
+            {
+                pfad_ets.Text = REG.Lesen("Pfade", "ETS2_PFAD");
+            }
+
         }
 
         private void tmp_suchen_btn_Click(object sender, RoutedEventArgs e)

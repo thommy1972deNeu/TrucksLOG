@@ -147,6 +147,9 @@
                             <Label x:Name="tmp_content"/>
                         </StackPanel>
 
+                        <Button Content="Spielpfade ändern..." Click="spielpfade_aendern" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
+
+
                         <Separator Margin="0,20,0,20"/>
 
                         <Button Width="230" Height="70" Background="{DynamicResource MahApps.Brushes.Accent}" Click="Spende_einen_Kaffee">
@@ -190,6 +193,8 @@
             <mah:Flyout x:Name="UpdatesFlyOut" Width="600" Position="Right" Foreground="White">
                 <StackPanel Orientation="Vertical">
                     <Label Content="Updates des Clients:" FontSize="20"/>
+                    <Label Content="13.07.2020 - Spielpfade können jetzt im Hauptmeü geändert werden"/>
+                    <Label Content="13.07.2020 - Pfade können jetzt im Startbildschirm geändert werden"/>
                     <Label Content="13.07.2020 - Fixing Tour Abgebrochen"/>
                     <Label Content="13.07.2020 - Diverse Umstellung der Icons und Anzeigen"/>
                     <Label Content="13.07.2020 - Gang-Anzeige bis 18-Gang eingefügt"/>
@@ -202,9 +207,9 @@
 
 
             </mah:Flyout>
-            
-            
-            
+
+
+
             <mah:Flyout x:Name="BottomFlyOut" Height="180" Position="Bottom" Background="Orange" Foreground="Black">
 
                 <StackPanel Orientation="Vertical">
@@ -288,7 +293,7 @@
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
-            
+
             <ToggleButton Content="Layers" ToolTip="Zeige Client-Updates" IsChecked="{Binding ElementName=UpdatesFlyOut, Path=IsOpen}" Cursor="Hand">
                 <ToggleButton.ContentTemplate>
                     <DataTemplate>
@@ -364,16 +369,21 @@
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
 
-            
+
             <!-- WAITING ZONE -->
-         <!--
-            <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.Badged.Background}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+
+            <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-            <Image Source="/Images/pj_2.png" Grid.Row="8" Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="20" Height="200" Width="800" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-          -->
+            <Image Source="/Images/pj_2.png" Grid.Row="8" Grid.Column="6" Grid.RowSpan="6" Grid.ColumnSpan="20" Height="200" Width="350" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <Button x:Name="ZEIGE_TMP" Height="50" FontSize="24" Content="Truckers-MP starten" Grid.Row="8" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="tmp_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006"/>
+            <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006"/>
+            <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006"/>
+            <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0"/>
+
+
             <!-- WAITING ZONE ENDE-->
-            
+
             <Label Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
             <Label Grid.Row="2" Grid.Column="7" Grid.ColumnSpan="4" x:Name="KMH_MI_LBL" Content="{Binding KMH_MI}" VerticalContentAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
 
@@ -391,7 +401,7 @@
             <Image Grid.Row="3" Grid.Column="9" Source="{iconPacks:FontAwesomeImage Kind=OilCanSolid}" Margin="3" Visibility="{Binding OIL_WARNUNG, Converter={StaticResource oil_warnung}}" ToolTip="Ölstand niedrig"/>
             <Image Grid.Row="3" Grid.Column="10" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3" Visibility="{Binding WATER_WARNUNG, Converter={StaticResource water_warnung}}" ToolTip="Temperatur zu hoch"/>
             <Image Grid.Row="3" Grid.Column="11" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3" Visibility="{Binding BATTERY_WARNUNG, Converter={StaticResource battery_warnung}}" ToolTip="Batterie fast leer"/>
-            
+
             <Label Content="Gang" Grid.Row="3" Grid.Column="13" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,-45,0,0" Foreground="Black"/>
             <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="13" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="0,5,0,0" Foreground="Black"/>
 
@@ -405,7 +415,7 @@
                         </LinearGradientBrush>
                     </mah:MetroProgressBar.Foreground>
                 </mah:MetroProgressBar>
-              
+
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Image Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Width="30" Height="30" Margin="10,-50,0,0"/>
                     <Label Content="{Binding FUEL_GERADE}" Margin="5,-50,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>

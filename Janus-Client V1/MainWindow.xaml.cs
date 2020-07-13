@@ -39,6 +39,10 @@ namespace Janus_Client_V1
             InitializeComponent();
             Logging.Make_Log_File();
 
+            
+            ZEIGE_TMP.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD"))) ? false : true;
+            ZEIGE_ETS2.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD"))) ? false : true;
+            ZEIGE_ATS.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD"))) ? false : true;
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
             credit_text.Content += " - Quasselboy Patti" + Environment.NewLine;
@@ -579,7 +583,7 @@ namespace Janus_Client_V1
                 bg_opacity.Value = Convert.ToDouble(REG.Lesen("Config", "BG_OPACITY"));
                 this.Hauptfenster.Background.Opacity = Convert.ToDouble(REG.Lesen("Config", "BG_OPACITY"));
 
-
+          
 
                 Logging.WriteClientLog("Voreinstellungen geladen !");
 
@@ -781,6 +785,33 @@ namespace Janus_Client_V1
             Application.Current.Shutdown();
         }
 
+
+        private void settings_Click(object sender, RoutedEventArgs e)
+        {
+            Pfad_Angeben pf2 = new Pfad_Angeben();
+            pf2.ShowDialog();
+        }
+
+        private void tmp_starten_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(REG.Lesen("Pfade", "TMP_PFAD"));
+        }
+
+        private void ats_starten_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(REG.Lesen("Pfade", "ATS_PFAD"));
+        }
+
+        private void ets_starten_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(REG.Lesen("Pfade", "ETS2_PFAD"));
+        }
+
+        private void spielpfade_aendern(object sender, RoutedEventArgs e)
+        {
+            Pfad_Angeben pf3 = new Pfad_Angeben();
+            pf3.ShowDialog();
+        }
     }
 
 
