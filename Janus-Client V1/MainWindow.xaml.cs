@@ -9,7 +9,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -39,7 +41,6 @@ namespace Janus_Client_V1
             InitializeComponent();
             Logging.Make_Log_File();
 
-            
             ZEIGE_TMP.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD"))) ? false : true;
             ZEIGE_ETS2.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD"))) ? false : true;
             ZEIGE_ATS.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD"))) ? false : true;
@@ -127,7 +128,6 @@ namespace Janus_Client_V1
 
             }
         }
-
 
 
         private void timer_Tick(object sender, EventArgs e)
@@ -812,6 +812,14 @@ namespace Janus_Client_V1
             Pfad_Angeben pf3 = new Pfad_Angeben();
             pf3.ShowDialog();
         }
+
+        private void ContextMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var item = e.OriginalSource as System.Windows.Controls.MenuItem;
+            MessageBox.Show($"{item.Header} was clicked");
+           
+        }
+
     }
 
 

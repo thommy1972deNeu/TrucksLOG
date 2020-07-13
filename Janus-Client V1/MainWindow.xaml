@@ -10,7 +10,8 @@
                  FontFamily="Oswald"
                  x:Name="Hauptfenster"
                   TitleBarHeight="50"
-                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen">
+                 ShowIconOnTitleBar="True"
+                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen" MaxWidth="1200" MaxHeight="700">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="job_angenommen" />
@@ -31,6 +32,13 @@
         <BooleanToVisibilityConverter x:Key="parking_brake" />
         <BooleanToVisibilityConverter x:Key="trailer_attached" />
         <BooleanToVisibilityConverter x:Key="SDK_Aktiv" />
+
+
+        <ContextMenu x:Key="contextMenu" MenuItem.Click="ContextMenu_Click">
+            <MenuItem Header="Item 1"/>
+        </ContextMenu>
+
+
     </Window.Resources>
 
 
@@ -312,6 +320,7 @@
     </mah:MetroWindow.RightWindowCommands>
 
 
+    
     <DockPanel>
 
         <StatusBar DockPanel.Dock="Bottom" Height="30" FontSize="12" HorizontalAlignment="Stretch">
