@@ -43,6 +43,7 @@ namespace Janus_Client_V1.Spieldaten
         private bool water_warnung;
         private bool battery_warnung;
         private int gear;
+        private string gang;
         private int speed;
         private string kmh_mi;
         private int tempomat;
@@ -58,12 +59,12 @@ namespace Janus_Client_V1.Spieldaten
 
         // LICHTER
         private bool beam_low;
-        private bool beam_high;
+        private bool fernlicht;
         private bool bremslicht;
         private bool reverse_light;
         private bool blinker_links;
         private bool blinker_rechts;
-        private bool parking_light;
+        private bool standlicht;
 
         // FUEL / ADBLUE
         private int fuel;
@@ -558,6 +559,18 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
+        public string GANG
+        {
+            get { return gang; }
+            set
+            {
+                if (gang != value)
+                {
+                    gang = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public bool ADBLUE_WARNUNG
         {
@@ -592,6 +605,19 @@ namespace Janus_Client_V1.Spieldaten
                 if (tank_warnung != value)
                 {
                     tank_warnung = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool STANDLICHT
+        {
+            get { return standlicht; }
+            set
+            {
+                if (standlicht != value)
+                {
+                    standlicht = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -1050,18 +1076,7 @@ namespace Janus_Client_V1.Spieldaten
         }
 
 
-        public bool PARKING_LIGHT
-        {
-            get { return parking_light; }
-            set
-            {
-                if (parking_light != value)
-                {
-                    parking_light = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
+
 
         public bool BLINKER_RECHTS
         {
@@ -1119,19 +1134,9 @@ namespace Janus_Client_V1.Spieldaten
             }
 
         }
-        public bool BEAM_HIGH
-        {
-            get { return beam_high; }
-            set
-            {
-                if (beam_high != value)
-                {
-                    beam_high = value;
-                    NotifyPropertyChanged();
-                }
-            }
 
-        }
+
+
         public bool BEAM_LOW
         {
             get { return beam_low; }
@@ -1146,6 +1151,19 @@ namespace Janus_Client_V1.Spieldaten
 
         }
 
+        public bool FERNLICHT
+        {
+            get { return fernlicht; }
+            set
+            {
+                if (fernlicht != value)
+                {
+                    fernlicht = value;
+                    NotifyPropertyChanged();
+                }
+            }
+
+        }
 
         public bool SCHEIBENWISCHER
         {

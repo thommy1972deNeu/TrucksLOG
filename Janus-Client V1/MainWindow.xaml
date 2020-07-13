@@ -19,7 +19,8 @@
         <BooleanToVisibilityConverter x:Key="elektrik_an" />
         <BooleanToVisibilityConverter x:Key="motor_an" />
         <BooleanToVisibilityConverter x:Key="licht_low" />
-        <BooleanToVisibilityConverter x:Key="licht_high" />
+        <BooleanToVisibilityConverter x:Key="fernlicht" />
+        <BooleanToVisibilityConverter x:Key="standlicht" />
         <BooleanToVisibilityConverter x:Key="bremslicht"/>
         <BooleanToVisibilityConverter x:Key="tank_warnung" />
         <BooleanToVisibilityConverter x:Key="adblue_warnung" />
@@ -189,6 +190,10 @@
             <mah:Flyout x:Name="UpdatesFlyOut" Width="600" Position="Right" Foreground="White">
                 <StackPanel Orientation="Vertical">
                     <Label Content="Updates des Clients:" FontSize="20"/>
+                    <Label Content="13.07.2020 - Fixing Tour Abgebrochen"/>
+                    <Label Content="13.07.2020 - Diverse Umstellung der Icons und Anzeigen"/>
+                    <Label Content="13.07.2020 - Gang-Anzeige bis 18-Gang eingefügt"/>
+                    <Label Content="12.07.2020 - Telemetry Update auf Version 1.16"/>
                     <Label Content="11.07.2020 - Telemetry wird automatisch in die Ordner kopiert"/>
                     <Label Content="11.07.2020 - Wartebildschirm wenn das Spiel aus ist"/>
 
@@ -361,32 +366,37 @@
 
             
             <!-- WAITING ZONE -->
-         
+         <!--
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.Badged.Background}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Image Source="/Images/pj_2.png" Grid.Row="8" Grid.Column="0" Grid.RowSpan="6" Grid.ColumnSpan="20" Height="200" Width="800" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-          
+          -->
             <!-- WAITING ZONE ENDE-->
             
             <Label Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
             <Label Grid.Row="2" Grid.Column="7" Grid.ColumnSpan="4" x:Name="KMH_MI_LBL" Content="{Binding KMH_MI}" VerticalContentAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
 
             <!-- ICON SET -->
-            <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="16" Background="Orange" Padding="10" CornerRadius="30"/>
-            <Image Grid.Row="3" Grid.Column="2" Source="{iconPacks:MaterialImage Kind=CarElectric}" Margin="3" Visibility="{Binding ELEKTRIK_AN, Converter={StaticResource elektrik_an}}" ToolTip="Zündung an" />
-            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=Engine}" Margin="3" Visibility="{Binding MOTOR_AN, Converter={StaticResource motor_an}}" ToolTip="Motor an"/>
+            <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="20" Background="Orange" Padding="10" CornerRadius="30" Width="1000"/>
+            <Image Grid.Row="3" Grid.Column="1" Source="{iconPacks:MaterialImage Kind=CarElectric}" Margin="3" Visibility="{Binding ELEKTRIK_AN, Converter={StaticResource elektrik_an}}" ToolTip="Zündung an" />
+            <Image Grid.Row="3" Grid.Column="2" Source="{iconPacks:MaterialImage Kind=Engine}" Margin="3" Visibility="{Binding MOTOR_AN, Converter={StaticResource motor_an}}" ToolTip="Motor an"/>
+            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=CarLightFog}" Margin="3" Visibility="{Binding STANDLICHT, Converter={StaticResource standlicht}}" ToolTip="Abblendlicht an"/>
+
             <Image Grid.Row="3" Grid.Column="4" Source="{iconPacks:MaterialImage Kind=CarLightDimmed}" Margin="3" Visibility="{Binding LICHT_LOW, Converter={StaticResource licht_low}}" ToolTip="Abblendlicht an"/>
-            <Image Grid.Row="3" Grid.Column="5" Source="{iconPacks:MaterialImage Kind=CarLightHigh}" Margin="3" Visibility="{Binding LICHT_HIGH, Converter={StaticResource licht_high}}" ToolTip="Hauptlicht an"/>
+            <Image Grid.Row="3" Grid.Column="5" Source="{iconPacks:MaterialImage Kind=CarLightHigh}" Margin="3" Visibility="{Binding FERNLICHT, Converter={StaticResource fernlicht}}" ToolTip="Fernlicht an"/>
             <Image Grid.Row="3" Grid.Column="6" Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Margin="3" Visibility="{Binding TANK_WARNUNG, Converter={StaticResource tank_warnung}}" ToolTip="Tankwarnung"/>
             <Image Grid.Row="3" Grid.Column="7" Source="{iconPacks:MaterialImage Kind=CarBrakeAlert}" Margin="3" Visibility="{Binding BREMSLICHT, Converter={StaticResource bremslicht}}" ToolTip="Bremse"/>
             <Image Grid.Row="3" Grid.Column="8" Source="{iconPacks:FontAwesomeImage Kind=WindSolid}" Margin="3" Visibility="{Binding AIR_WARNUNG, Converter={StaticResource air_warnung}}" ToolTip="Luftdruck gering"/>
             <Image Grid.Row="3" Grid.Column="9" Source="{iconPacks:FontAwesomeImage Kind=OilCanSolid}" Margin="3" Visibility="{Binding OIL_WARNUNG, Converter={StaticResource oil_warnung}}" ToolTip="Ölstand niedrig"/>
             <Image Grid.Row="3" Grid.Column="10" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3" Visibility="{Binding WATER_WARNUNG, Converter={StaticResource water_warnung}}" ToolTip="Temperatur zu hoch"/>
             <Image Grid.Row="3" Grid.Column="11" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3" Visibility="{Binding BATTERY_WARNUNG, Converter={StaticResource battery_warnung}}" ToolTip="Batterie fast leer"/>
+            
+            <Label Content="Gang" Grid.Row="3" Grid.Column="13" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,-45,0,0" Foreground="Black"/>
+            <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="13" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="0,5,0,0" Foreground="Black"/>
 
             <!-- TANKANZEIGE -->
-            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="12" Grid.ColumnSpan="4" VerticalAlignment="Center">
+            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="15" Grid.ColumnSpan="3" VerticalAlignment="Center" Width="180" HorizontalAlignment="Left">
                 <mah:MetroProgressBar Height="50" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
                     <mah:MetroProgressBar.Foreground>
                         <LinearGradientBrush EndPoint="0,1" StartPoint="1,0">
@@ -471,10 +481,8 @@
             <Label Foreground="Black" Content="{Binding LKW_HERSTELLER}" Grid.Row="8" Grid.Column="17" Grid.RowSpan="2" FontSize="24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="60" VerticalAlignment="Bottom" />
             <Label Foreground="Black" Content="{Binding LKW_MODELL}" Grid.Row="10" Grid.Column="17" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" />
 
-            <Image Source="{iconPacks:MaterialImage Kind=TruckTrailer}" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="15" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" Margin="0,5" Width="38"/>
-            <Image Source="{iconPacks:FontAwesomeImage Kind=TruckSolid}" HorizontalAlignment="Left" Grid.Row="10" Grid.Column="16" Margin="0,5" Width="38"/>
-
-
+            <Image Source="{iconPacks:MaterialImage Kind=TruckTrailer}" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="15" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" Margin="0,5" Width="38"/>
+            <Image Source="{iconPacks:FontAwesomeImage Kind=TruckSolid}" HorizontalAlignment="Left" Grid.Row="11" Grid.Column="16" Margin="0,5" Width="38"/>
 
 
         </Grid>

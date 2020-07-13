@@ -20,12 +20,13 @@ namespace Janus_Client_V1
 
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.1.5";
+        public string CLIENT_VERSION = "1.1.6";
         readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
         public int refueling;
         public string tour_id_tanken;
+        
 
         DispatcherTimer job_update_timer = new DispatcherTimer();
 
@@ -37,7 +38,6 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
             Logging.Make_Log_File();
-            kopiere_telemetry();
 
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
@@ -125,36 +125,6 @@ namespace Janus_Client_V1
         }
 
 
-        private void kopiere_telemetry()
-        {
-            string pfad_ets = REG.Lesen("Pfade", "ETS2_PFAD"); 
-            pfad_ets = pfad_ets.Substring(0, pfad_ets.Length - 15);
-
-            string pfad_ats = REG.Lesen("Pfade", "ATS_Pfad"); 
-            pfad_ats = pfad_ats.Substring(0, pfad_ats.Length - 12);
-
-            MessageBox.Show(pfad_ets);
-
-            if (!Directory.Exists(pfad_ets + @"plugins"))
-            {
-                Directory.CreateDirectory(pfad_ets + "\\plugins");
-                File.Copy(@"Resources\scs-telemetry.dll", pfad_ets + @"plugins\scs-telemetry.dll", true);
-            } else
-            {
-                File.Copy(@"Resources\scs-telemetry.dll", pfad_ets + @"plugins\scs-telemetry.dll", true);
-            }
-
-            if (!Directory.Exists(pfad_ats + @"plugins"))
-            {
-                Directory.CreateDirectory(pfad_ats + "\\plugins");
-                File.Copy(@"Resources\scs-telemetry.dll", pfad_ats + @"plugins\scs-telemetry.dll", true);
-            } else
-            {
-                File.Copy(@"Resources\scs-telemetry.dll", pfad_ats + @"plugins\scs-telemetry.dll", true);
-            }
-
-        }
-
 
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -186,6 +156,7 @@ namespace Janus_Client_V1
                     return;
                 }
             }
+
             if(REG.Lesen("Config", "TOUR_ID") == "")
             {
                 try
@@ -248,9 +219,11 @@ namespace Janus_Client_V1
             post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
             string response = API.HTTPSRequestPost(API.job_cancel, post_param);
             Console.WriteLine(response);
+
             REG.Schreiben("Config", "TOUR_ID", "");
             SoundPlayer.Sound_Tour_Abgebrochen();
             job_update_timer.Stop();
+
             Logging.WriteClientLog("Tour abgebrochen: " + response);
         }
 
@@ -414,9 +387,86 @@ namespace Janus_Client_V1
                     Truck_Daten.PARKING_BRAKE = data.TruckValues.CurrentValues.MotorValues.BrakeValues.ParkingBrake;
                     Truck_Daten.BLINKER_LINKS = data.TruckValues.CurrentValues.LightsValues.BlinkerLeftOn;
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
+                    Truck_Daten.GEAR = data.TruckValues.CurrentValues.MotorValues.GearValues.Selected;
 
-                    Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.Parking;
-                    Truck_Daten.LICHT_HIGH = data.TruckValues.CurrentValues.LightsValues.BeamLow;
+
+                    switch(Truck_Daten.GEAR)
+                    {
+                        case (0):
+                            Truck_Daten.GANG = "N";
+                            break;
+                        case (-1):
+                            Truck_Daten.GANG = "R1";
+                            break;
+                        case (-2):
+                            Truck_Daten.GANG = "R2";
+                            break;
+                        case (-3):
+                            Truck_Daten.GANG = "R3";
+                            break;
+                        case (-4):
+                            Truck_Daten.GANG = "R4";
+                            break;
+                        case (1):
+                            Truck_Daten.GANG = "1";
+                            break;
+                        case (2):
+                            Truck_Daten.GANG = "2";
+                            break;
+                        case (3):
+                            Truck_Daten.GANG = "3";
+                            break;
+                        case (4):
+                            Truck_Daten.GANG = "4";
+                            break;
+                        case (5):
+                            Truck_Daten.GANG = "5";
+                            break;
+                        case (6):
+                            Truck_Daten.GANG = "6";
+                            break;
+                        case (7):
+                            Truck_Daten.GANG = "7";
+                            break;
+                        case (8):
+                            Truck_Daten.GANG = "8";
+                            break;
+                        case (9):
+                            Truck_Daten.GANG = "9";
+                            break;
+                        case (10):
+                            Truck_Daten.GANG = "10";
+                            break;
+                        case (11):
+                            Truck_Daten.GANG = "11";
+                            break;
+                        case (12):
+                            Truck_Daten.GANG = "12";
+                            break;
+                        case (13):
+                            Truck_Daten.GANG = "13";
+                            break;
+                        case (14):
+                            Truck_Daten.GANG = "14";
+                            break;
+                        case (15):
+                            Truck_Daten.GANG = "15";
+                            break;
+                        case (16):
+                            Truck_Daten.GANG = "16";
+                            break;
+                        case (17):
+                            Truck_Daten.GANG = "17";
+                            break;
+                        case (18):
+                            Truck_Daten.GANG = "18";
+                            break;
+                    }
+
+
+                    Truck_Daten.STANDLICHT = data.TruckValues.CurrentValues.LightsValues.Parking;
+                    Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
+                    Truck_Daten.FERNLICHT = data.TruckValues.CurrentValues.LightsValues.BeamHigh;
 
 
                     Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
@@ -449,21 +499,26 @@ namespace Janus_Client_V1
                     Truck_Daten.CANCEL_STRAFE = data.GamePlay.JobCancelled.Penalty;
 
                     // Sonstiges
-                    Truck_Daten.LKW_SCHADEN = Convert.ToInt32(data.TruckValues.CurrentValues.DamageValues.WheelsAvg * 100);
+
+
+                    
 
                     // SCAHDENSBERECHNUNG LKW
-                    double schaden1 = data.TruckValues.CurrentValues.DamageValues.Cabin;
-                    double schaden2 = data.TruckValues.CurrentValues.DamageValues.Chassis;
-                    double schaden3 = data.TruckValues.CurrentValues.DamageValues.Engine;
-                    double schaden4 = data.TruckValues.CurrentValues.DamageValues.Transmission;
-                    double schaden5 = data.TruckValues.CurrentValues.DamageValues.WheelsAvg;
-                    Truck_Daten.LKW_SCHADEN = Convert.ToInt32(schaden1 + schaden2 + schaden3 + schaden4 + schaden5 * 100);
+                    float schaden1 = data.TruckValues.CurrentValues.DamageValues.Engine*100;
+                    float schaden2 = data.TruckValues.CurrentValues.DamageValues.Transmission*100;
+                    float schaden3 = data.TruckValues.CurrentValues.DamageValues.Chassis*100;
+                    float schaden4 = data.TruckValues.CurrentValues.DamageValues.Cabin*100;
+                    float schaden5 = data.TruckValues.CurrentValues.DamageValues.WheelsAvg*100;
+                    Truck_Daten.LKW_SCHADEN = Math.Round((schaden1 + schaden3 + schaden4) / 3);
+
 
                     // SCHADENSBERECHNUNG TRAILER
-                    double tschaden1 = data.TrailerValues[0].DamageValues.Chassis;
-                    double tschaden2 = data.TrailerValues[0].DamageValues.Wheels;
-                    double tschaden3 = data.TrailerValues[0].DamageValues.Cargo;
-                    Truck_Daten.TRAILER_SCHADEN = Convert.ToInt32(tschaden1 + tschaden2 + tschaden3 * 100);
+                    //float tschaden1 = data.TrailerValues[0].DamageValues.Wheels*100;
+                    float tschaden2 = data.TrailerValues[0].DamageValues.Chassis*100;
+                    //float tschaden3 = data.TrailerValues[0].DamageValues.Cargo * 100;
+
+                    Truck_Daten.TRAILER_SCHADEN = Math.Round(tschaden2);
+   
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
