@@ -61,8 +61,6 @@ namespace Janus_Client_V1
                     return;
                 }
 
-                Lade_Voreinstellungen();
-
                 try
                 {
                     TelemetryInstaller.check_ETS();
