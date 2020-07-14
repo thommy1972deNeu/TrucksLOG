@@ -308,7 +308,6 @@
     <Resource Include="apple-icon-72x72.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="icons\" />
     <Folder Include="Sonstiges\" />
   </ItemGroup>
   <ItemGroup>
@@ -417,6 +416,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="icons\kupplung.png" />
     <Content Include="Resources\scs-telemetry.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

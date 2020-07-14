@@ -1,17 +1,12 @@
 ﻿using ControlzEx.Theming;
 using Janus_Client_V1.Klassen;
 using Janus_Client_V1.Spieldaten;
-using MahApps.Metro.Controls.Dialogs;
 using SCSSdkClient;
 using SCSSdkClient.Object;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -19,38 +14,32 @@ using System.Windows.Threading;
 
 namespace Janus_Client_V1
 {
-
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.1.6";
-        readonly MSG msg = new MSG();
+        public string CLIENT_VERSION = "1.1.7";
+        private readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
         public int refueling;
         public string tour_id_tanken;
-        
 
-        DispatcherTimer job_update_timer = new DispatcherTimer();
-
+        private DispatcherTimer job_update_timer = new DispatcherTimer();
 
         public bool InvokeRequired { get; private set; }
-
 
         public MainWindow()
         {
             InitializeComponent();
             Logging.Make_Log_File();
 
-            ZEIGE_TMP.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD"))) ? false : true;
-            ZEIGE_ETS2.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD"))) ? false : true;
-            ZEIGE_ATS.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD"))) ? false : true;
+            Lade_Voreinstellungen();
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
             credit_text.Content += " - Quasselboy Patti" + Environment.NewLine;
             credit_text.Content += " - Daniel1983" + Environment.NewLine;
             credit_text.Content += " - [MBTransporte] MaxS730" + Environment.NewLine + Environment.NewLine; ;
             credit_text.Content += "Einen Extra Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der Zeit unterstützt." + Environment.NewLine;
-            credit_text.Content +=  Environment.NewLine;
+            credit_text.Content += Environment.NewLine;
             credit_text.Content += "Unser(e) Live-Streamer:" + Environment.NewLine;
 
             Logging.WriteClientLog("Version: " + CLIENT_VERSION);
@@ -65,11 +54,10 @@ namespace Janus_Client_V1
             }
             else
             {
-
                 if (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
                 {
-                     Pfad_Angeben pf = new Pfad_Angeben();
-                     pf.ShowDialog();
+                    Pfad_Angeben pf = new Pfad_Angeben();
+                    pf.ShowDialog();
                     return;
                 }
 
@@ -79,12 +67,10 @@ namespace Janus_Client_V1
                 {
                     TelemetryInstaller.check_ETS();
                     TelemetryInstaller.check_ATS();
-
-                } catch { }
+                }
+                catch { }
 
                 System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
-
-
 
                 Telemetry = new SCSSdkTelemetry();
                 Telemetry.Data += Telemetry_Data;
@@ -104,31 +90,8 @@ namespace Janus_Client_V1
                 if (REG.Lesen("Config", "Systemsounds") == "An")
                     SoundPlayer.Sound_Willkommen();
                 */
-
-                try
-                {
-                    ets2_content.Content = REG.Lesen("Pfade", "ETS2_PFAD") != "" ? "OK" : "Fehlerhaft";
-                    ats_content.Content = REG.Lesen("Pfade", "ATS_PFAD") != "" ? "OK" : "Fehlerhaft";
-                    tmp_content.Content = REG.Lesen("Pfade", "TMP_PFAD") != "" ? "OK" : "Fehlerhaft";
-                    status_bar_version.Content = "Client Version: " + CLIENT_VERSION;
-                    Logging.WriteClientLog("Pfade aus REG gelesen und in Seitenmenü angezeigt !");
-                } catch (Exception ex)
-                {
-                    Logging.WriteClientLog("Fehler beim laden der Pfade aus Registry" + ex.Message);
-                }
-
-                try
-                {
-                    this.DataContext = Truck_Daten;
-                } catch (Exception ex)
-                {
-                    Logging.WriteClientLog("Fehler beim setzen des DataContext" + ex.Message);
-                }
-                
-
             }
         }
-
 
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -143,7 +106,6 @@ namespace Janus_Client_V1
 
         private void TelemetryOnJobStarted(object sender, EventArgs e)
         {
-
             if (!Truck_Daten.CARGO_LOADED)
             {
                 Stopwatch stopWatch = new Stopwatch(); //as timeout
@@ -161,18 +123,18 @@ namespace Janus_Client_V1
                 }
             }
 
-            if(REG.Lesen("Config", "TOUR_ID") == "")
+            if (REG.Lesen("Config", "TOUR_ID") == "")
             {
                 try
                 {
                     REG.Schreiben("Config", "TOUR_ID", GenerateString());
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Logging.WriteClientLog("Fehler beim Schreiben TOUR_ID mit GENERATE STRING(): " + ex.Message);
                 }
-               
             }
-            
+
             try
             {
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
@@ -249,7 +211,6 @@ namespace Janus_Client_V1
             Logging.WriteClientLog("Tour Abgeliefert: " + response);
         }
 
-
         private void TelemetryFined(object sender, EventArgs e)
         {
             Dictionary<string, string> post_param = new Dictionary<string, string>();
@@ -260,7 +221,6 @@ namespace Janus_Client_V1
             string response = API.HTTPSRequestPost(API.strafe, post_param);
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Strafe_Erhalten();
             Logging.WriteClientLog("Strafe erhalten: " + response);
-
         }
 
         private void TelemetryTollgate(object sender, EventArgs e)
@@ -273,7 +233,6 @@ namespace Janus_Client_V1
 
             if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
             Logging.WriteClientLog("Maut durchfahren: " + response);
-
         }
 
         private void TelemetryFerry(object sender, EventArgs e)
@@ -286,7 +245,6 @@ namespace Janus_Client_V1
 
             string response = API.HTTPSRequestPost(API.transport, post_param);
             Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
-
         }
 
         private void TelemetryTrain(object sender, EventArgs e)
@@ -306,7 +264,6 @@ namespace Janus_Client_V1
             Logging.WriteClientLog("Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
-
         private void TelemetryRefuelEnd(object sender, EventArgs e)
         {
             Logging.WriteClientLog("Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
@@ -314,25 +271,26 @@ namespace Janus_Client_V1
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
-            if(string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID"))) {
+            if (string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID")))
+            {
                 tour_id_tanken = "0";
-            } else
+            }
+            else
             {
                 tour_id_tanken = REG.Lesen("Config", "TOUR_ID");
             }
 
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                post_param.Add("TOUR_ID", tour_id_tanken);
-                post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
-                post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
-                post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
-                post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("TOUR_ID", tour_id_tanken);
+            post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
+            post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
+            post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
+            post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
 
-                string response = API.HTTPSRequestPost(API.tanken, post_param);
-                Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
+            string response = API.HTTPSRequestPost(API.tanken, post_param);
+            Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
         }
-
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
         {
@@ -350,7 +308,6 @@ namespace Janus_Client_V1
                     Truck_Daten.ETS_PFAD = REG.Lesen("Pfade", "ETS2_PFAD");
                     Truck_Daten.ATS_PFAD = REG.Lesen("Pfade", "ATS_PFAD");
                     Truck_Daten.TMP_PFAD = REG.Lesen("Pfade", "TMP_PFAD");
-
 
                     // Tour TEST
                     Truck_Daten.STARTORT = data.JobValues.CitySource;
@@ -393,91 +350,109 @@ namespace Janus_Client_V1
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
                     Truck_Daten.GEAR = data.TruckValues.CurrentValues.MotorValues.GearValues.Selected;
 
-
-                    switch(Truck_Daten.GEAR)
+                    switch (Truck_Daten.GEAR)
                     {
                         case (0):
                             Truck_Daten.GANG = "N";
                             break;
+
                         case (-1):
                             Truck_Daten.GANG = "R1";
                             break;
+
                         case (-2):
                             Truck_Daten.GANG = "R2";
                             break;
+
                         case (-3):
                             Truck_Daten.GANG = "R3";
                             break;
+
                         case (-4):
                             Truck_Daten.GANG = "R4";
                             break;
+
                         case (1):
                             Truck_Daten.GANG = "1";
                             break;
+
                         case (2):
                             Truck_Daten.GANG = "2";
                             break;
+
                         case (3):
                             Truck_Daten.GANG = "3";
                             break;
+
                         case (4):
                             Truck_Daten.GANG = "4";
                             break;
+
                         case (5):
                             Truck_Daten.GANG = "5";
                             break;
+
                         case (6):
                             Truck_Daten.GANG = "6";
                             break;
+
                         case (7):
                             Truck_Daten.GANG = "7";
                             break;
+
                         case (8):
                             Truck_Daten.GANG = "8";
                             break;
+
                         case (9):
                             Truck_Daten.GANG = "9";
                             break;
+
                         case (10):
                             Truck_Daten.GANG = "10";
                             break;
+
                         case (11):
                             Truck_Daten.GANG = "11";
                             break;
+
                         case (12):
                             Truck_Daten.GANG = "12";
                             break;
+
                         case (13):
                             Truck_Daten.GANG = "13";
                             break;
+
                         case (14):
                             Truck_Daten.GANG = "14";
                             break;
+
                         case (15):
                             Truck_Daten.GANG = "15";
                             break;
+
                         case (16):
                             Truck_Daten.GANG = "16";
                             break;
+
                         case (17):
                             Truck_Daten.GANG = "17";
                             break;
+
                         case (18):
                             Truck_Daten.GANG = "18";
                             break;
                     }
 
-
                     Truck_Daten.STANDLICHT = data.TruckValues.CurrentValues.LightsValues.Parking;
                     Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
                     Truck_Daten.FERNLICHT = data.TruckValues.CurrentValues.LightsValues.BeamHigh;
-
 
                     Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
                     Truck_Daten.TRAILER_ANGEHANGEN = data.TrailerValues[0].Attached;
                     Truck_Daten.TEMPOLIMIT = (int)(Truck_Daten.SPIEL == "Ets2" ? Math.Round(data.NavigationValues.SpeedLimit.Kph) : Math.Round(data.NavigationValues.SpeedLimit.Mph));
                     Truck_Daten.AIR_WARNUNG = data.TruckValues.CurrentValues.DashboardValues.WarningValues.AirPressure;
-
 
                     // FRACHTSCHADEN
                     Truck_Daten.FRACHTSCHADEN = data.JobValues.CargoValues.CargoDamage * 100;
@@ -489,7 +464,6 @@ namespace Janus_Client_V1
 
                     // MAUTSTATION
                     Truck_Daten.MAUT_BETRAG = (int)data.GamePlay.TollgateEvent.PayAmount;
-
 
                     // Fahrtinfo
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT2 + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
@@ -504,25 +478,20 @@ namespace Janus_Client_V1
 
                     // Sonstiges
 
-
-                    
-
                     // SCAHDENSBERECHNUNG LKW
-                    float schaden1 = data.TruckValues.CurrentValues.DamageValues.Engine*100;
-                    float schaden2 = data.TruckValues.CurrentValues.DamageValues.Transmission*100;
-                    float schaden3 = data.TruckValues.CurrentValues.DamageValues.Chassis*100;
-                    float schaden4 = data.TruckValues.CurrentValues.DamageValues.Cabin*100;
-                    float schaden5 = data.TruckValues.CurrentValues.DamageValues.WheelsAvg*100;
+                    float schaden1 = data.TruckValues.CurrentValues.DamageValues.Engine * 100;
+                    float schaden2 = data.TruckValues.CurrentValues.DamageValues.Transmission * 100;
+                    float schaden3 = data.TruckValues.CurrentValues.DamageValues.Chassis * 100;
+                    float schaden4 = data.TruckValues.CurrentValues.DamageValues.Cabin * 100;
+                    float schaden5 = data.TruckValues.CurrentValues.DamageValues.WheelsAvg * 100;
                     Truck_Daten.LKW_SCHADEN = Math.Round((schaden1 + schaden3 + schaden4) / 3);
-
 
                     // SCHADENSBERECHNUNG TRAILER
                     //float tschaden1 = data.TrailerValues[0].DamageValues.Wheels*100;
-                    float tschaden2 = data.TrailerValues[0].DamageValues.Chassis*100;
+                    float tschaden2 = data.TrailerValues[0].DamageValues.Chassis * 100;
                     //float tschaden3 = data.TrailerValues[0].DamageValues.Cargo * 100;
 
                     Truck_Daten.TRAILER_SCHADEN = Math.Round(tschaden2);
-   
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
@@ -551,8 +520,6 @@ namespace Janus_Client_V1
             { }
         }
 
-
-
         private void Lade_Voreinstellungen()
         {
             try
@@ -570,50 +537,73 @@ namespace Janus_Client_V1
 
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
 
-                if(string.IsNullOrWhiteSpace(REG.Lesen("Config", "Background")))
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Background")))
                 {
                     Background_WEchsler.SelectedValue = "pj_1.png";
                     REG.Schreiben("Config", "Background", "pj_1.png");
-                } else
+                }
+                else
                 {
                     Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
                 }
 
-
+                // Hintergrund Transparenz Beginn
                 bg_opacity.Value = Convert.ToDouble(REG.Lesen("Config", "BG_OPACITY"));
                 this.Hauptfenster.Background.Opacity = Convert.ToDouble(REG.Lesen("Config", "BG_OPACITY"));
+                // Hintergrund Transparenz Ende
 
-          
+                // Pfade Auslesen Beginn
+                try
+                {
+                    ets2_content.Content = REG.Lesen("Pfade", "ETS2_PFAD") != "" ? "OK" : "Fehlt";
+                    ats_content.Content = REG.Lesen("Pfade", "ATS_PFAD") != "" ? "OK" : "Fehlt";
+                    tmp_content.Content = REG.Lesen("Pfade", "TMP_PFAD") != "" ? "OK" : "Fehlt";
+                    status_bar_version.Content = "Client Version: " + CLIENT_VERSION;
+                    Logging.WriteClientLog("Pfade aus REG gelesen und in Seitenmenü angezeigt !");
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteClientLog("Fehler beim laden der Pfade aus Registry" + ex.Message);
+                }
+                // Pfade Auslesen Ende
+
+                try
+                {
+                    this.DataContext = Truck_Daten;
+                }
+                catch (Exception ex)
+                {
+                    Logging.WriteClientLog("Fehler beim setzen des DataContext" + ex.Message);
+                }
 
                 Logging.WriteClientLog("Voreinstellungen geladen !");
-
-
-
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logging.WriteClientLog("Fehler beim Laden der Voreinstellungen " + ex.Message);
             }
 
-
-
+            /*
+                ZEIGE_TMP.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD"))) ? false : true;
+                ZEIGE_ETS2.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD"))) ? false : true;
+                ZEIGE_ATS.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD"))) ? false : true;
+            */
         }
-
 
         private void Beta_Tester(object sender, RoutedEventArgs e)
         {
             try
             {
                 Process.Start("https://projekt-janus.de/beta_bewerbung.php");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1010). Bitte versuche es später erneut oder gib uns diesen Fehlercode in Discord." + ex.Message);
             }
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void Spende_einen_Kaffee(object sender, RoutedEventArgs e)
@@ -621,26 +611,23 @@ namespace Janus_Client_V1
             try
             {
                 Process.Start("https://paypal.me/ErIstWiederDa/2,00");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut..." + ex.Message);
             }
-
         }
 
         private void MainWindow_Oeffnen(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void Seite_Kontakt_oeffnen(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void Hauptmenu_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void Farbschema_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -657,12 +644,10 @@ namespace Janus_Client_V1
             }
         }
 
-
         private void Preis_eintragen_Click(object sender, RoutedEventArgs e)
         {
             Logging.WriteClientLog("Preis eintragen CLICK-EVENT");
         }
-
 
         private void Systemsounds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -675,7 +660,6 @@ namespace Janus_Client_V1
                 REG.Schreiben("Config", "Systemsounds", "Aus");
             }
         }
-
 
         public static string GenerateString()
         {
@@ -701,7 +685,6 @@ namespace Janus_Client_V1
             return System.Text.Encoding.Default.GetString(bytes);
         }
 
-
         private void LOG_ORDNER_OEFFNEN(object sender, RoutedEventArgs e)
         {
             Process.Start(Config.LogRoot);
@@ -725,7 +708,6 @@ namespace Janus_Client_V1
                 ImageBrush myBrush = new ImageBrush();
                 myBrush.ImageSource = new BitmapImage(new Uri(BaseUriHelper.GetBaseUri(this), "Images/" + (string)Background_WEchsler.SelectedValue));
                 this.Hauptfenster.Background = myBrush;
-
             }
             catch (Exception ex)
             {
@@ -735,7 +717,6 @@ namespace Janus_Client_V1
 
         private void Oeffne_Credits(object sender, RoutedEventArgs e)
         {
-            
         }
 
         private void Andras_Click(object sender, RoutedEventArgs e)
@@ -756,8 +737,8 @@ namespace Janus_Client_V1
 
                 REG.Schreiben("Config", "BG_OPACITY", bg_opacity.Value.ToString());
                 Truck_Daten.BG_OPACITY = bg_opacity.Value;
-            } catch { }
-
+            }
+            catch { }
         }
 
         private void OPEN_BG_FILE(object sender, RoutedEventArgs e)
@@ -784,7 +765,6 @@ namespace Janus_Client_V1
         {
             Application.Current.Shutdown();
         }
-
 
         private void settings_Click(object sender, RoutedEventArgs e)
         {
@@ -817,12 +797,6 @@ namespace Janus_Client_V1
         {
             var item = e.OriginalSource as System.Windows.Controls.MenuItem;
             MessageBox.Show($"{item.Header} was clicked");
-           
         }
-
     }
-
-
-
 }
-

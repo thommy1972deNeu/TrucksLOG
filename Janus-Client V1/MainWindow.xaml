@@ -201,6 +201,10 @@
             <mah:Flyout x:Name="UpdatesFlyOut" Width="600" Position="Right" Foreground="White">
                 <StackPanel Orientation="Vertical">
                     <Label Content="Updates des Clients:" FontSize="20"/>
+                    <Label Content="14.07.2020 - Ganganzeige Anzeigefehler behoben"/>
+                    <Label Content="14.07.2020 - Fehler -> Tooltip bei Lampenicons behoben"/>
+                    <Label Content="14.07.2020 - Icon für Trailer in Statusleiste verschoben"/>
+                    <Label Content="14.07.2020 - Bugfix Buttonanzeige im WaitingScreen"/>
                     <Label Content="13.07.2020 - Spielpfade können jetzt im Hauptmeü geändert werden"/>
                     <Label Content="13.07.2020 - Pfade können jetzt im Startbildschirm geändert werden"/>
                     <Label Content="13.07.2020 - Fixing Tour Abgebrochen"/>
@@ -380,16 +384,15 @@
 
 
             <!-- WAITING ZONE -->
-
+  
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Image Source="/Images/pj_2.png" Grid.Row="8" Grid.Column="6" Grid.RowSpan="6" Grid.ColumnSpan="20" Height="200" Width="350" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-            <Button x:Name="ZEIGE_TMP" Height="50" FontSize="24" Content="Truckers-MP starten" Grid.Row="8" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="tmp_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006"/>
-            <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006"/>
-            <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006"/>
-            <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0"/>
-
+            <Button x:Name="ZEIGE_TMP" Height="50" FontSize="24" Content="Truckers-MP starten" Grid.Row="8" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="tmp_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
 
             <!-- WAITING ZONE ENDE-->
 
@@ -400,7 +403,7 @@
             <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="20" Background="Orange" Padding="10" CornerRadius="30" Width="1000"/>
             <Image Grid.Row="3" Grid.Column="1" Source="{iconPacks:MaterialImage Kind=CarElectric}" Margin="3" Visibility="{Binding ELEKTRIK_AN, Converter={StaticResource elektrik_an}}" ToolTip="Zündung an" />
             <Image Grid.Row="3" Grid.Column="2" Source="{iconPacks:MaterialImage Kind=Engine}" Margin="3" Visibility="{Binding MOTOR_AN, Converter={StaticResource motor_an}}" ToolTip="Motor an"/>
-            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=CarLightFog}" Margin="3" Visibility="{Binding STANDLICHT, Converter={StaticResource standlicht}}" ToolTip="Abblendlicht an"/>
+            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=CarLightFog}" Margin="3" Visibility="{Binding STANDLICHT, Converter={StaticResource standlicht}}" ToolTip="Standlicht an"/>
 
             <Image Grid.Row="3" Grid.Column="4" Source="{iconPacks:MaterialImage Kind=CarLightDimmed}" Margin="3" Visibility="{Binding LICHT_LOW, Converter={StaticResource licht_low}}" ToolTip="Abblendlicht an"/>
             <Image Grid.Row="3" Grid.Column="5" Source="{iconPacks:MaterialImage Kind=CarLightHigh}" Margin="3" Visibility="{Binding FERNLICHT, Converter={StaticResource fernlicht}}" ToolTip="Fernlicht an"/>
@@ -410,9 +413,9 @@
             <Image Grid.Row="3" Grid.Column="9" Source="{iconPacks:FontAwesomeImage Kind=OilCanSolid}" Margin="3" Visibility="{Binding OIL_WARNUNG, Converter={StaticResource oil_warnung}}" ToolTip="Ölstand niedrig"/>
             <Image Grid.Row="3" Grid.Column="10" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3" Visibility="{Binding WATER_WARNUNG, Converter={StaticResource water_warnung}}" ToolTip="Temperatur zu hoch"/>
             <Image Grid.Row="3" Grid.Column="11" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3" Visibility="{Binding BATTERY_WARNUNG, Converter={StaticResource battery_warnung}}" ToolTip="Batterie fast leer"/>
+            <Image Grid.Row="3" Grid.Column="12" Source="icons/kupplung.png" Margin="3" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" ToolTip="Anhänger gekuppelt"/>
 
-            <Label Content="Gang" Grid.Row="3" Grid.Column="13" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,-45,0,0" Foreground="Black"/>
-            <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="13" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="0,5,0,0" Foreground="Black"/>
+            <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="13" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="0,-5,0,0" Foreground="Black"/>
 
             <!-- TANKANZEIGE -->
             <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="15" Grid.ColumnSpan="3" VerticalAlignment="Center" Width="180" HorizontalAlignment="Left">
@@ -499,9 +502,9 @@
             <Border x:Name="HERSTELLER" Grid.Row="8" Grid.ColumnSpan="5" Grid.Column="15" Grid.RowSpan="4" Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,5,0,2" CornerRadius="20,0,0,20"/>
             <Label Foreground="Black" Content="{Binding LKW_HERSTELLER}" Grid.Row="8" Grid.Column="17" Grid.RowSpan="2" FontSize="24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="60" VerticalAlignment="Bottom" />
             <Label Foreground="Black" Content="{Binding LKW_MODELL}" Grid.Row="10" Grid.Column="17" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" />
+            
 
-            <Image Source="{iconPacks:MaterialImage Kind=TruckTrailer}" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="15" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" Margin="0,5" Width="38"/>
-            <Image Source="{iconPacks:FontAwesomeImage Kind=TruckSolid}" HorizontalAlignment="Left" Grid.Row="11" Grid.Column="16" Margin="0,5" Width="38"/>
+            <!-- HERSTELLER / MODELL ENDE -->
 
 
         </Grid>
