@@ -11,12 +11,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using AutoUpdaterDotNET;
+
 
 namespace Janus_Client_V1
 {
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.1.7";
+        public string CLIENT_VERSION = "1.3.1.0";
         private readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
@@ -37,10 +39,10 @@ namespace Janus_Client_V1
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
             credit_text.Content += " - Quasselboy Patti" + Environment.NewLine;
             credit_text.Content += " - Daniel1983" + Environment.NewLine;
-            credit_text.Content += " - [MBTransporte] MaxS730" + Environment.NewLine + Environment.NewLine; ;
+            credit_text.Content += " - TOBI_𝟙Ƽ⊘५" + Environment.NewLine;
             credit_text.Content += "Einen Extra Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der Zeit unterstützt." + Environment.NewLine;
-            credit_text.Content += Environment.NewLine;
-            credit_text.Content += "Unser(e) Live-Streamer:" + Environment.NewLine;
+            credit_text.Content += "und natürlich auch an" + Environment.NewLine;
+            credit_text.Content += "unsere(n) Live-Streamer:" + Environment.NewLine;
 
             Logging.WriteClientLog("Version: " + CLIENT_VERSION);
 
@@ -795,6 +797,11 @@ namespace Janus_Client_V1
         {
             var item = e.OriginalSource as System.Windows.Controls.MenuItem;
             MessageBox.Show($"{item.Header} was clicked");
+        }
+
+        private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
+        {
+            AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
         }
     }
 }

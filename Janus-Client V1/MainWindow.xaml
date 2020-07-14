@@ -11,7 +11,7 @@
                  x:Name="Hauptfenster"
                   TitleBarHeight="50"
                  ShowIconOnTitleBar="True"
-                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen" MaxWidth="1200" MaxHeight="700">
+                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen" MaxWidth="1200" MaxHeight="700" Loaded="Hauptfenster_Loaded">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="job_angenommen" />
