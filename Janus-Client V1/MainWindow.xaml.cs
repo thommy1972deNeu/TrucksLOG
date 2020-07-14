@@ -37,9 +37,10 @@ namespace Janus_Client_V1
             Lade_Voreinstellungen();
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
-            credit_text.Content += " - Quasselboy Patti" + Environment.NewLine;
-            credit_text.Content += " - Daniel1983" + Environment.NewLine;
-            credit_text.Content += " - TOBI_𝟙Ƽ⊘५" + Environment.NewLine;
+            credit_text.Content += " - Quasselboy Patti [COO]" + Environment.NewLine;
+            credit_text.Content += " - Daniel1983 [Beta-Tester]" + Environment.NewLine;
+            credit_text.Content += " - TOBI_𝟙Ƽ⊘५ [Beta-Tester]" + Environment.NewLine;
+            credit_text.Content += " - Angelo Riechmann [WebDesigner]" + Environment.NewLine;
             credit_text.Content += "Einen Extra Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der Zeit unterstützt." + Environment.NewLine;
             credit_text.Content += "und natürlich auch an" + Environment.NewLine;
             credit_text.Content += "unsere(n) Live-Streamer:" + Environment.NewLine;
@@ -340,7 +341,10 @@ namespace Janus_Client_V1
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
                     Truck_Daten.LKW_HERSTELLER_ID = data.TruckValues.ConstantsValues.BrandId;
-                    Truck_Daten.SPEED = (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
+
+                    //Truck_Daten.SPEED =  (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
+                    Truck_Daten.SPEED = Truck_Daten.SPIEL == "Ets2" ? (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph : (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Mph;
+
                     Truck_Daten.SPIEL = data.Game.ToString();
                     Truck_Daten.KMH_MI = Truck_Daten.SPIEL == "Ets2" ? "KM/H" : "MI/H";
                     Truck_Daten.ELEKTRIK_AN = data.TruckValues.CurrentValues.ElectricEnabled;
