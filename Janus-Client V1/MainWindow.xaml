@@ -193,31 +193,15 @@
                     </Button>
 
                 </StackPanel>
-
-
-
+                
             </mah:Flyout>
 
             <mah:Flyout x:Name="UpdatesFlyOut" Width="600" Position="Right" Foreground="White">
-                <StackPanel Orientation="Vertical">
-                    <Label Content="Updates des Clients:" FontSize="20"/>
-                    <Label Content="14.07.2020 - Ganganzeige Anzeigefehler behoben"/>
-                    <Label Content="14.07.2020 - Fehler -> Tooltip bei Lampenicons behoben"/>
-                    <Label Content="14.07.2020 - Icon für Trailer in Statusleiste verschoben"/>
-                    <Label Content="14.07.2020 - Bugfix Buttonanzeige im WaitingScreen"/>
-                    <Label Content="13.07.2020 - Spielpfade können jetzt im Hauptmeü geändert werden"/>
-                    <Label Content="13.07.2020 - Pfade können jetzt im Startbildschirm geändert werden"/>
-                    <Label Content="13.07.2020 - Fixing Tour Abgebrochen"/>
-                    <Label Content="13.07.2020 - Diverse Umstellung der Icons und Anzeigen"/>
-                    <Label Content="13.07.2020 - Gang-Anzeige bis 18-Gang eingefügt"/>
-                    <Label Content="12.07.2020 - Telemetry Update auf Version 1.16"/>
-                    <Label Content="11.07.2020 - Telemetry wird automatisch in die Ordner kopiert"/>
-                    <Label Content="11.07.2020 - Wartebildschirm wenn das Spiel aus ist"/>
 
-                </StackPanel>
-
-
-
+                    <ScrollViewer Width="600" VerticalScrollBarVisibility="Auto">
+                        <TextBlock x:Name="update_text" Margin="20,0,0,0" FontSize="24" TextWrapping="Wrap"/>
+                    </ScrollViewer>
+             
             </mah:Flyout>
 
 
@@ -316,15 +300,17 @@
                 </ToggleButton.ContentTemplate>
             </ToggleButton>
 
+            <!-- DISABLED WEIL DIE TELE AUS GEHT IM MINIMIZE
             <Button Click="Minimize_Window" ToolTip="Minimiere das Fenster">
                 <iconPacks:PackIconModern Width="22" Height="22" Kind="WindowMinimize" />
             </Button>
-
+            -->
+            
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
 
 
-    
+
     <DockPanel>
 
         <StatusBar DockPanel.Dock="Bottom" Height="30" FontSize="12" HorizontalAlignment="Stretch">
@@ -384,7 +370,7 @@
 
 
             <!-- WAITING ZONE -->
-  
+           <!--
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
@@ -393,7 +379,7 @@
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-
+-->
             <!-- WAITING ZONE ENDE-->
 
             <Label Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
@@ -455,21 +441,20 @@
             <!-- LICENSE PLATE ENDE -->
 
 
-            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="24" FontSize="16" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
+            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="24" FontSize="30" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
 
+            <Border Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,5,5,0" Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="4" CornerRadius="0,20,0,0"/>
+            <Label Grid.Row="12" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="12" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="12" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
 
-            <Border Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,5,5,2" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="4" CornerRadius="0,20,20,0"/>
-            <Label Grid.Row="10" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="10" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="10" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="13" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="LKW_SCHADEN_1" Content="LKW-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" />
+            <Label Grid.Row="13" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="LKW_SCHADEN_2" Content="{Binding LKW_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="13" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="LKW_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
 
-            <Label Grid.Row="8" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="LKW_SCHADEN_1" Content="LKW-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" />
-            <Label Grid.Row="8" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="LKW_SCHADEN_2" Content="{Binding LKW_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
-            <Label Grid.Row="8" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="LKW_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
-
-            <Label Grid.Row="9" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="TRAILER_SCHADEN_1" Content="Trailer-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" />
-            <Label Grid.Row="9" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="TRAILERSCHADEN_2" Content="{Binding TRAILER_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="9" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="TRAILER_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="TRAILER_SCHADEN_1" Content="Trailer-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" />
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="TRAILERSCHADEN_2" Content="{Binding TRAILER_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="TRAILER_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
 
             <!-- TEMPOLIMIT -->
             <Border x:Name="TEMPOLIMIT" BorderBrush="Red" BorderThickness="20" CornerRadius="150" Grid.Row="1" Grid.Column="0" Height="150" Grid.RowSpan="2" VerticalAlignment="Top" Grid.ColumnSpan="1" Background="White" Margin="20,0,21,0">
@@ -482,13 +467,20 @@
             </Border>
 
             <!-- Streckenverlauf -->
-            <Grid Grid.Row="8" Grid.Column="3" Grid.ColumnSpan="12" Grid.RowSpan="4" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}">
+            <Grid Grid.Row="14" Grid.Column="3" Grid.ColumnSpan="12" Grid.RowSpan="4" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}">
                 <mah:MetroProgressBar 
                     Minimum="0" 
                     Height="50"
                     Maximum="{Binding GESAMT_KM_SA}" 
                     Value="{Binding REST_KM_SA}" 
-                    Name="pbStatus" Foreground="Red" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="2" />
+                    Name="pbStatus" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="2" Grid.Column="1" >
+                    <mah:MetroProgressBar.Foreground>
+                        <LinearGradientBrush EndPoint="0,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF3AFF00" Offset="1"/>
+                            <GradientStop Color="Red" Offset="0.325"/>
+                        </LinearGradientBrush>
+                    </mah:MetroProgressBar.Foreground>
+                </mah:MetroProgressBar>
                 <TextBlock Text="{Binding REST_KM_SA, StringFormat={}{0:0} KM}" 
            HorizontalAlignment="Center" 
                            FontSize="30"
@@ -499,10 +491,10 @@
 
 
             <!-- HERSTELLER / MODELL -->
-            <Border x:Name="HERSTELLER" Grid.Row="8" Grid.ColumnSpan="5" Grid.Column="15" Grid.RowSpan="4" Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,5,0,2" CornerRadius="20,0,0,20"/>
-            <Label Foreground="Black" Content="{Binding LKW_HERSTELLER}" Grid.Row="8" Grid.Column="17" Grid.RowSpan="2" FontSize="24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="60" VerticalAlignment="Bottom" />
-            <Label Foreground="Black" Content="{Binding LKW_MODELL}" Grid.Row="10" Grid.Column="17" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" />
-            
+            <Border x:Name="HERSTELLER" Grid.Row="12" Grid.ColumnSpan="5" Grid.Column="15" Grid.RowSpan="4" Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,5,0,0" CornerRadius="20,0,0,0"/>
+            <Label Foreground="Black" Content="{Binding LKW_HERSTELLER}" Grid.Row="12" Grid.Column="17" Grid.RowSpan="2" FontSize="24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="60" VerticalAlignment="Bottom" />
+            <Label Foreground="Black" Content="{Binding LKW_MODELL}" Grid.Row="14" Grid.Column="17" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" />
+
 
             <!-- HERSTELLER / MODELL ENDE -->
 

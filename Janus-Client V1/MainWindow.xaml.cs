@@ -12,13 +12,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using AutoUpdaterDotNET;
-
+using System.Reflection;
+using System.Linq;
 
 namespace Janus_Client_V1
 {
     public partial class MainWindow
     {
-        public string CLIENT_VERSION = "1.3.1.0";
+        public string CLIENT_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
@@ -33,7 +34,7 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
             Logging.Make_Log_File();
-
+        
             Lade_Voreinstellungen();
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
@@ -300,10 +301,12 @@ namespace Janus_Client_V1
                 if (!InvokeRequired)
                 {
                     // ALLGEMEIN
+                    Truck_Daten.SDK_AKTIVE = !data.SdkActive;
                     Truck_Daten.TELEMETRY_VERSION = "Telemetry: " + data.TelemetryVersion.Major.ToString() + "." + data.TelemetryVersion.Minor.ToString();
                     Truck_Daten.DLL_VERSION = "DLL: " + data.DllVersion.ToString();
                     Truck_Daten.EURO_DOLLAR = Truck_Daten.SPIEL == "Ets2" ? "€" : "$";
-                    Truck_Daten.SDK_AKTIVE = !data.SdkActive;
+                    Truck_Daten.TONNEN_LBS = Truck_Daten.SPIEL == "Ets2" ? " t " : " lb ";
+                    Truck_Daten.LITER_GALLONEN = (Truck_Daten.SPIEL == "Ets2") ? " L" : " Gal.";
 
                     // PFADE für Seitenmenü
                     Truck_Daten.ETS_PFAD = REG.Lesen("Pfade", "ETS2_PFAD");
@@ -346,108 +349,14 @@ namespace Janus_Client_V1
                     Truck_Daten.SPEED = Truck_Daten.SPIEL == "Ets2" ? (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph : (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Mph;
 
                     Truck_Daten.SPIEL = data.Game.ToString();
-                    Truck_Daten.KMH_MI = Truck_Daten.SPIEL == "Ets2" ? "KM/H" : "MI/H";
+                    Truck_Daten.KMH_MI = Truck_Daten.SPIEL == "Ets2" ? "KM/H" : "mp/h";
                     Truck_Daten.ELEKTRIK_AN = data.TruckValues.CurrentValues.ElectricEnabled;
                     Truck_Daten.MOTOR_AN = data.TruckValues.CurrentValues.EngineEnabled;
                     Truck_Daten.PARKING_BRAKE = data.TruckValues.CurrentValues.MotorValues.BrakeValues.ParkingBrake;
                     Truck_Daten.BLINKER_LINKS = data.TruckValues.CurrentValues.LightsValues.BlinkerLeftOn;
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
                     Truck_Daten.GEAR = data.TruckValues.CurrentValues.MotorValues.GearValues.Selected;
-
-                    switch (Truck_Daten.GEAR)
-                    {
-                        case (0):
-                            Truck_Daten.GANG = "N";
-                            break;
-
-                        case (-1):
-                            Truck_Daten.GANG = "R1";
-                            break;
-
-                        case (-2):
-                            Truck_Daten.GANG = "R2";
-                            break;
-
-                        case (-3):
-                            Truck_Daten.GANG = "R3";
-                            break;
-
-                        case (-4):
-                            Truck_Daten.GANG = "R4";
-                            break;
-
-                        case (1):
-                            Truck_Daten.GANG = "1";
-                            break;
-
-                        case (2):
-                            Truck_Daten.GANG = "2";
-                            break;
-
-                        case (3):
-                            Truck_Daten.GANG = "3";
-                            break;
-
-                        case (4):
-                            Truck_Daten.GANG = "4";
-                            break;
-
-                        case (5):
-                            Truck_Daten.GANG = "5";
-                            break;
-
-                        case (6):
-                            Truck_Daten.GANG = "6";
-                            break;
-
-                        case (7):
-                            Truck_Daten.GANG = "7";
-                            break;
-
-                        case (8):
-                            Truck_Daten.GANG = "8";
-                            break;
-
-                        case (9):
-                            Truck_Daten.GANG = "9";
-                            break;
-
-                        case (10):
-                            Truck_Daten.GANG = "10";
-                            break;
-
-                        case (11):
-                            Truck_Daten.GANG = "11";
-                            break;
-
-                        case (12):
-                            Truck_Daten.GANG = "12";
-                            break;
-
-                        case (13):
-                            Truck_Daten.GANG = "13";
-                            break;
-
-                        case (14):
-                            Truck_Daten.GANG = "14";
-                            break;
-
-                        case (15):
-                            Truck_Daten.GANG = "15";
-                            break;
-
-                        case (16):
-                            Truck_Daten.GANG = "16";
-                            break;
-
-                        case (17):
-                            Truck_Daten.GANG = "17";
-                            break;
-
-                        case (18):
-                            Truck_Daten.GANG = "18";
-                            break;
-                    }
+              
 
                     Truck_Daten.STANDLICHT = data.TruckValues.CurrentValues.LightsValues.Parking;
                     Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
@@ -470,7 +379,7 @@ namespace Janus_Client_V1
                     Truck_Daten.MAUT_BETRAG = (int)data.GamePlay.TollgateEvent.PayAmount;
 
                     // Fahrtinfo
-                    Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT2 + " Tonnen " + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
+                    Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT2 + Truck_Daten.TONNEN_LBS + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
 
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
@@ -483,19 +392,20 @@ namespace Janus_Client_V1
                     // Sonstiges
 
                     // SCAHDENSBERECHNUNG LKW
-                    float schaden1 = data.TruckValues.CurrentValues.DamageValues.Engine * 100;
-                    float schaden2 = data.TruckValues.CurrentValues.DamageValues.Transmission * 100;
+                    float schaden1 = data.TruckValues.CurrentValues.DamageValues.Cabin * 100;
+                    float schaden2 = data.TruckValues.CurrentValues.DamageValues.WheelsAvg * 100;
                     float schaden3 = data.TruckValues.CurrentValues.DamageValues.Chassis * 100;
-                    float schaden4 = data.TruckValues.CurrentValues.DamageValues.Cabin * 100;
-                    float schaden5 = data.TruckValues.CurrentValues.DamageValues.WheelsAvg * 100;
-                    Truck_Daten.LKW_SCHADEN = Math.Round((schaden1 + schaden3 + schaden4) / 3);
+                    float schaden4 = data.TruckValues.CurrentValues.DamageValues.Engine * 100;
+                    float schaden5 = data.TruckValues.CurrentValues.DamageValues.Transmission * 100;
+                    float schaden_total = schaden1 + schaden2 + schaden3 + schaden4 + schaden5;
+                    Truck_Daten.LKW_SCHADEN = Math.Round((double)Enumerable.Max( new[] { schaden1, schaden2, schaden3, schaden4, schaden5 } ), 2);
+
 
                     // SCHADENSBERECHNUNG TRAILER
-                    //float tschaden1 = data.TrailerValues[0].DamageValues.Wheels*100;
+                    float tschaden1 = data.TrailerValues[0].DamageValues.Wheels * 100;
                     float tschaden2 = data.TrailerValues[0].DamageValues.Chassis * 100;
-                    //float tschaden3 = data.TrailerValues[0].DamageValues.Cargo * 100;
-
-                    Truck_Daten.TRAILER_SCHADEN = Math.Round(tschaden2);
+                    float tschaden3 = data.TrailerValues[0].DamageValues.Cargo * 100;
+                    Truck_Daten.TRAILER_SCHADEN = Math.Round((double)Enumerable.Max(new[] { tschaden1, tschaden2, tschaden3 }),2);
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
@@ -507,7 +417,7 @@ namespace Janus_Client_V1
                     Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
                     Truck_Daten.FUEL_MAX = (int)data.TruckValues.ConstantsValues.CapacityValues.Fuel;
                     Truck_Daten.FUEL_GERADE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount;
-                    Truck_Daten.LITER_GALLONEN = (Truck_Daten.SPIEL == "Ets2") ? " L" : " Gal.";
+                    
 
                     // Transport FERRY
                     Truck_Daten.FERRY_SOURCE_NAME = data.GamePlay.FerryEvent.SourceName;
@@ -522,6 +432,12 @@ namespace Janus_Client_V1
             }
             catch
             { }
+        }
+
+
+        static int Max(params int[] numbers)
+        {
+            return numbers.Max();
         }
 
         private void Lade_Voreinstellungen()
@@ -592,6 +508,18 @@ namespace Janus_Client_V1
                 ZEIGE_ETS2.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD"))) ? false : true;
                 ZEIGE_ATS.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD"))) ? false : true;
             */
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("VERSION", CLIENT_VERSION);
+                update_text.Text = API.HTTPSRequestPost(API.updatetext_uri, post_param);
+                Logging.WriteClientLog("Update wurde Erfolgreich gesucht... ");
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("Fehler beim Update laden " + ex.Message);
+            }
+
+
         }
 
         private void Beta_Tester(object sender, RoutedEventArgs e)
@@ -762,7 +690,8 @@ namespace Janus_Client_V1
 
         private void Minimize_Window(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;
+            Hauptfenster.WindowState = WindowState.Minimized;
+        
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -807,5 +736,6 @@ namespace Janus_Client_V1
         {
             AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
         }
+
     }
 }

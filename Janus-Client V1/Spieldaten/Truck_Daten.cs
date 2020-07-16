@@ -15,6 +15,7 @@ namespace Janus_Client_V1.Spieldaten
         private string spiel;
         private bool soundan;
         private string euro_dollar;
+        private string tonnen_lbs;
         private string ets_pfad;
         private string ats_pfad;
         private string tmp_pfad;
@@ -98,6 +99,7 @@ namespace Janus_Client_V1.Spieldaten
         private string ladung_name;
         private string ladung_id;
         private int gef_strecke;
+
         // POSITION
         private double pos_x;
         private double pos_y;
@@ -145,6 +147,19 @@ namespace Janus_Client_V1.Spieldaten
                 if (sdk_active != value)
                 {
                     sdk_active = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string TONNEN_LBS
+        {
+            get { return tonnen_lbs; }
+            set
+            {
+                if (tonnen_lbs != value)
+                {
+                    tonnen_lbs = value;
                     NotifyPropertyChanged();
                 }
             }
