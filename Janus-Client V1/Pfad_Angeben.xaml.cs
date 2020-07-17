@@ -1,5 +1,6 @@
 ﻿using Janus_Client_V1.Klassen;
 using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Windows;
 
@@ -53,7 +54,7 @@ namespace Janus_Client_V1
             OpenFileDialog tmp = new OpenFileDialog();
             tmp.InitialDirectory = initial_TMP;
             var result_tmp = tmp.ShowDialog();
-            if (result_tmp == false) return;
+            //if (result_tmp == false) return;
             REG.Schreiben("Pfade", "TMP_PFAD", tmp.FileName);
             pfad_tmp.Text = tmp.FileName;
         }
@@ -64,7 +65,7 @@ namespace Janus_Client_V1
             ets.Filter = "Euro Truck Simulator 2 (.exe)|eurotrucks2.exe|All Files (*.*)|*.*";
             ets.InitialDirectory = initial_ETS;
             var result_ets = ets.ShowDialog();
-            if (result_ets == false) return;
+           // if (result_ets == false) return;
 
             REG.Schreiben("Pfade", "ETS2_PFAD", ets.FileName); ;
             pfad_ets.Text = ets.FileName;
@@ -158,22 +159,26 @@ namespace Janus_Client_V1
 
         private void ok_click(object sender, RoutedEventArgs e)
         {
-            if (pfad_ets.Text == "" && pfad_ats.Text == "")
+            if (pfad_ets.Text == "" || client_key.Text == "")
             {
-                MessageBox.Show("Der ETS2 oder ATS Pfad muss angegeben werden !", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error); 
+                MessageBox.Show("Der ETS2-Pfad und der Client-Key müssen angegeben werden !", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error); 
                 return;
             } else
             {
                 REG.Schreiben("Pfade", "ETS2_PFAD", pfad_ets.Text);
                 REG.Schreiben("Pfade", "ATS_PFAD", pfad_ats.Text);
                 REG.Schreiben("Pfade", "TMP_PFAD", pfad_tmp.Text);
+                REG.Schreiben("Config", "CLIENT_KEY", client_key.Text);
 
-                MessageBox.Show("Der Client wird jetzt einmal neu gestartet!", "Reload", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Der Client wird jetzt einmal zum Speichern der Daten neu gestartet!", "Reload...", MessageBoxButton.OK, MessageBoxImage.Information);
                 System.Windows.Forms.Application.Restart();
                 System.Windows.Application.Current.Shutdown();
             }
         }
 
-
+        private void where_img_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Du findest deinen Client-Key" + Environment.NewLine + "auf unserer Webseite " + Environment.NewLine + "https://projekt-janus.de" + Environment.NewLine + "in deinem Profil.", "Hilfe...", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

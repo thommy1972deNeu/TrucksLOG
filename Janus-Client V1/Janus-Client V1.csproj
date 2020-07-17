@@ -384,7 +384,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\div_1.jpg" />
-    <Resource Include="Images\lkw_1.jpg" />
+    <Resource Include="Images\lkw_1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\lkw_10.jpg" />
     <Resource Include="Images\lkw_2.jpg" />
     <Resource Include="Images\lkw_3.jpg" />
@@ -421,6 +423,10 @@
   <ItemGroup>
     <Resource Include="icons\kupplung.png" />
     <Resource Include="Images\patti_1.png" />
+    <Resource Include="Images\key_image.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\where.png" />
     <Content Include="Resources\scs-telemetry.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

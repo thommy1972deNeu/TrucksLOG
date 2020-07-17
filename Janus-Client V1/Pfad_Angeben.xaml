@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Janus_Client_V1"
         mc:Ignorable="d"
-        Title="Spielpfade angeben..." Height="404.062" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+        Title="Spielpfade angeben..." Height="506.062" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Window.Background>
-        <ImageBrush ImageSource="road-1303617_640.jpg" Opacity="0.2"/>
+        <ImageBrush ImageSource="road-1303617_640.jpg" Opacity="0.1"/>
     </Window.Background>
     <Grid>
-        <Label Content="Bitte gib deine Spielpfade an:" FontFamily="Oswald" FontSize="26" Foreground="White" Height="50" Width="350" Margin="225,10,217,359"/>
+        <Label Content="Bitte gib deine Spielpfade an:" FontFamily="Oswald" FontSize="26" Foreground="White" Height="50" VerticalContentAlignment="Center" Width="350" Margin="226,10,224,446"/>
 
         <StackPanel Orientation="Vertical">
 
@@ -37,8 +37,18 @@
                 <Button x:Name="tmp_suchen" Content="Suchen" Width="100" Height="30" Click="tmp_suchen_btn_Click" />
 
             </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Image x:Name="key_icon" Source="Images/key_image.png"  Width="65" Margin="0,0,10,0" ToolTip="Gib den Client-Key ein"/>
+                <TextBox x:Name="client_key" Width="500" Height="30" Margin="0,0,10,0" VerticalContentAlignment="Center"/>
+            </StackPanel>
 
-
+            <StackPanel Orientation="Horizontal" Margin="0,-10,0,0" HorizontalAlignment="Center">
+                <Label Content="Gib deinen Client-Key ein !" HorizontalAlignment="Center" FontSize="18"/>
+                <Image x:Name="where_img" Source="Images/where.png"  Width="35" Margin="0,0,10,0" ToolTip="Für Hilfe hier klicken..." MouseDown="where_img_MouseDown"/>
+            </StackPanel>
+            
+            
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50">
 
                 <Button x:Name="absende" Content="Absenden" Width="100" Height="30" Click="ok_click" Margin="0,0,100,0" Foreground="Black" >

@@ -50,20 +50,15 @@ namespace Janus_Client_V1
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
 
-            if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")))
+
+            if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")) || string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
             {
-                CLIENT_KEY_ABFRAGE form = new CLIENT_KEY_ABFRAGE();
-                form.ShowDialog();
+                Pfad_Angeben pf = new Pfad_Angeben();
+                pf.ShowDialog();
                 return;
             }
             else
             {
-                if (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
-                {
-                    Pfad_Angeben pf = new Pfad_Angeben();
-                    pf.ShowDialog();
-                    return;
-                }
 
                 try
                 {
@@ -439,6 +434,7 @@ namespace Janus_Client_V1
                     Truck_Daten.EURO_DOLLAR = Truck_Daten.SPIEL == "Ets2" ? "€" : "$";
                     Truck_Daten.TONNEN_LBS = Truck_Daten.SPIEL == "Ets2" ? " t " : " lb ";
                     Truck_Daten.LITER_GALLONEN = (Truck_Daten.SPIEL == "Ets2") ? " L" : " Gal.";
+                    Truck_Daten.KMH_MI = Truck_Daten.SPIEL == "Ets2" ? "KM/H" : "mp/h";
 
                     // PFADE für Seitenmenü
                     Truck_Daten.ETS_PFAD = REG.Lesen("Pfade", "ETS2_PFAD");
@@ -481,7 +477,7 @@ namespace Janus_Client_V1
                     Truck_Daten.SPEED = Truck_Daten.SPIEL == "Ets2" ? (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph : (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Mph;
 
                     Truck_Daten.SPIEL = data.Game.ToString();
-                    Truck_Daten.KMH_MI = Truck_Daten.SPIEL == "Ets2" ? "KM/H" : "mp/h";
+        
                     Truck_Daten.ELEKTRIK_AN = data.TruckValues.CurrentValues.ElectricEnabled;
                     Truck_Daten.MOTOR_AN = data.TruckValues.CurrentValues.EngineEnabled;
                     Truck_Daten.PARKING_BRAKE = data.TruckValues.CurrentValues.MotorValues.BrakeValues.ParkingBrake;
