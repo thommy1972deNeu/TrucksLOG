@@ -97,13 +97,27 @@ namespace Janus_Client_V1
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
-            post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
-            string response = API.HTTPSRequestPost(API.job_update, post_param);
-            Logging.WriteClientLog("Tour Update:" + response);
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                if(Truck_Daten.SPIEL == "Ets2")
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
+                } else
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
+                }
+                
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
+                post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
+                string response = API.HTTPSRequestPost(API.job_update, post_param);
+              
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
+            }
+
         }
 
         private void TelemetryOnJobStarted(object sender, EventArgs e)
@@ -125,22 +139,47 @@ namespace Janus_Client_V1
                 }
             }
 
-            if (REG.Lesen("Config", "TOUR_ID") == "")
+            if (Truck_Daten.SPIEL == "Ets2")
             {
-                try
+
+                if (REG.Lesen("Config", "TOUR_ID_ETS2") == "")
                 {
-                    REG.Schreiben("Config", "TOUR_ID", GenerateString());
+                    try
+                    {
+                        REG.Schreiben("Config", "TOUR_ID_ETS2", GenerateString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ETS2 mit GENERATE STRING(): " + ex.Message);
+                    }
                 }
-                catch (Exception ex)
+            } else
+            {
+                if (REG.Lesen("Config", "TOUR_ID_ATS") == "")
                 {
-                    Logging.WriteClientLog("Fehler beim Schreiben TOUR_ID mit GENERATE STRING(): " + ex.Message);
+                    try
+                    {
+                        REG.Schreiben("Config", "TOUR_ID_ATS", GenerateString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ATS mit GENERATE STRING(): " + ex.Message);
+                    }
                 }
             }
+
 
             try
             {
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
+                if(Truck_Daten.SPIEL == "Ets2")
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
+                } else
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
+                }
+                
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 post_param.Add("STARTORT", Truck_Daten.STARTORT.ToString());
                 post_param.Add("STARTORT_ID", Truck_Daten.STARTORT_ID);
@@ -171,127 +210,220 @@ namespace Janus_Client_V1
 
                 job_update_timer.Tick += timer_Tick;
                 job_update_timer.Start();
-                Logging.WriteClientLog("Tour gestartet: " + response);
+                Logging.WriteClientLog("[INFO] Tour gestartet: " + response);
             }
             catch (Exception ex)
             {
-                Logging.WriteClientLog("Fehler beim Schreiben TOUR_ID mit GENERATE STRING(): " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim Starten der Tour: " + ex.Message);
             }
         }
 
         private void TelemetryJobCancelled(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
-            post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
-            string response = API.HTTPSRequestPost(API.job_cancel, post_param);
-            Console.WriteLine(response);
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
 
-            REG.Schreiben("Config", "TOUR_ID", "");
-            SoundPlayer.Sound_Tour_Abgebrochen();
-            job_update_timer.Stop();
+                if (Truck_Daten.SPIEL == "Ets2")
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
+                }
+                else
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
+                }
 
-            Logging.WriteClientLog("Tour abgebrochen: " + response);
+                post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
+                string response = API.HTTPSRequestPost(API.job_cancel, post_param);
+                Console.WriteLine(response);
+
+                if(Truck_Daten.SPIEL == "Ets2")
+                {
+                    REG.Schreiben("Config", "TOUR_ID_ETS2", "");
+                } else
+                {
+                    REG.Schreiben("Config", "TOUR_ID_ATS", "");
+                }
+
+                SoundPlayer.Sound_Tour_Abgebrochen();
+                job_update_timer.Stop();
+
+                Logging.WriteClientLog("[INFO] Tour abgebrochen: " + response);
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Tour abbrechen !" + ex.Message);
+            }
+
         }
 
         private void TelemetryJobDelivered(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
-            post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
-            post_param.Add("STRECKE", Truck_Daten.ABGABE_GEF_STRECKE.ToString());
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
 
-            string response = API.HTTPSRequestPost(API.job_finish, post_param);
-            Console.WriteLine(response);
+                if (Truck_Daten.SPIEL == "Ets2")
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
+                }
+                else
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
+                }
 
-            REG.Schreiben("Config", "TOUR_ID", "");
-            SoundPlayer.Sound_Tour_Beendet();
+                post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
+                post_param.Add("STRECKE", Truck_Daten.ABGABE_GEF_STRECKE.ToString());
+                string response = API.HTTPSRequestPost(API.job_finish, post_param);
 
-            job_update_timer.Stop();
-            Logging.WriteClientLog("Tour Abgeliefert: " + response);
+                    if (Truck_Daten.SPIEL == "Ets2") {
+                        REG.Schreiben("Config", "TOUR_ID_ETS2", "");
+                        } else
+                        {
+                            REG.Schreiben("Config", "TOUR_ID_ATS", "");
+                    }
+
+                SoundPlayer.Sound_Tour_Beendet();
+
+                job_update_timer.Stop();
+                Logging.WriteClientLog("[INFO] Tour Abgeliefert: " + response);
+            } catch(Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Abgeben der Tour ! - " + ex.Message);
+            }
+
         }
 
         private void TelemetryFined(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID"));
-            post_param.Add("BETRAG", Truck_Daten.STRAF_BETRAG.ToString());
-            post_param.Add("GRUND", Truck_Daten.GRUND);
-            string response = API.HTTPSRequestPost(API.strafe, post_param);
-            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Strafe_Erhalten();
-            Logging.WriteClientLog("Strafe erhalten: " + response);
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+
+                if (Truck_Daten.SPIEL == "Ets2")
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
+                }
+                else
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
+                }
+
+                post_param.Add("BETRAG", Truck_Daten.STRAF_BETRAG.ToString());
+                post_param.Add("GRUND", Truck_Daten.GRUND);
+                string response = API.HTTPSRequestPost(API.strafe, post_param);
+                if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Strafe_Erhalten();
+                Logging.WriteClientLog("[INFO] Strafe erhalten: " + response);
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei Strafzuweisung" + ex.Message);
+            }
+
         }
 
         private void TelemetryTollgate(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("BETRAG", Truck_Daten.MAUT_BETRAG.ToString());
-            string response = API.HTTPSRequestPost(API.tollgate, post_param);
-            Console.WriteLine(response);
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("BETRAG", Truck_Daten.MAUT_BETRAG.ToString());
+                string response = API.HTTPSRequestPost(API.tollgate, post_param);
+                Console.WriteLine(response);
 
-            if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
-            Logging.WriteClientLog("Maut durchfahren: " + response);
+                if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
+                Logging.WriteClientLog("[INFO] Maut durchfahren: " + response);
+            } catch(Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Mautdurchfahrt " + ex.Message);
+            }
+
         }
 
         private void TelemetryFerry(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("SOURCE_NAME", Truck_Daten.FERRY_SOURCE_NAME);
-            post_param.Add("TARGET_NAME", Truck_Daten.FERRY_TARGET_NAME);
-            post_param.Add("PAY_AMOUNT", Truck_Daten.FERRY_PAY_AMOUNT.ToString());
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("SOURCE_NAME", Truck_Daten.FERRY_SOURCE_NAME);
+                post_param.Add("TARGET_NAME", Truck_Daten.FERRY_TARGET_NAME);
+                post_param.Add("PAY_AMOUNT", Truck_Daten.FERRY_PAY_AMOUNT.ToString());
 
-            string response = API.HTTPSRequestPost(API.transport, post_param);
-            Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
+                string response = API.HTTPSRequestPost(API.transport, post_param);
+                Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei Transport (Schiff)" + ex.Message);
+            }
+
         }
 
         private void TelemetryTrain(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("SOURCE_NAME", Truck_Daten.TRAIN_SOURCE_NAME.ToString());
-            post_param.Add("TARGET_NAME", Truck_Daten.TRAIN_TARGET_NAME.ToString());
-            post_param.Add("PAY_AMOUNT", Truck_Daten.TRAIN_PAY_AMOUNT.ToString());
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("SOURCE_NAME", Truck_Daten.TRAIN_SOURCE_NAME.ToString());
+                post_param.Add("TARGET_NAME", Truck_Daten.TRAIN_TARGET_NAME.ToString());
+                post_param.Add("PAY_AMOUNT", Truck_Daten.TRAIN_PAY_AMOUNT.ToString());
 
-            string response = API.HTTPSRequestPost(API.transport, post_param);
-            Logging.WriteClientLog("[INFO] TRANSPORT - TRAIN - EVENT: " + response);
+                string response = API.HTTPSRequestPost(API.transport, post_param);
+                Logging.WriteClientLog("[INFO] TRANSPORT - TRAIN - EVENT: " + response);
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei Transport (Zug) " + ex.Message);
+            }
+
         }
 
         private void TelemetryRefuel(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
+            Logging.WriteClientLog("[INFO] Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
         private void TelemetryRefuelEnd(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
+            Logging.WriteClientLog("[INFO] Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID")))
+            try
             {
-                tour_id_tanken = "0";
-            }
-            else
+                if (string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2")) && string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS")))
+                {
+                    tour_id_tanken = "0";
+                }
+                else
+                {
+                    if (Truck_Daten.SPIEL == "Ets2")
+                    {
+                        tour_id_tanken = REG.Lesen("Config", "TOUR_ID_ETS2");
+                    } else
+                    {
+                        tour_id_tanken = REG.Lesen("Config", "TOUR_ID_ATS");
+                    }
+                }
+
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("TOUR_ID", tour_id_tanken);
+                post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
+                post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
+                post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
+                post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
+
+                string response = API.HTTPSRequestPost(API.tanken, post_param);
+                Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
+            } catch (Exception ex)
             {
-                tour_id_tanken = REG.Lesen("Config", "TOUR_ID");
+                Logging.WriteClientLog("[ERROR] Fehler bei RefuelPayed " + ex.Message);
             }
-
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("TOUR_ID", tour_id_tanken);
-            post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
-            post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
-            post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
-            post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
-
-            string response = API.HTTPSRequestPost(API.tanken, post_param);
-            Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
+           
         }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
@@ -449,8 +581,10 @@ namespace Janus_Client_V1
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
                     REG.Schreiben("Config", "BG_OPACITY", "1");
 
-                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID")))
-                    REG.Schreiben("Config", "TOUR_ID", "");
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ETS2")))
+                    REG.Schreiben("Config", "TOUR_ID_ETS2", "");
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ATS")))
+                    REG.Schreiben("Config", "TOUR_ID_ATS", "");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
                     REG.Schreiben("Config", "CLIENT_KEY", "");
@@ -712,7 +846,21 @@ namespace Janus_Client_V1
 
         private void ats_starten_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(REG.Lesen("Pfade", "ATS_PFAD"));
+            try
+            {
+                if(!string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD")))
+                {
+                    Process.Start(REG.Lesen("Pfade", "ATS_PFAD"));
+                } else
+                {
+                    msg.Schreiben("Fehler bei der Pfadangabe ATS", "Der Pfad zu ATS wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
+                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer");
+                }
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer" + ex.Message + ex.StackTrace);
+            }
+           
         }
 
         private void ets_starten_Click(object sender, RoutedEventArgs e)
