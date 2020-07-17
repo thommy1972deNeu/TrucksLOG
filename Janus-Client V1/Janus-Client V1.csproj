@@ -420,6 +420,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\kupplung.png" />
+    <Resource Include="Images\patti_1.png" />
     <Content Include="Resources\scs-telemetry.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

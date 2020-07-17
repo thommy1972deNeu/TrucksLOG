@@ -131,6 +131,7 @@
                             <ComboBoxItem Tag="woman_5.jpg">Frau 5</ComboBoxItem>
                             <ComboBoxItem Tag="woman_6.jpg">Frau 6</ComboBoxItem>
                             <ComboBoxItem Tag="woman_7.jpg">Frau 7</ComboBoxItem>
+                            <ComboBoxItem Tag="patti_1.png">Patti 1</ComboBoxItem>
                         </ComboBox>
                         <Label Content="oder:" HorizontalAlignment="Center" Margin="0,-20" FontSize="14"/>
                         <Button x:Name="eigene_bg_bild" Click="OPEN_BG_FILE" Content="Eigenes Hintergrundbild" Margin="0,10,0,20" Width="150" Height="40" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
@@ -193,15 +194,15 @@
                     </Button>
 
                 </StackPanel>
-                
+
             </mah:Flyout>
 
             <mah:Flyout x:Name="UpdatesFlyOut" Width="600" Position="Right" Foreground="White">
 
-                    <ScrollViewer Width="600" VerticalScrollBarVisibility="Auto">
-                        <TextBlock x:Name="update_text" Margin="20,0,0,0" FontSize="24" TextWrapping="Wrap"/>
-                    </ScrollViewer>
-             
+                <ScrollViewer Width="600" VerticalScrollBarVisibility="Auto">
+                    <TextBlock x:Name="update_text" Margin="20,0,0,0" FontSize="24" TextWrapping="Wrap"/>
+                </ScrollViewer>
+
             </mah:Flyout>
 
 
@@ -305,7 +306,7 @@
                 <iconPacks:PackIconModern Width="22" Height="22" Kind="WindowMinimize" />
             </Button>
             -->
-            
+
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
 
@@ -345,10 +346,12 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
+
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="190"/>
+                <ColumnDefinition Width="135"/>
+                <ColumnDefinition Width="55"/>
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
@@ -365,12 +368,13 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="101"/>
+                <ColumnDefinition Width="99"/>
             </Grid.ColumnDefinitions>
 
 
             <!-- WAITING ZONE -->
-           <!--
+
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
@@ -379,32 +383,32 @@
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
--->
+
             <!-- WAITING ZONE ENDE-->
 
-            <Label Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
-            <Label Grid.Row="2" Grid.Column="7" Grid.ColumnSpan="4" x:Name="KMH_MI_LBL" Content="{Binding KMH_MI}" VerticalContentAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="2" Grid.Column="8" Grid.ColumnSpan="4" x:Name="KMH_MI_LBL" Content="{Binding KMH_MI}" VerticalContentAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
 
             <!-- ICON SET -->
-            <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="20" Background="Orange" Padding="10" CornerRadius="30" Width="1000"/>
-            <Image Grid.Row="3" Grid.Column="1" Source="{iconPacks:MaterialImage Kind=CarElectric}" Margin="3" Visibility="{Binding ELEKTRIK_AN, Converter={StaticResource elektrik_an}}" ToolTip="Zündung an" />
-            <Image Grid.Row="3" Grid.Column="2" Source="{iconPacks:MaterialImage Kind=Engine}" Margin="3" Visibility="{Binding MOTOR_AN, Converter={StaticResource motor_an}}" ToolTip="Motor an"/>
-            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=CarLightFog}" Margin="3" Visibility="{Binding STANDLICHT, Converter={StaticResource standlicht}}" ToolTip="Standlicht an"/>
+            <Border Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="18" Background="Orange" Padding="10" CornerRadius="30" Margin="0"/>
+            <Image Grid.Row="3" Grid.Column="2" Source="{iconPacks:MaterialImage Kind=CarElectric}" Margin="3" Visibility="{Binding ELEKTRIK_AN, Converter={StaticResource elektrik_an}}" ToolTip="Zündung an" />
+            <Image Grid.Row="3" Grid.Column="3" Source="{iconPacks:MaterialImage Kind=Engine}" Margin="3" Visibility="{Binding MOTOR_AN, Converter={StaticResource motor_an}}" ToolTip="Motor an"/>
+            <Image Grid.Row="3" Grid.Column="4" Source="{iconPacks:MaterialImage Kind=CarLightFog}" Margin="3" Visibility="{Binding STANDLICHT, Converter={StaticResource standlicht}}" ToolTip="Standlicht an"/>
 
-            <Image Grid.Row="3" Grid.Column="4" Source="{iconPacks:MaterialImage Kind=CarLightDimmed}" Margin="3" Visibility="{Binding LICHT_LOW, Converter={StaticResource licht_low}}" ToolTip="Abblendlicht an"/>
-            <Image Grid.Row="3" Grid.Column="5" Source="{iconPacks:MaterialImage Kind=CarLightHigh}" Margin="3" Visibility="{Binding FERNLICHT, Converter={StaticResource fernlicht}}" ToolTip="Fernlicht an"/>
-            <Image Grid.Row="3" Grid.Column="6" Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Margin="3" Visibility="{Binding TANK_WARNUNG, Converter={StaticResource tank_warnung}}" ToolTip="Tankwarnung"/>
-            <Image Grid.Row="3" Grid.Column="7" Source="{iconPacks:MaterialImage Kind=CarBrakeAlert}" Margin="3" Visibility="{Binding BREMSLICHT, Converter={StaticResource bremslicht}}" ToolTip="Bremse"/>
-            <Image Grid.Row="3" Grid.Column="8" Source="{iconPacks:FontAwesomeImage Kind=WindSolid}" Margin="3" Visibility="{Binding AIR_WARNUNG, Converter={StaticResource air_warnung}}" ToolTip="Luftdruck gering"/>
-            <Image Grid.Row="3" Grid.Column="9" Source="{iconPacks:FontAwesomeImage Kind=OilCanSolid}" Margin="3" Visibility="{Binding OIL_WARNUNG, Converter={StaticResource oil_warnung}}" ToolTip="Ölstand niedrig"/>
-            <Image Grid.Row="3" Grid.Column="10" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3" Visibility="{Binding WATER_WARNUNG, Converter={StaticResource water_warnung}}" ToolTip="Temperatur zu hoch"/>
-            <Image Grid.Row="3" Grid.Column="11" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3" Visibility="{Binding BATTERY_WARNUNG, Converter={StaticResource battery_warnung}}" ToolTip="Batterie fast leer"/>
-            <Image Grid.Row="3" Grid.Column="12" Source="icons/kupplung.png" Margin="3" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" ToolTip="Anhänger gekuppelt"/>
+            <Image Grid.Row="3" Grid.Column="5" Source="{iconPacks:MaterialImage Kind=CarLightDimmed}" Margin="3" Visibility="{Binding LICHT_LOW, Converter={StaticResource licht_low}}" ToolTip="Abblendlicht an"/>
+            <Image Grid.Row="3" Grid.Column="6" Source="{iconPacks:MaterialImage Kind=CarLightHigh}" Margin="3" Visibility="{Binding FERNLICHT, Converter={StaticResource fernlicht}}" ToolTip="Fernlicht an"/>
+            <Image Grid.Row="3" Grid.Column="7" Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Margin="3" Visibility="{Binding TANK_WARNUNG, Converter={StaticResource tank_warnung}}" ToolTip="Tankwarnung"/>
+            <Image Grid.Row="3" Grid.Column="8" Source="{iconPacks:MaterialImage Kind=CarBrakeAlert}" Margin="3" Visibility="{Binding BREMSLICHT, Converter={StaticResource bremslicht}}" ToolTip="Bremse"/>
+            <Image Grid.Row="3" Grid.Column="9" Source="{iconPacks:FontAwesomeImage Kind=WindSolid}" Margin="3" Visibility="{Binding AIR_WARNUNG, Converter={StaticResource air_warnung}}" ToolTip="Luftdruck gering"/>
+            <Image Grid.Row="3" Grid.Column="10" Source="{iconPacks:FontAwesomeImage Kind=OilCanSolid}" Margin="3" Visibility="{Binding OIL_WARNUNG, Converter={StaticResource oil_warnung}}" ToolTip="Ölstand niedrig"/>
+            <Image Grid.Row="3" Grid.Column="11" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3" Visibility="{Binding WATER_WARNUNG, Converter={StaticResource water_warnung}}" ToolTip="Temperatur zu hoch"/>
+            <Image Grid.Row="3" Grid.Column="12" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3" Visibility="{Binding BATTERY_WARNUNG, Converter={StaticResource battery_warnung}}" ToolTip="Batterie fast leer"/>
+            <Image Grid.Row="3" Grid.Column="13" Source="icons/kupplung.png" Margin="3" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" ToolTip="Anhänger gekuppelt"/>
 
-            <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="13" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="0,-5,0,0" Foreground="Black"/>
+            <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="45,28,45,32" Foreground="Black" Height="10" Width="10"/>
 
             <!-- TANKANZEIGE -->
-            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="15" Grid.ColumnSpan="3" VerticalAlignment="Center" Width="180" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="16" Grid.ColumnSpan="3" VerticalAlignment="Center" Width="180" HorizontalAlignment="Left" Height="50" Margin="0,10">
                 <mah:MetroProgressBar Height="50" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
                     <mah:MetroProgressBar.Foreground>
                         <LinearGradientBrush EndPoint="0,1" StartPoint="1,0">
@@ -425,11 +429,11 @@
 
 
             <!-- BLINKER -->
-            <Border Background="LightGray" BorderBrush="White" Grid.Row="1" Grid.Column="6" CornerRadius="20" Visibility="{Binding BLINKER_LINKS, Converter={StaticResource blinker_links}}"/>
-            <Image Grid.Row="1" Grid.Column="6" Source="{iconPacks:MaterialLightImage Kind=ArrowLeftCircle}" Margin="3" Visibility="{Binding BLINKER_LINKS, Converter={StaticResource blinker_links}}"/>
+            <Border Background="LightGray" BorderBrush="White" Grid.Row="1" Grid.Column="7" CornerRadius="20" Visibility="{Binding BLINKER_LINKS, Converter={StaticResource blinker_links}}"/>
+            <Image Grid.Row="1" Grid.Column="7" Source="{iconPacks:MaterialLightImage Kind=ArrowLeftCircle}" Margin="3" Visibility="{Binding BLINKER_LINKS, Converter={StaticResource blinker_links}}"/>
 
-            <Border Background="LightGray" BorderBrush="White" Grid.Row="1" Grid.Column="11" CornerRadius="20" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
-            <Image Grid.Row="1" Grid.Column="11" Source="{iconPacks:MaterialLightImage Kind=ArrowRightCircle}" Margin="3" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
+            <Border Background="LightGray" BorderBrush="White" Grid.Row="1" Grid.Column="12" CornerRadius="20" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
+            <Image Grid.Row="1" Grid.Column="12" Source="{iconPacks:MaterialLightImage Kind=ArrowRightCircle}" Margin="3" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
 
 
             <!-- ICON SET ENDE -->
@@ -441,35 +445,39 @@
             <!-- LICENSE PLATE ENDE -->
 
 
-            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="24" FontSize="30" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
+            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" FontSize="30" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
 
-            <Border Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,5,5,0" Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="4" CornerRadius="0,20,0,0"/>
-            <Label Grid.Row="12" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="12" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="12" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Border Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,5,0,0" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Margin="0,-5,0,0"/>
 
-            <Label Grid.Row="13" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="LKW_SCHADEN_1" Content="LKW-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" />
-            <Label Grid.Row="13" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="LKW_SCHADEN_2" Content="{Binding LKW_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
-            <Label Grid.Row="13" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="LKW_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Content="{Binding LKW_HERSTELLER}" Grid.Row="14" Grid.RowSpan="2" FontSize="16" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Grid.Column="0" HorizontalContentAlignment="Right" Foreground="Black" Grid.ColumnSpan="1" Margin="0"/>
+            <Label Content="{Binding LKW_MODELL}" Grid.Row="14" Grid.RowSpan="2" FontSize="16" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Grid.Column="1" Grid.ColumnSpan="2" Foreground="Black" Margin="0"/>
 
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="0" FontSize="16" x:Name="TRAILER_SCHADEN_1" Content="Trailer-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" />
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="1" FontSize="16" x:Name="TRAILERSCHADEN_2" Content="{Binding TRAILER_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="2" FontSize="16" x:Name="TRAILER_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="14" Grid.RowSpan="2" VerticalAlignment="Stretch" Grid.ColumnSpan="3" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="17" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="18" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,0,5,0" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Margin="0" Grid.ColumnSpan="2"/>
+
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="4" Grid.RowSpan="2" VerticalAlignment="Stretch" Grid.ColumnSpan="3" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,0,0,0" FontSize="16" x:Name="LKW_SCHADEN_1" Content="LKW-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="7" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" x:Name="LKW_SCHADEN_2" Content="{Binding LKW_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="8" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" x:Name="LKW_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="9" Grid.RowSpan="2" VerticalAlignment="Stretch" Grid.ColumnSpan="3" FontSize="16" x:Name="TRAILER_SCHADEN_1" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,0,0,0" Content="Trailer-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="12" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" x:Name="TRAILERSCHADEN_2" Content="{Binding TRAILER_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="13" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" x:Name="TRAILER_SCHADEN_3" Content="%" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
 
             <!-- TEMPOLIMIT -->
-            <Border x:Name="TEMPOLIMIT" BorderBrush="Red" BorderThickness="20" CornerRadius="150" Grid.Row="1" Grid.Column="0" Height="150" Grid.RowSpan="2" VerticalAlignment="Top" Grid.ColumnSpan="1" Background="White" Margin="20,0,21,0">
+            <Border x:Name="TEMPOLIMIT" BorderBrush="Red" BorderThickness="20" CornerRadius="150" Grid.Row="1" Grid.Column="0" Height="150" Grid.RowSpan="2" VerticalAlignment="Top" Grid.ColumnSpan="2" Background="White" Margin="20,0,21,0">
                 <Label Content="{Binding TEMPOLIMIT}" FontSize="53" FontWeight="Bold" Margin="0,-5,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="Black"/>
             </Border>
 
             <!-- PARKING BRAKE -->
-            <Border x:Name="BRAKE" Grid.Row="1" Grid.Column="17" Grid.RowSpan="1" Background="red" BorderBrush="Yellow" BorderThickness="2" CornerRadius="100" Visibility="{Binding PARKING_BRAKE, Converter={StaticResource parking_brake}}" Margin="0,0,70,0">
+            <Border x:Name="BRAKE" Grid.Row="1" Grid.Column="18" Grid.RowSpan="1" Background="red" BorderBrush="Yellow" BorderThickness="2" CornerRadius="100" Visibility="{Binding PARKING_BRAKE, Converter={StaticResource parking_brake}}">
                 <Image Source="{iconPacks:MaterialImage Kind=CarBrakeParking}" Margin="10" Visibility="{Binding PARKING_BRAKE, Converter={StaticResource parking_brake}}"/>
             </Border>
 
             <!-- Streckenverlauf -->
-            <Grid Grid.Row="14" Grid.Column="3" Grid.ColumnSpan="12" Grid.RowSpan="4" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}">
+            <Grid Grid.Row="12" Grid.Column="2" Grid.ColumnSpan="16" Grid.RowSpan="2" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}">
                 <mah:MetroProgressBar 
-                    Minimum="0" 
+                    Minimum="0"
                     Height="50"
                     Maximum="{Binding GESAMT_KM_SA}" 
                     Value="{Binding REST_KM_SA}" 
@@ -482,22 +490,19 @@
                     </mah:MetroProgressBar.Foreground>
                 </mah:MetroProgressBar>
                 <TextBlock Text="{Binding REST_KM_SA, StringFormat={}{0:0} KM}" 
-           HorizontalAlignment="Center" 
+           HorizontalAlignment="Center"
                            FontSize="30"
                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
            VerticalAlignment="Center" />
             </Grid>
 
-
-
             <!-- HERSTELLER / MODELL -->
+            <!--
             <Border x:Name="HERSTELLER" Grid.Row="12" Grid.ColumnSpan="5" Grid.Column="15" Grid.RowSpan="4" Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,5,0,0" CornerRadius="20,0,0,0"/>
             <Label Foreground="Black" Content="{Binding LKW_HERSTELLER}" Grid.Row="12" Grid.Column="17" Grid.RowSpan="2" FontSize="24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="60" VerticalAlignment="Bottom" />
             <Label Foreground="Black" Content="{Binding LKW_MODELL}" Grid.Row="14" Grid.Column="17" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" />
-
-
+            -->
             <!-- HERSTELLER / MODELL ENDE -->
-
 
         </Grid>
 
