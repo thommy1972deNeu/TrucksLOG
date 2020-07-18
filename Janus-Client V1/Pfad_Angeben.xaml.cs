@@ -19,6 +19,7 @@ namespace Janus_Client_V1
         public Pfad_Angeben()
         {
             InitializeComponent();
+
             if(string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
             {
                 REG.Schreiben("Pfade", "ETS2_PFAD", "");
@@ -46,26 +47,29 @@ namespace Janus_Client_V1
             {
                 pfad_ets.Text = REG.Lesen("Pfade", "ETS2_PFAD");
             }
-
         }
 
         private void tmp_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog tmp = new OpenFileDialog();
-            tmp.InitialDirectory = initial_TMP;
+            OpenFileDialog tmp = new OpenFileDialog
+            {
+                InitialDirectory = initial_TMP
+            };
             var result_tmp = tmp.ShowDialog();
-            //if (result_tmp == false) return;
+            if (result_tmp == false) return;
             REG.Schreiben("Pfade", "TMP_PFAD", tmp.FileName);
             pfad_tmp.Text = tmp.FileName;
         }
 
         private void ets_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
-            var ets = new Microsoft.Win32.OpenFileDialog();
-            ets.Filter = "Euro Truck Simulator 2 (.exe)|eurotrucks2.exe|All Files (*.*)|*.*";
-            ets.InitialDirectory = initial_ETS;
+            OpenFileDialog ets = new OpenFileDialog
+            {
+                Filter = "Euro Truck Simulator 2 (.exe)|eurotrucks2.exe|All Files (*.*)|*.*",
+                InitialDirectory = initial_ETS
+            };
             var result_ets = ets.ShowDialog();
-           // if (result_ets == false) return;
+            if (result_ets == false) return;
 
             REG.Schreiben("Pfade", "ETS2_PFAD", ets.FileName); ;
             pfad_ets.Text = ets.FileName;

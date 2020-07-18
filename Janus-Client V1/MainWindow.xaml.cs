@@ -14,21 +14,39 @@ using System.Windows.Threading;
 using AutoUpdaterDotNET;
 using System.Reflection;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Windows.Input;
+using WindowsInput.Native;
+using WindowsInput;
+using System.Threading;
+using ControlzEx.Native;
+using DiscordRPC;
+using DiscordRPC.Logging;
 
 namespace Janus_Client_V1
 {
     public partial class MainWindow
     {
+        public DiscordRpcClient client;
+        private static RichPresence jobRPC;
+        private const string DiscordSmallImageKey = "";
+        private const string DiscordAppID = "730374187025170472";
+        private const string DefaultDiscordLargeImageKey = "pj_512";
+
+
         public string CLIENT_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private readonly MSG msg = new MSG();
         public Truck_Daten Truck_Daten = new Truck_Daten();
         public SCSSdkTelemetry Telemetry;
         public int refueling;
         public string tour_id_tanken;
+        InputSimulator sim = new InputSimulator();
 
         private DispatcherTimer job_update_timer = new DispatcherTimer();
+        private DispatcherTimer anti_afk_timer = new DispatcherTimer();
 
         public bool InvokeRequired { get; private set; }
+        public static Window ActivatedWindow { get; set; }
 
         public MainWindow()
         {
@@ -36,6 +54,15 @@ namespace Janus_Client_V1
             Logging.Make_Log_File();
         
             Lade_Voreinstellungen();
+
+            client = new DiscordRpcClient("730374187025170472");
+            client.Initialize();
+
+
+            var timer = new System.Timers.Timer(150);
+            timer.Elapsed += (sender, args) => { client.Invoke(); };
+            timer.Start();
+
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
             credit_text.Content += " - Quasselboy Patti [COO]" + Environment.NewLine;
@@ -49,7 +76,8 @@ namespace Janus_Client_V1
             Logging.WriteClientLog("Version: " + CLIENT_VERSION);
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
-
+            anti_afk_timer.Interval = TimeSpan.FromMinutes(Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER")));
+           // anti_afk_timer.Interval = TimeSpan.FromMinutes(1);
 
             if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")) || string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
             {
@@ -90,10 +118,103 @@ namespace Janus_Client_V1
             }
         }
 
+
+        private bool CheckIfAProcessIsRunning(string processname)
+        {
+            return Process.GetProcessesByName(processname).Length > 0;
+        }
+
+
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+        private static extern bool ShowWindow(IntPtr hWnd, ShowWindowEnum flags);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int SetForegroundWindow(IntPtr hwnd);
+
+
+        private enum ShowWindowEnum
+        {
+            Hide = 0,
+            ShowNormal = 1, ShowMinimized = 2, ShowMaximized = 3,
+            Maximize = 3, ShowNormalNoActivate = 4, Show = 5,
+            Minimize = 6, ShowMinNoActivate = 7, ShowNoActivate = 8,
+            Restore = 9, ShowDefault = 10, ForceMinimized = 11
+        };
+        public void BringMainWindowToFront(string processName)
+        {
+            Process bProcess = Process.GetProcessesByName(processName).FirstOrDefault();
+            if (bProcess != null)
+            {
+                if (bProcess.MainWindowHandle == IntPtr.Zero)
+                {
+                    ShowWindow(bProcess.Handle, ShowWindowEnum.Restore);
+                }
+                SetForegroundWindow(bProcess.MainWindowHandle);
+            }
+        }
+
+        private void anti_afk_timer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Truck_Daten.SPEED == 0)
+                {
+                    BringMainWindowToFront("eurotrucks2");
+
+                    sim.Keyboard.KeyPress(VirtualKeyCode.VK_Y);
+                    sim.Keyboard.TextEntry("PJ-BOT:");
+                    sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
+                    sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
+                    Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " +Truck_Daten.SPEED);
+                } else
+                {
+                    Logging.WriteClientLog("[INFO] Keys nicht gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
+                }
+              
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei SendKeys " + ex.Message);
+            }
+
+        }
+
+        private void setzt_antiAFK()
+        {
+            if (Truck_Daten.PATREON_LEVEL == 0)
+            {
+                REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!");
+                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.MaxLength = 0;
+                laenge_antiafk_text.Content = "Keine Änderung möglich";
+            }
+            else if (Truck_Daten.PATREON_LEVEL == 1)
+            {
+                anti_ak_text.MaxLength = 50;
+                laenge_antiafk_text.Content = "Max. 50 Zeichen";
+            }
+            else if (Truck_Daten.PATREON_LEVEL == 2)
+            {
+                anti_ak_text.MaxLength = 100;
+                laenge_antiafk_text.Content = "Max. 100 Zeichen";
+            }
+            else if (Truck_Daten.PATREON_LEVEL == 3)
+            {
+                anti_ak_text.MaxLength = 150;
+                laenge_antiafk_text.Content = "Max. 150 Zeichen";
+            }
+
+        }
+
+
         private void timer_Tick(object sender, EventArgs e)
         {
             try
             {
+                lade_Patreon();
+                setzt_antiAFK();
+
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 if(Truck_Daten.SPIEL == "Ets2")
                 {
@@ -115,6 +236,23 @@ namespace Janus_Client_V1
 
         }
 
+        private void lade_Patreon()
+        {
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                string response = API.HTTPSRequestPost(API.patreon_state, post_param);
+                Truck_Daten.PATREON_LEVEL = Convert.ToInt32(response);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fehler beim Abrufen PS!" + ex.Message + ex.StackTrace);
+                Truck_Daten.PATREON_LEVEL = 0;
+            }
+        }
+
         private void TelemetryOnJobStarted(object sender, EventArgs e)
         {
             if (!Truck_Daten.CARGO_LOADED)
@@ -129,7 +267,7 @@ namespace Janus_Client_V1
                 Console.WriteLine("Wait for data took " + stopWatch.ElapsedMilliseconds + " ms");
                 if (String.IsNullOrWhiteSpace(Truck_Daten.STARTORT) && stopWatch.ElapsedMilliseconds < 5000)
                 {
-                    MessageBox.Show("Could not get required data. Job couldn't start.", "ERROR", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show("Could not get required data. Job couldn't start.", "ERROR", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
             }
@@ -251,6 +389,8 @@ namespace Janus_Client_V1
             }
 
         }
+
+
 
         private void TelemetryJobDelivered(object sender, EventArgs e)
         {
@@ -429,12 +569,14 @@ namespace Janus_Client_V1
                 {
                     // ALLGEMEIN
                     Truck_Daten.SDK_AKTIVE = !data.SdkActive;
+
                     Truck_Daten.TELEMETRY_VERSION = "Telemetry: " + data.TelemetryVersion.Major.ToString() + "." + data.TelemetryVersion.Minor.ToString();
                     Truck_Daten.DLL_VERSION = "DLL: " + data.DllVersion.ToString();
                     Truck_Daten.EURO_DOLLAR = Truck_Daten.SPIEL == "Ets2" ? "€" : "$";
                     Truck_Daten.TONNEN_LBS = Truck_Daten.SPIEL == "Ets2" ? " t " : " lb ";
                     Truck_Daten.LITER_GALLONEN = (Truck_Daten.SPIEL == "Ets2") ? " L" : " Gal.";
                     Truck_Daten.KMH_MI = Truck_Daten.SPIEL == "Ets2" ? "KM/H" : "mp/h";
+                    Truck_Daten.KM_MI = Truck_Daten.SPIEL == "Ets2" ? "KM" : "mi";
 
                     // PFADE für Seitenmenü
                     Truck_Daten.ETS_PFAD = REG.Lesen("Pfade", "ETS2_PFAD");
@@ -556,10 +698,79 @@ namespace Janus_Client_V1
                     Truck_Daten.TRAIN_SOURCE_NAME = data.GamePlay.TrainEvent.SourceName;
                     Truck_Daten.TRAIN_TARGET_NAME = data.GamePlay.TrainEvent.TargetName;
                     Truck_Daten.TRAIN_PAY_AMOUNT = (int)data.GamePlay.TrainEvent.PayAmount;
+
+
+                    Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_HERSTELLER_ID, Truck_Daten.LKW_SCHADEN);
+
                 }
             }
             catch
             { }
+        }
+
+        private void Update_Discord(string HERSTELLER, string MODELL, string FRACHT, int GEWICHT, string STARTORT, string ZIELORT, string BRAND_ID, double SCHADEN)
+        {
+            string truckdaten;
+            string tourdaten;
+            string DiscordLargeImageKey = "pj_512";
+
+            if (string.IsNullOrEmpty(HERSTELLER))
+            {
+                truckdaten = "---";
+                
+            } else
+            {
+                truckdaten = HERSTELLER + " " + MODELL + "(" + SCHADEN + " %)";
+               
+            }
+            if(string.IsNullOrEmpty(FRACHT))
+            {
+                tourdaten = "Gerade keine Tour...";
+            } else
+            {
+                tourdaten = GEWICHT + " T " + FRACHT + " von " + STARTORT + " nach " + ZIELORT;
+            }
+
+            
+
+            jobRPC = new RichPresence()
+            {
+               
+                Details = "Ladung: " + FRACHT + "(" + GEWICHT + "t)",
+                State = STARTORT + "->" + ZIELORT,
+
+                Assets = new Assets()
+                {
+                    LargeImageKey = DiscordLargeImageKey,
+                    LargeImageText = HERSTELLER + " " + MODELL,
+                    SmallImageKey = "lkw",
+                    SmallImageText = "v" + CLIENT_VERSION
+                }
+            };
+         
+            client.SetPresence(jobRPC);
+        }
+
+        private static string getTruckImageKey(string truck_brand_id)
+        {
+            string DiscordLargeImageKey = DefaultDiscordLargeImageKey;
+            if (truck_brand_id == "renault")
+            {
+                DiscordLargeImageKey = "brand-renault";
+            }
+            else if (truck_brand_id == "scania")
+            {
+                DiscordLargeImageKey = "brand-scania";
+            }
+            else if (truck_brand_id == "mercedes")
+            {
+                DiscordLargeImageKey = "brand-mercedes";
+            }
+            else if (truck_brand_id == "volvo")
+            {
+                DiscordLargeImageKey = "brand-volvo";
+            }
+            return DiscordLargeImageKey;
         }
 
 
@@ -567,6 +778,8 @@ namespace Janus_Client_V1
         {
             return numbers.Max();
         }
+
+
 
         private void Lade_Voreinstellungen()
         {
@@ -577,13 +790,24 @@ namespace Janus_Client_V1
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
                     REG.Schreiben("Config", "BG_OPACITY", "1");
 
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
+                    REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine gute und sichere Fahrt!");
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
+                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
+
+                antiafk_zeit.Value = Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER"));
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ETS2")))
                     REG.Schreiben("Config", "TOUR_ID_ETS2", "");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ATS")))
                     REG.Schreiben("Config", "TOUR_ID_ATS", "");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
                     REG.Schreiben("Config", "CLIENT_KEY", "");
+
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
+                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
 
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
 
@@ -649,6 +873,36 @@ namespace Janus_Client_V1
                 Logging.WriteClientLog("Fehler beim Update laden " + ex.Message);
             }
 
+            lade_Patreon();
+
+            if (Truck_Daten.PATREON_LEVEL == 0)
+            {
+                REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!");
+                anti_ak_text.Text = "Projekt-Janus.de wünscth allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.MaxLength = 0;
+                laenge_antiafk_text.Content = "Keine Änderung möglich";
+            }
+            else if (Truck_Daten.PATREON_LEVEL == 1)
+            {
+                anti_ak_text.Text = "Projekt-Janus.de wünscht eine gute Fahrt!";
+                anti_ak_text.MaxLength = 50;
+                laenge_antiafk_text.Content = "Max. 50 Zeichen";
+            }
+            else if (Truck_Daten.PATREON_LEVEL == 2)
+            {
+                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.MaxLength = 100;
+                laenge_antiafk_text.Content = "Max. 100 Zeichen";
+            }
+            else if (Truck_Daten.PATREON_LEVEL == 3)
+            {
+                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.MaxLength = 150;
+                laenge_antiafk_text.Content = "Max. 150 Zeichen";
+            }
+
+            anti_afk.SelectedValue = "Aus";
+            anti_afk_timer.Stop();
 
         }
 
@@ -826,7 +1080,7 @@ namespace Janus_Client_V1
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void settings_Click(object sender, RoutedEventArgs e)
@@ -873,7 +1127,7 @@ namespace Janus_Client_V1
         private void ContextMenu_Click(object sender, RoutedEventArgs e)
         {
             var item = e.OriginalSource as System.Windows.Controls.MenuItem;
-            MessageBox.Show($"{item.Header} was clicked");
+            System.Windows.MessageBox.Show($"{item.Header} was clicked");
         }
 
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
@@ -881,5 +1135,51 @@ namespace Janus_Client_V1
             AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
         }
 
+        private void AntiAFK_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if ((string)anti_afk.SelectedValue == "An")
+            {
+                anti_afk_timer.Tick += anti_afk_timer_Tick;
+                if(Truck_Daten.SDK_AKTIVE == false)
+                {
+                    anti_afk_timer.Start(); 
+                } else
+                {
+                    msg.Schreiben("Fehler", "Starte zuerst ein Spiel !");
+                    anti_afk.SelectedValue = "Aus";
+                }
+               
+
+                Logging.WriteClientLog("[INFO] SendKeys gestartet...");
+            } else
+            {
+                anti_afk_timer.Stop();
+                Logging.WriteClientLog("[INFO] ANTI_AFK gestoppt");
+            }
+        }
+
+        private void anti_afk_text_save_Click(object sender, RoutedEventArgs e)
+        {
+            if(Truck_Daten.PATREON_LEVEL >= 1)
+            {
+                REG.Schreiben("Config", "ANTI_AFK_TEXT", anti_ak_text.Text);
+                REG.Schreiben("Config", "ANTI_AFK_TIMER", antiafk_zeit.Value.ToString());
+                REG.Schreiben("Config", "ANTI_AFK_TIMER", antiafk_zeit.Value.ToString());
+                anti_ak_text.Text = anti_ak_text.Text;
+            }
+            else
+            {
+                msg.Schreiben("Fehler!", "Du kannst mit deinem Patreon-Level den Text nicht ändern !" + Environment.NewLine + "Änderung des Textes und der Zeit erst ab Patreon Level 1 möglich.");
+                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                antiafk_zeit.Value = 4;
+            }
+            
+        }
+
+        private void Hauptfenster_Closed(object sender, EventArgs e)
+        {
+
+      
+        }
     }
 }

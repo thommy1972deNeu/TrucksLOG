@@ -10,16 +10,20 @@ namespace Janus_Client_V1.Spieldaten
         private string dll_version;
         private string client_version;
         private bool sdk_active;
+        private bool sdk_active2;
         private string fahrinfo_1;
         private string fahrinfo_2;
         private string spiel;
         private bool soundan;
         private string euro_dollar;
         private string tonnen_lbs;
+        private string km_mi;
         private string ets_pfad;
         private string ats_pfad;
         private string tmp_pfad;
         private double bg_opacity;
+        private int patreon_level;
+
         // Truck Daten
         private string lkw_hersteller;
         private string lkw_hersteller_id;
@@ -152,6 +156,30 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
+        public bool SDK_AKTIVE2
+        {
+            get { return sdk_active2; }
+            set
+            {
+                if (sdk_active2 != value)
+                {
+                    sdk_active = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public string KM_MI
+        {
+            get { return km_mi; }
+            set
+            {
+                if (km_mi != value)
+                {
+                    km_mi = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public string TONNEN_LBS
         {
             get { return tonnen_lbs; }
@@ -249,7 +277,18 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
-
+        public int PATREON_LEVEL
+        {
+            get { return patreon_level; }
+            set
+            {
+                if (patreon_level != value)
+                {
+                    patreon_level = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public int TRAIN_PAY_AMOUNT
         {
             get { return train_pay_amount; }

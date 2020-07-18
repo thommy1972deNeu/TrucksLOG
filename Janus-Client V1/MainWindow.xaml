@@ -11,7 +11,7 @@
                  x:Name="Hauptfenster"
                   TitleBarHeight="50"
                  ShowIconOnTitleBar="True"
-                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen" MaxWidth="1200" MaxHeight="700" Loaded="Hauptfenster_Loaded">
+                 Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen" MaxWidth="1200" MaxHeight="700" Loaded="Hauptfenster_Loaded" Closed="Hauptfenster_Closed">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="job_angenommen" />
@@ -32,7 +32,7 @@
         <BooleanToVisibilityConverter x:Key="parking_brake" />
         <BooleanToVisibilityConverter x:Key="trailer_attached" />
         <BooleanToVisibilityConverter x:Key="SDK_Aktiv" />
-
+        <BooleanToVisibilityConverter x:Key="SDK_Aktiv2" />
 
         <ContextMenu x:Key="contextMenu" MenuItem.Click="ContextMenu_Click">
             <MenuItem Header="Item 1"/>
@@ -103,12 +103,33 @@
                             <ComboBoxItem Tag="Light.Sienna">Hell Wüste</ComboBoxItem>
                         </ComboBox>
 
+
                         <Label Content="System-Sounds:" HorizontalAlignment="Center"/>
                         <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Systemsounds" SelectedValuePath="Tag" SelectionChanged="Systemsounds_SelectionChanged" Margin="0,0,0,20">
                             <ComboBoxItem Tag="An">An</ComboBoxItem>
                             <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
                         </ComboBox>
+
                         <Separator/>
+                        <Label Content="Anti-AFK (Multiplayer):" HorizontalAlignment="Center"/>
+                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="anti_afk" SelectedValuePath="Tag" SelectionChanged="AntiAFK_SelectionChanged" Margin="0,0,0,20">
+                            <ComboBoxItem Tag="An">An</ComboBoxItem>
+                            <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
+                        </ComboBox>
+
+
+                        <TextBox x:Name="anti_ak_text" Padding="5" Margin="0,0,0,0" Height="50" Width="250" TextWrapping="Wrap"/>
+                        <Label x:Name="laenge_antiafk_text" FontSize="10" HorizontalAlignment="Center"/>
+
+                        <Slider x:Name="antiafk_zeit" Width="200" Minimum="2" Maximum="4" TickFrequency="1" IsSnapToTickEnabled="True" TickPlacement="Both"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Label Content="{Binding ElementName=antiafk_zeit,Path=Value}" />
+                            <Label Content=" Min."/>
+                        </StackPanel>
+
+                        <Button x:Name="anti_afk_text_save" Width="150" Height="40" Click="anti_afk_text_save_Click" Content="Anti-AFK speichern" Margin="0,0,0,10" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                        <Separator/>
+                        
                         <Label Content="Hintergrund" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Label Content="Hintergrundbild:" HorizontalAlignment="Center" FontSize="14"/>
                         <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" Margin="0,0,0,20">
@@ -321,7 +342,14 @@
             <StatusBarItem>
                 <Label Content="{Binding DLL_VERSION}" />
             </StatusBarItem>
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{iconPacks:BoxIconsImage Kind=LogosPatreon}" Height="20" ToolTip="Dein Patreon-Level" VerticalAlignment="Bottom"/>
+                    <Label Content="{Binding PATREON_LEVEL}" VerticalAlignment="Center"/>
+                </StackPanel>
 
+            </StatusBarItem>
+            
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <StatusBarItem x:Name="status_bar_version"/>
@@ -374,7 +402,7 @@
 
 
             <!-- WAITING ZONE -->
-<!--
+
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
@@ -383,7 +411,7 @@
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
--->
+
             <!-- WAITING ZONE ENDE-->
 
             <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
@@ -476,9 +504,11 @@
 
             <!-- Streckenverlauf -->
             <Grid Grid.Row="12" Grid.Column="2" Grid.ColumnSpan="16" Grid.RowSpan="2" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}">
+              
                 <mah:MetroProgressBar 
                     Minimum="0"
                     Height="50"
+                    Width="800"
                     Maximum="{Binding GESAMT_KM_SA}" 
                     Value="{Binding REST_KM_SA}" 
                     Name="pbStatus" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="2" Grid.Column="1" >
@@ -489,20 +519,21 @@
                         </LinearGradientBrush>
                     </mah:MetroProgressBar.Foreground>
                 </mah:MetroProgressBar>
-                <TextBlock Text="{Binding REST_KM_SA}"  
-                           Width="100"
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding REST_KM_SA}"
                            TextAlignment="Right"
                            HorizontalAlignment="Center"
                            FontSize="30"
                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
            VerticalAlignment="Center" />
-                <TextBlock Text="{Binding KMH_MI}"  
-                           Width="100"
-                            TextAlignment="Left"
-                           HorizontalAlignment="Center"
+                <TextBlock Text="{Binding KM_MI}"  
+                           TextAlignment="Left"
                            FontSize="30"
+                           Margin="10,0,0,0"
                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
            VerticalAlignment="Center" />
+                </StackPanel>
             </Grid>
 
             <!-- HERSTELLER / MODELL -->
