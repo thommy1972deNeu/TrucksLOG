@@ -21,6 +21,9 @@ namespace Janus_Client_V1.Klassen
         public static string transport = server + "transport.php";
         public static string link_click = server + "link_click.php";
         public static string patreon_state = server + "patreon.php";
+        public static string beta = server + "beta.php";
+        public static string nutzerdaten = server + "nutzerdaten.php";
+        public static string email_daten = server + "email_daten.php";
         public static string updatetext_uri = "http://clientupdates.projekt-janus.de/changelog.html";
 
 
@@ -54,8 +57,6 @@ namespace Janus_Client_V1.Klassen
             myHttpWebResponse.Close();
             return pageContent;
         }
-           
-
 
     }
 }

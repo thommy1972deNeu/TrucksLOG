@@ -255,6 +255,7 @@
     <Compile Include="Klassen\API.cs" />
     <Compile Include="Klassen\Config.cs" />
     <Compile Include="Klassen\DiscordHandler.cs" />
+    <Compile Include="Klassen\EmailHandler.cs" />
     <Compile Include="Klassen\Logging.cs" />
     <Compile Include="Klassen\RegistryHandler.cs" />
     <Compile Include="Klassen\SoundPlayer.cs" />
@@ -464,6 +465,9 @@
     </Content>
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\PJ_ICON.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\scs-telemetry.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

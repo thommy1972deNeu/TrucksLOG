@@ -52,17 +52,17 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
             Logging.Make_Log_File();
-        
+           // BETA_CHECK();
+
             Lade_Voreinstellungen();
 
+            // DISCORD
             client = new DiscordRpcClient("730374187025170472");
             client.Initialize();
-
-
             var timer = new System.Timers.Timer(150);
             timer.Elapsed += (sender, args) => { client.Invoke(); };
             timer.Start();
-
+            // DISCORD ENDE
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
             credit_text.Content += " - Quasselboy Patti [COO]" + Environment.NewLine;
@@ -161,8 +161,13 @@ namespace Janus_Client_V1
             {
                 if (Truck_Daten.SPEED == 0)
                 {
-                    BringMainWindowToFront("eurotrucks2");
-
+                    if(Truck_Daten.SPIEL == "Ets2")
+                    {
+                        BringMainWindowToFront("eurotrucks2");
+                    } else
+                    {
+                        BringMainWindowToFront("amtrucks");
+                    }
                     sim.Keyboard.KeyPress(VirtualKeyCode.VK_Y);
                     sim.Keyboard.TextEntry("PJ-BOT:");
                     sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
@@ -236,6 +241,33 @@ namespace Janus_Client_V1
 
         }
 
+        private void BETA_CHECK()
+        {
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                int response = Convert.ToInt32(API.HTTPSRequestPost(API.beta, post_param));
+
+                if (response == 0)
+                {
+
+                    MessageBox.Show("Du bist leider kein BETA-TESTER oder noch nicht freigeschaltet." + Environment.NewLine + "Bitte wende dich auf unserem Discord Server: https://discord.gg/jvD2Y7H an einen der Verantwortlichen." + Environment.NewLine + Environment.NewLine + "Diese Anwendung wird jetzt beendet !", "Fehler BETA-Tester", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    string key = REG.Lesen("Config", "CLIENT_KEY");
+                    Logging.WriteClientLog("[DISMISS] Fehlversuch sich als Beta-Tester anzumelden wurde an die Administration gemeldet !");
+                    EmailHandler mail = new EmailHandler();
+                    mail.Email_BETA_TESTER_FEHLER(key, "Unzulässige Beta-Tester Anmeldung");
+                } else
+                {
+                    Logging.WriteClientLog("[DISMISS] BETA-Tester Nutzerstatus: " + response);
+                }
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[DISMISS] Fehler beim Abfrage des BETA-Tester-Status: " + ex.Message + ex.StackTrace);
+            }
+        }
+
         private void lade_Patreon()
         {
             try
@@ -246,9 +278,9 @@ namespace Janus_Client_V1
                 Truck_Daten.PATREON_LEVEL = Convert.ToInt32(response);
 
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("Fehler beim Abrufen PS!" + ex.Message + ex.StackTrace);
+                //MessageBox.Show("Fehler beim Abrufen PS!" + ex.Message + ex.StackTrace);
                 Truck_Daten.PATREON_LEVEL = 0;
             }
         }
@@ -700,6 +732,9 @@ namespace Janus_Client_V1
                     Truck_Daten.TRAIN_PAY_AMOUNT = (int)data.GamePlay.TrainEvent.PayAmount;
 
 
+
+
+                    // DISCORD
                     Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_HERSTELLER_ID, Truck_Daten.LKW_SCHADEN);
 
                 }
