@@ -24,6 +24,7 @@ namespace Janus_Client_V1.Klassen
         public static string beta = server + "beta.php";
         public static string nutzerdaten = server + "nutzerdaten.php";
         public static string email_daten = server + "email_daten.php";
+        public static string key_check = server + "key_check.php";
         public static string updatetext_uri = "http://clientupdates.projekt-janus.de/changelog.html";
 
 

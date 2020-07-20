@@ -221,7 +221,7 @@
             <mah:Flyout x:Name="UpdatesFlyOut" Width="600" Position="Right" Foreground="White">
 
                 <ScrollViewer Width="600" VerticalScrollBarVisibility="Auto">
-                    <TextBlock x:Name="update_text" Margin="20,0,0,0" FontSize="24" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="update_text" Margin="20,0,0,0" FontSize="14" TextWrapping="Wrap"/>
                 </ScrollViewer>
 
             </mah:Flyout>

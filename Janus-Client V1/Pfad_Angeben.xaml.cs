@@ -1,6 +1,7 @@
 ﻿using Janus_Client_V1.Klassen;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
@@ -20,33 +21,25 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
 
-            if(string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
+            
+                pfad_ets.Text = REG.Lesen("Pfade", "ETS2_PFAD");
+                pfad_ets.Text = REG.Lesen("Pfade", "ATS_PFAD");
+                pfad_ets.Text = REG.Lesen("Pfade", "ETS2_PFAD");
+
+            if (REG.Lesen("Config", "CLIENT_KEY") != "")
             {
-                REG.Schreiben("Pfade", "ETS2_PFAD", "");
+                client_key.Text = REG.Lesen("Config", "CLIENT_KEY");
+                client_key.IsEnabled = false;
+            }
+
+            if(!string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD")) || !string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
+            {
+                close.Visibility = Visibility.Visible;
             } else
             {
-                pfad_ets.Text = REG.Lesen("Pfade", "ETS2_PFAD");
-            }
-           
-
-            if (string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD")))
-            {
-                REG.Schreiben("Pfade", "ATS_PFAD", "");
-            }
-            else
-            {
-                pfad_ets.Text = REG.Lesen("Pfade", "ATS_PFAD");
+                close.Visibility = Visibility.Hidden;
             }
 
-
-            if (string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD")))
-            {
-                REG.Schreiben("Pfade", "ATS_PFAD", "");
-            }
-            else
-            {
-                pfad_ets.Text = REG.Lesen("Pfade", "ETS2_PFAD");
-            }
         }
 
         private void tmp_suchen_btn_Click(object sender, RoutedEventArgs e)
@@ -163,26 +156,52 @@ namespace Janus_Client_V1
 
         private void ok_click(object sender, RoutedEventArgs e)
         {
-            if (pfad_ets.Text == "" || client_key.Text == "")
+            if (client_key.Text == "")
             {
-                MessageBox.Show("Der ETS2-Pfad und der Client-Key müssen angegeben werden !", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error); 
+                MessageBox.Show("Der Client-Key muss angegeben werden !", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error); 
                 return;
             } else
             {
-                REG.Schreiben("Pfade", "ETS2_PFAD", pfad_ets.Text);
-                REG.Schreiben("Pfade", "ATS_PFAD", pfad_ats.Text);
-                REG.Schreiben("Pfade", "TMP_PFAD", pfad_tmp.Text);
-                REG.Schreiben("Config", "CLIENT_KEY", client_key.Text);
+                if (pfad_ets.Text == "" && pfad_ats.Text == "")
+                {
+                    MessageBox.Show("Entweder ETS2 oder ATS muss angegeben werden !", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                else
+                {
+                    REG.Schreiben("Pfade", "ETS2_PFAD", pfad_ets.Text);
+                    REG.Schreiben("Pfade", "ATS_PFAD", pfad_ats.Text);
+                    REG.Schreiben("Pfade", "TMP_PFAD", pfad_tmp.Text);
+                    
 
-                MessageBox.Show("Der Client wird jetzt einmal zum Speichern der Daten neu gestartet!", "Reload...", MessageBoxButton.OK, MessageBoxImage.Information);
-                System.Windows.Forms.Application.Restart();
-                System.Windows.Application.Current.Shutdown();
+                    Dictionary<string, string> post_param4 = new Dictionary<string, string>();
+                    post_param4.Add("CLIENT_KEY", client_key.Text);
+                    string response4 = API.HTTPSRequestPost(API.key_check, post_param4);
+                    if (response4 == "NOK")
+                    {
+                        MessageBox.Show("Der Client-Key kann nicht verifiziert werden !" + Environment.NewLine + "Bitte versuche es Erneut !", "Fehler Client Key", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        REG.Schreiben("Config", "CLIENT_KEY", client_key.Text);
+                        MessageBox.Show("Der Client wird jetzt einmal zum Speichern der Daten neu gestartet!", "Reload...", MessageBoxButton.OK, MessageBoxImage.Information);
+                        System.Windows.Forms.Application.Restart();
+                        System.Windows.Application.Current.Shutdown();
+                    }
+                }
             }
         }
+
+
 
         private void where_img_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             MessageBox.Show("Du findest deinen Client-Key" + Environment.NewLine + "auf unserer Webseite " + Environment.NewLine + "https://projekt-janus.de" + Environment.NewLine + "in deinem Profil.", "Hilfe...", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void cancel_click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

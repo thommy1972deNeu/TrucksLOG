@@ -29,7 +29,6 @@ namespace Janus_Client_V1
     {
         public DiscordRpcClient client;
         private static RichPresence jobRPC;
-        private const string DiscordSmallImageKey = "";
         private const string DiscordAppID = "730374187025170472";
         private const string DefaultDiscordLargeImageKey = "pj_512";
 
@@ -57,7 +56,7 @@ namespace Janus_Client_V1
             Lade_Voreinstellungen();
 
             // DISCORD
-            client = new DiscordRpcClient("730374187025170472");
+            client = new DiscordRpcClient(DiscordAppID);
             client.Initialize();
             var timer = new System.Timers.Timer(150);
             timer.Elapsed += (sender, args) => { client.Invoke(); };
@@ -77,23 +76,25 @@ namespace Janus_Client_V1
 
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
             anti_afk_timer.Interval = TimeSpan.FromMinutes(Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER")));
-           // anti_afk_timer.Interval = TimeSpan.FromMinutes(1);
+            // anti_afk_timer.Interval = TimeSpan.FromMinutes(1);
 
-            if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")) || string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
+            if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")))
             {
                 Pfad_Angeben pf = new Pfad_Angeben();
                 pf.ShowDialog();
                 return;
             }
-            else
-            {
 
-                try
-                {
+            if (REG.Lesen("Pfade", "ETS2_PFAD") == "" && REG.Lesen("Pfade", "ATS_PFAD") == "")
+            {
+                    Pfad_Angeben pf = new Pfad_Angeben();
+                    pf.ShowDialog();
+                    return;
+            } 
+            try {
                     TelemetryInstaller.check_ETS();
                     TelemetryInstaller.check_ATS();
-                }
-                catch { }
+                } catch { }
 
                 System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
 
@@ -111,11 +112,11 @@ namespace Janus_Client_V1
                 Telemetry.RefuelEnd += TelemetryRefuelEnd;
                 Telemetry.RefuelPayed += TelemetryRefuelPayed;
 
-                /* DEAKTIVIERT FÜR PATTI
+               
                 if (REG.Lesen("Config", "Systemsounds") == "An")
                     SoundPlayer.Sound_Willkommen();
-                */
-            }
+               
+            
         }
 
 
@@ -219,7 +220,6 @@ namespace Janus_Client_V1
             {
                 lade_Patreon();
                 setzt_antiAFK();
-
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 if(Truck_Daten.SPIEL == "Ets2")
                 {
@@ -233,7 +233,9 @@ namespace Janus_Client_V1
                 post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
-              
+
+                Logging.WriteClientLog("[UPDATE] Tour-Update: " + Truck_Daten.FRACHTSCHADEN.ToString() + ((float)Truck_Daten.REST_KM / 1000).ToString());
+
             } catch (Exception ex)
             {
                 Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
@@ -251,7 +253,6 @@ namespace Janus_Client_V1
 
                 if (response == 0)
                 {
-
                     MessageBox.Show("Du bist leider kein BETA-TESTER oder noch nicht freigeschaltet." + Environment.NewLine + "Bitte wende dich auf unserem Discord Server: https://discord.gg/jvD2Y7H an einen der Verantwortlichen." + Environment.NewLine + Environment.NewLine + "Diese Anwendung wird jetzt beendet !", "Fehler BETA-Tester", MessageBoxButton.OK, MessageBoxImage.Error);
 
                     string key = REG.Lesen("Config", "CLIENT_KEY");
@@ -344,7 +345,6 @@ namespace Janus_Client_V1
                 {
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
                 }
-                
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 post_param.Add("STARTORT", Truck_Daten.STARTORT.ToString());
                 post_param.Add("STARTORT_ID", Truck_Daten.STARTORT_ID);
@@ -827,6 +827,7 @@ namespace Janus_Client_V1
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
                     REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine gute und sichere Fahrt!");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
 
@@ -844,7 +845,14 @@ namespace Janus_Client_V1
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
 
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Systemsounds")))
+                    REG.Schreiben("Config", "Systemsounds", "An");
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
+
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Farbschema")))
+                    REG.Schreiben("Config", "Farbschema", "Dark.Blue");
+                Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
+
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Background")))
                 {
@@ -901,11 +909,15 @@ namespace Janus_Client_V1
             {
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 post_param.Add("VERSION", CLIENT_VERSION);
-                update_text.Text = API.HTTPSRequestPost(API.updatetext_uri, post_param);
-                Logging.WriteClientLog("Update wurde Erfolgreich gesucht... ");
+                string response = API.HTTPSRequestPost(API.updatetext_uri, post_param);
+                string response2 = response.Replace("<br/>", "");
+                string response3 = response2.Replace("<hr/>", "");
+
+                update_text.Text = response3;
+
             } catch (Exception ex)
             {
-                Logging.WriteClientLog("Fehler beim Update laden " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim Anzeigen der Update News " + ex.Message);
             }
 
             lade_Patreon();
@@ -913,7 +925,7 @@ namespace Janus_Client_V1
             if (Truck_Daten.PATREON_LEVEL == 0)
             {
                 REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!");
-                anti_ak_text.Text = "Projekt-Janus.de wünscth allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
                 anti_ak_text.MaxLength = 0;
                 laenge_antiafk_text.Content = "Keine Änderung möglich";
             }
@@ -940,6 +952,7 @@ namespace Janus_Client_V1
             anti_afk_timer.Stop();
 
         }
+
 
         private void Beta_Tester(object sender, RoutedEventArgs e)
         {
@@ -1126,7 +1139,22 @@ namespace Janus_Client_V1
 
         private void tmp_starten_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(REG.Lesen("Pfade", "TMP_PFAD"));
+            try
+            {
+                if (!string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD")))
+                {
+                    Process.Start(REG.Lesen("Pfade", "TMP_PFAD"));
+                }
+                else
+                {
+                    msg.Schreiben("Fehler bei der Pfadangabe - TruckersMP", "Der Pfad zu TruckersMP wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
+                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von TMP. Kein Pfad angegeben");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Exception throw " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void ats_starten_Click(object sender, RoutedEventArgs e)
@@ -1150,7 +1178,22 @@ namespace Janus_Client_V1
 
         private void ets_starten_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start(REG.Lesen("Pfade", "ETS2_PFAD"));
+            try
+            {
+                if (!string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
+                {
+                    Process.Start(REG.Lesen("Pfade", "ETS2_PFAD"));
+                }
+                else
+                {
+                    msg.Schreiben("Fehler bei der Pfadangabe - ETS2", "Der Pfad zu Euro Truck Simulator 2 wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
+                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von ETS2. Kein Pfad angegeben");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Exception throw " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void spielpfade_aendern(object sender, RoutedEventArgs e)
