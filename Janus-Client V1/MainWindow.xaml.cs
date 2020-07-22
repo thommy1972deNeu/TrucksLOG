@@ -22,6 +22,9 @@ using System.Threading;
 using ControlzEx.Native;
 using DiscordRPC;
 using DiscordRPC.Logging;
+using Microsoft.Win32;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Janus_Client_V1
 {
@@ -116,8 +119,8 @@ namespace Janus_Client_V1
                 if (REG.Lesen("Config", "Systemsounds") == "An")
                     SoundPlayer.Sound_Willkommen();
                
-            
         }
+
 
 
         private bool CheckIfAProcessIsRunning(string processname)
@@ -822,6 +825,9 @@ namespace Janus_Client_V1
             {
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "FIRST_RUN")))
+                    REG.Schreiben("Config", "FIRST_RUN", "0");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
                     REG.Schreiben("Config", "BG_OPACITY", "1");
 
@@ -1258,6 +1264,44 @@ namespace Janus_Client_V1
         {
 
       
+        }
+
+        private void Oeffne_Andras_TV(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://www.twitch.tv/andras_tv");
+        }
+
+        private async void Werksteinstellungen_Click(object sender, RoutedEventArgs e)
+        {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
+        
+            var result = await metroWindow.ShowMessageAsync("Client Reset durchführen ?", "Soll der Client wirklich Resettet werden ?" + Environment.NewLine + "Du musst alle Pfade und den Client Key neu eintragen !", MessageDialogStyle.AffirmativeAndNegative);
+            
+            if (result == MessageDialogResult.Affirmative)
+            {
+                if (SubKeyExist(@"Software\Projekt-Janus"))
+                {
+                    Registry.CurrentUser.DeleteSubKeyTree(@"Software\Projekt-Janus");
+                }
+                await metroWindow.ShowMessageAsync("Client Reset Erfolgreich durchgeführt !", "Der Client wird nun beendet. Bitte starte den Client einfach neu.", MessageDialogStyle.Affirmative);
+                Application.Current.Shutdown();
+            }
+            else
+            {
+                await metroWindow.ShowMessageAsync("Reset", "Der Reset wurde nicht durchgeführt !");
+            }
+
+
+    
+        }
+
+        private bool SubKeyExist(string Subkey)
+        {
+            RegistryKey myKey = Registry.CurrentUser.OpenSubKey(Subkey);
+            if (myKey == null)
+                return false;
+            else
+                return true;
         }
     }
 }

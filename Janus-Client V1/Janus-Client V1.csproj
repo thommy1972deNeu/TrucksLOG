@@ -66,7 +66,7 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>Janus_Client_V1.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -189,9 +189,8 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SCSSdkClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\NEUE TELE\SCSSdkClient.dll</HintPath>
+    <Reference Include="SCSSdkClient">
+      <HintPath>E:\Backup Desktop\NEUE TELE\SCSSdkClient.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
@@ -425,9 +424,6 @@
     <Resource Include="Images\woman_7.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\pj_1.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\bg2.png" />
   </ItemGroup>
   <ItemGroup>
@@ -466,13 +462,20 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\pj_2.png" />
+    <Resource Include="Images\pj_3.png" />
+    <Resource Include="Images\pj_1.png" />
+    <Resource Include="Images\pj_4.png" />
+    <Resource Include="Images\pj_5.png" />
+    <Resource Include="Images\pj_6.png" />
+    <Resource Include="Images\pj_7.png" />
+    <Resource Include="Images\pj_8.png" />
     <Content Include="Images\PJ_ICON.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\scs-telemetry.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Images\pj_2.png" />
     <Content Include="Images\Truck_Left_Green_26321.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
