@@ -439,7 +439,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\kupplung.png" />
-    <Resource Include="Images\patti_1.png" />
     <Resource Include="Images\key_image.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -462,14 +461,15 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Images\pj_2.png" />
-    <Resource Include="Images\pj_3.png" />
-    <Resource Include="Images\pj_1.png" />
-    <Resource Include="Images\pj_4.png" />
-    <Resource Include="Images\pj_5.png" />
-    <Resource Include="Images\pj_6.png" />
-    <Resource Include="Images\pj_7.png" />
-    <Resource Include="Images\pj_8.png" />
+    <Resource Include="Images\patti_1.jpg" />
+    <Resource Include="Images\pj_1.jpg" />
+    <Resource Include="Images\pj_2.jpg" />
+    <Resource Include="Images\pj_3.jpg" />
+    <Resource Include="Images\pj_4.jpg" />
+    <Resource Include="Images\pj_6.jpg" />
+    <Resource Include="Images\pj_7.jpg" />
+    <Resource Include="Images\pj_8.jpg" />
+    <Resource Include="Images\pj_5.jpg" />
     <Content Include="Images\PJ_ICON.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

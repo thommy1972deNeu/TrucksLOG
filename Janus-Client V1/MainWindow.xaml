@@ -133,14 +133,14 @@
                         <Label Content="Hintergrund" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Label Content="Hintergrundbild:" HorizontalAlignment="Center" FontSize="14"/>
                         <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" Margin="0,0,0,20">
-                            <ComboBoxItem Tag="pj_1.png">Janus 1 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_2.png">Janus 2 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_3.png">Janus 3 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_4.png">Janus 4 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_5.png">Janus 5 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_6.png">Janus 6 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_7.png">Janus 7 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_8.png">Janus 8 (Neu)</ComboBoxItem>
+                            <ComboBoxItem Tag="pj_1.jpg">Janus 1 (Neu)</ComboBoxItem>
+                            <ComboBoxItem Tag="pj_2.jpg">Janus 2 (Neu)</ComboBoxItem>
+                            <ComboBoxItem Tag="pj_3.jpg">Janus 3 (Neu)</ComboBoxItem>
+                            <ComboBoxItem Tag="pj_4.jpg">Janus 4 (Neu)</ComboBoxItem>
+                            <ComboBoxItem Tag="pj_5.jpg">Janus 5 (Neu)</ComboBoxItem>
+                            <ComboBoxItem Tag="pj_6.jpg">Janus 6 (Neu)</ComboBoxItem>
+                            <ComboBoxItem Tag="pj_7.jpg">Janus 7 (Neu)</ComboBoxItem>
+                            <ComboBoxItem Tag="pj_8.jpg">Janus 8 (Neu)</ComboBoxItem>
                             <ComboBoxItem Tag="div_1.jpg">Divers 1</ComboBoxItem>
                             <ComboBoxItem Tag="div_2.jpg">Divers 2</ComboBoxItem>
                             <ComboBoxItem Tag="lkw_1.jpg">LKW 1</ComboBoxItem>
@@ -159,7 +159,7 @@
                             <ComboBoxItem Tag="woman_5.jpg">Frau 5</ComboBoxItem>
                             <ComboBoxItem Tag="woman_6.jpg">Frau 6</ComboBoxItem>
                             <ComboBoxItem Tag="woman_7.jpg">Frau 7</ComboBoxItem>
-                            <ComboBoxItem Tag="patti_1.png">Patti 1</ComboBoxItem>
+                            <ComboBoxItem Tag="patti_1.jpg">Patti 1</ComboBoxItem>
                         </ComboBox>
                         <Label Content="oder:" HorizontalAlignment="Center" Margin="0,-20" FontSize="14"/>
                         <Button x:Name="eigene_bg_bild" Click="OPEN_BG_FILE" Content="Eigenes Hintergrundbild" Margin="0,10,0,20" Width="150" Height="40" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
@@ -170,6 +170,7 @@
                         <Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
 
                         <Separator Margin="0,20,0,20"/>
+
 
                         <StackPanel Orientation="Horizontal">
                             <Label Content="ETS2-Pfad:" Margin="0,0,20,0"/>
@@ -422,7 +423,7 @@
 
 
             <!-- WAITING ZONE -->
-
+<!--
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
@@ -431,6 +432,7 @@
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="ETS2 im Singelplayer starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+           -->
             <!-- WAITING ZONE ENDE-->
 
             <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>

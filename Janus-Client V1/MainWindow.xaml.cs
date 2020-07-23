@@ -862,8 +862,8 @@ namespace Janus_Client_V1
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Background")))
                 {
-                    Background_WEchsler.SelectedValue = "pj_1.png";
-                    REG.Schreiben("Config", "Background", "pj_1.png");
+                    Background_WEchsler.SelectedValue = "pj_7.jpg";
+                    REG.Schreiben("Config", "Background", "pj_7.jpg");
                 }
                 else
                 {
