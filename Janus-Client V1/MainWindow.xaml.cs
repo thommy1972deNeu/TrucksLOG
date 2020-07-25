@@ -46,6 +46,8 @@ namespace Janus_Client_V1
 
         private DispatcherTimer job_update_timer = new DispatcherTimer();
         private DispatcherTimer anti_afk_timer = new DispatcherTimer();
+        private DispatcherTimer useronline_timer = new DispatcherTimer();
+        private DispatcherTimer zu_schnell = new DispatcherTimer();
 
         public bool InvokeRequired { get; private set; }
         public static Window ActivatedWindow { get; set; }
@@ -54,7 +56,7 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
             Logging.Make_Log_File();
-           // BETA_CHECK();
+            // BETA_CHECK();
 
             Lade_Voreinstellungen();
 
@@ -77,7 +79,17 @@ namespace Janus_Client_V1
 
             Logging.WriteClientLog("Version: " + CLIENT_VERSION);
 
+            useronline_timer.Interval = TimeSpan.FromSeconds(5);
+            useronline_timer.Tick += Useronline_Tick;
+            useronline_timer.Start();
+
+            zu_schnell.Interval = TimeSpan.FromSeconds(1);
+            zu_schnell.Tick += zu_schnell_tick;
+
+            // JOB UPDATE TIMER
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
+
+            // ANTI_AFK TIMER
             anti_afk_timer.Interval = TimeSpan.FromMinutes(Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER")));
             // anti_afk_timer.Interval = TimeSpan.FromMinutes(1);
 
@@ -90,35 +102,35 @@ namespace Janus_Client_V1
 
             if (REG.Lesen("Pfade", "ETS2_PFAD") == "" && REG.Lesen("Pfade", "ATS_PFAD") == "")
             {
-                    Pfad_Angeben pf = new Pfad_Angeben();
-                    pf.ShowDialog();
-                    return;
-            } 
+                Pfad_Angeben pf = new Pfad_Angeben();
+                pf.ShowDialog();
+                return;
+            }
             try {
-                    TelemetryInstaller.check_ETS();
-                    TelemetryInstaller.check_ATS();
-                } catch { }
+                TelemetryInstaller.check_ETS();
+                TelemetryInstaller.check_ATS();
+            } catch { }
 
-                System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
+            System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
 
-                Telemetry = new SCSSdkTelemetry();
-                Telemetry.Data += Telemetry_Data;
-                Telemetry.JobStarted += TelemetryOnJobStarted;
+            Telemetry = new SCSSdkTelemetry();
+            Telemetry.Data += Telemetry_Data;
+            Telemetry.JobStarted += TelemetryOnJobStarted;
 
-                Telemetry.JobCancelled += TelemetryJobCancelled;
-                Telemetry.JobDelivered += TelemetryJobDelivered;
-                Telemetry.Fined += TelemetryFined;
-                Telemetry.Tollgate += TelemetryTollgate;
-                Telemetry.Ferry += TelemetryFerry;
-                Telemetry.Train += TelemetryTrain;
-                Telemetry.RefuelStart += TelemetryRefuel;
-                Telemetry.RefuelEnd += TelemetryRefuelEnd;
-                Telemetry.RefuelPayed += TelemetryRefuelPayed;
+            Telemetry.JobCancelled += TelemetryJobCancelled;
+            Telemetry.JobDelivered += TelemetryJobDelivered;
+            Telemetry.Fined += TelemetryFined;
+            Telemetry.Tollgate += TelemetryTollgate;
+            Telemetry.Ferry += TelemetryFerry;
+            Telemetry.Train += TelemetryTrain;
+            Telemetry.RefuelStart += TelemetryRefuel;
+            Telemetry.RefuelEnd += TelemetryRefuelEnd;
+            Telemetry.RefuelPayed += TelemetryRefuelPayed;
 
-               
-                if (REG.Lesen("Config", "Systemsounds") == "An")
-                    SoundPlayer.Sound_Willkommen();
-               
+
+            if (REG.Lesen("Config", "Systemsounds") == "An")
+                SoundPlayer.Sound_Willkommen();
+
         }
 
 
@@ -165,7 +177,7 @@ namespace Janus_Client_V1
             {
                 if (Truck_Daten.SPEED == 0)
                 {
-                    if(Truck_Daten.SPIEL == "Ets2")
+                    if (Truck_Daten.SPIEL == "Ets2")
                     {
                         BringMainWindowToFront("eurotrucks2");
                     } else
@@ -176,18 +188,35 @@ namespace Janus_Client_V1
                     sim.Keyboard.TextEntry("PJ-BOT:");
                     sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
                     sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-                    Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " +Truck_Daten.SPEED);
+                    Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
                 } else
                 {
                     Logging.WriteClientLog("[INFO] Keys nicht gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
                 }
-              
+
             } catch (Exception ex)
             {
                 Logging.WriteClientLog("[ERROR] Fehler bei SendKeys " + ex.Message);
             }
 
         }
+
+        private void zu_schnell_tick(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                string response = API.HTTPSRequestPost(API.user_zu_schnell, post_param);
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei SendKeys " + ex.Message);
+            }
+
+        }
+
+
 
         private void setzt_antiAFK()
         {
@@ -215,14 +244,29 @@ namespace Janus_Client_V1
             }
 
         }
+        private void Useronline_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+               
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("SECRET", "fZhdgte4fdgDDgfet567ufghf");
+                string response_online = API.HTTPSRequestPost(API.useronline_url, post_param);
+                Truck_Daten.ONLINEUSER = "User: " + response_online;
+            } catch { }
+        }
+
+
+
 
 
         private void timer_Tick(object sender, EventArgs e)
-        {
+            {
             try
             {
                 lade_Patreon();
                 setzt_antiAFK();
+
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 if(Truck_Daten.SPIEL == "Ets2")
                 {
@@ -252,6 +296,9 @@ namespace Janus_Client_V1
             }
 
         }
+
+
+
 
         private void BETA_CHECK()
         {
@@ -755,6 +802,21 @@ namespace Janus_Client_V1
                     // DISCORD
                     Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_HERSTELLER_ID, Truck_Daten.LKW_SCHADEN);
 
+                    // GESCHWINDIGKEITS_LOGGEN
+                    if(Truck_Daten.TEMPOLIMIT != 0)
+                    {
+                        if (Truck_Daten.SPEED >= (Truck_Daten.TEMPOLIMIT + 10))
+                        {
+                            zu_schnell.Start();
+                        }
+                        else
+                        {
+                            zu_schnell.Stop();
+                        }
+                    }
+
+                        
+
                 }
             }
             catch
@@ -838,6 +900,7 @@ namespace Janus_Client_V1
         {
             try
             {
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
                     REG.Schreiben("Config", "BG_OPACITY", "1.0"); Truck_Daten.BG_OPACITY = "1.0"; bg_opacity.SelectedValue = "1.0";
                 Truck_Daten.BG_OPACITY = REG.Lesen("Config", "BG_OPACITY"); bg_opacity.SelectedValue = REG.Lesen("Config", "BG_OPACITY");
@@ -1223,6 +1286,12 @@ namespace Janus_Client_V1
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
         {
             AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
+
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("STATUS", "ONLINE");
+            string response = API.HTTPSRequestPost(API.c_online, post_param);
+
         }
 
         private void AntiAFK_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1328,6 +1397,14 @@ namespace Janus_Client_V1
             {
 
             }
+        }
+
+        private void Hauptfenster_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("STATUS", "OFFLINE");
+            string response = API.HTTPSRequestPost(API.c_online, post_param);
         }
     }
 }

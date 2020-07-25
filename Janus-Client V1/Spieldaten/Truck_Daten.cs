@@ -23,7 +23,7 @@ namespace Janus_Client_V1.Spieldaten
         private string tmp_pfad;
         private string bg_opacity;
         private int patreon_level;
-
+        private string onlineuser;
         // Truck Daten
         private string lkw_hersteller;
         private string lkw_hersteller_id;
@@ -143,6 +143,21 @@ namespace Janus_Client_V1.Spieldaten
         private int rest_km_sa;
         private int gesamt_km_sa;
         // -----------------------------------------------------------------------------------
+
+        public string ONLINEUSER
+        {
+            get { return onlineuser; }
+            set
+            {
+                if (onlineuser != value)
+                {
+                    onlineuser = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
         public bool SDK_AKTIVE
         {
             get { return sdk_active; }
