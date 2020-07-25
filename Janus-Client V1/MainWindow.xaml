@@ -11,6 +11,8 @@
                  x:Name="Hauptfenster"
                   TitleBarHeight="50"
                  ShowIconOnTitleBar="True"
+                 AllowsTransparency="True"
+                 Opacity="{Binding BG_OPACITY}"
                  Title="Projekt-Janus Client V1" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen" MaxWidth="1200" MaxHeight="700" Loaded="Hauptfenster_Loaded" Closed="Hauptfenster_Closed">
 
     <Window.Resources>
@@ -165,8 +167,20 @@
                         <Button x:Name="eigene_bg_bild" Click="OPEN_BG_FILE" Content="Eigenes Hintergrundbild" Margin="0,10,0,20" Width="150" Height="40" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
 
                         <Label HorizontalAlignment="Center" Content="Background-Transparenz:"/>
-                        <Slider x:Name="bg_opacity" Maximum="1" Minimum="0.1" Value="{Binding Path=BG_OPACITY, Mode=TwoWay}" ValueChanged="bg_opacity_ValueChanged"  TickFrequency="0.1" IsSnapToTickEnabled="True" TickPlacement="TopLeft" AutoToolTipPlacement="TopLeft"  Width="200" Margin="0,0,0,30"/>
-
+                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="bg_opacity" SelectedValuePath="Tag" SelectionChanged="bg_opacity_ValueChanged" Margin="0,0,0,20">
+                            <ComboBoxItem Tag="1.0">100 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.9">90 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.8">80 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.7">70 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.6">60 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.5">50 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.4">40 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.3">30 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.2">20 %</ComboBoxItem>
+                            <ComboBoxItem Tag="0.1">10 %</ComboBoxItem>
+                        </ComboBox>
+                        
+                        
                         <Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
 
                         <Separator Margin="0,20,0,20"/>
@@ -423,19 +437,19 @@
 
 
             <!-- WAITING ZONE -->
-<!--
+
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-            <Image Source="/Images/pj_2.png" Grid.Row="8" Grid.Column="6" Grid.RowSpan="6" Grid.ColumnSpan="20" Height="200" Width="350" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <Image Source="Images/werb_03.png" Grid.Row="7" Grid.Column="7" Grid.RowSpan="20" Grid.ColumnSpan="20" Width="500" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_TMP" Height="50" FontSize="24" Content="Truckers-MP starten" Grid.Row="8" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="tmp_starten_Click"  ToolTip="ATS im Singleplayer starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="ETS2 im Singelplayer starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="Truckers-MP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-           -->
+           
             <!-- WAITING ZONE ENDE-->
 
-            <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" Opacity="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
             <Label Grid.Row="2" Grid.Column="8" Grid.ColumnSpan="4" x:Name="KMH_MI_LBL" Content="{Binding KMH_MI}" VerticalContentAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold"/>
 
             <!-- ICON SET -->
@@ -472,8 +486,6 @@
                     <Label Content="{Binding FUEL_GERADE}" Margin="5,-50,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
                     <Label Content="L" Margin="0,-50,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
                 </StackPanel>
-
-
             </StackPanel>
 
 
@@ -483,10 +495,10 @@
 
             <Border Background="LightGray" BorderBrush="White" Grid.Row="1" Grid.Column="12" CornerRadius="20" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
             <Image Grid.Row="1" Grid.Column="12" Source="{iconPacks:MaterialLightImage Kind=ArrowRightCircle}" Margin="3" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
+            <!-- BLINKER ENDE -->
 
-
-            <!-- ICON SET ENDE -->
-
+            
+            
             <!-- LICENSE PLATE -->
 
 

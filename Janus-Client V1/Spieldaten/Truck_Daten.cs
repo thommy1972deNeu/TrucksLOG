@@ -21,7 +21,7 @@ namespace Janus_Client_V1.Spieldaten
         private string ets_pfad;
         private string ats_pfad;
         private string tmp_pfad;
-        private double bg_opacity;
+        private string bg_opacity;
         private int patreon_level;
 
         // Truck Daten
@@ -639,7 +639,7 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
-        public double BG_OPACITY
+        public string BG_OPACITY
         {
             get { return bg_opacity; }
             set

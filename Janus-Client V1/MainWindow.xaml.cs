@@ -233,7 +233,14 @@ namespace Janus_Client_V1
                 }
                 
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
+                if(Truck_Daten.SPIEL == "Ets2")
+                {
+                    post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
+                } else
+                {
+                    post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1609).ToString());
+                }
+               
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
 
@@ -637,7 +644,15 @@ namespace Janus_Client_V1
                     Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
                     Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
 
-                    Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1000;
+                    
+                    if(Truck_Daten.SPIEL == "Ets2")
+                    {
+                        Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1000;
+                    } else
+                    {
+                        Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1609;
+                    }
+
                     Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
 
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
@@ -823,13 +838,14 @@ namespace Janus_Client_V1
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
+                    REG.Schreiben("Config", "BG_OPACITY", "1.0"); Truck_Daten.BG_OPACITY = "1.0"; bg_opacity.SelectedValue = "1.0";
+                Truck_Daten.BG_OPACITY = REG.Lesen("Config", "BG_OPACITY"); bg_opacity.SelectedValue = REG.Lesen("Config", "BG_OPACITY");
+
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "FIRST_RUN")))
                     REG.Schreiben("Config", "FIRST_RUN", "0");
-
-                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
-                    REG.Schreiben("Config", "BG_OPACITY", "1");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
                     REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine gute und sichere Fahrt!");
@@ -871,8 +887,8 @@ namespace Janus_Client_V1
                 }
 
                 // Hintergrund Transparenz Beginn
-                bg_opacity.Value = Convert.ToDouble(REG.Lesen("Config", "BG_OPACITY"));
-                this.Hauptfenster.Background.Opacity = Convert.ToDouble(REG.Lesen("Config", "BG_OPACITY"));
+
+
                 // Hintergrund Transparenz Ende
 
                 // Pfade Auslesen Beginn
@@ -1099,17 +1115,7 @@ namespace Janus_Client_V1
             Process.Start("https://www.twitch.tv/andras_tv");
         }
 
-        private void bg_opacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            try
-            {
-                this.Hauptfenster.Background.Opacity = bg_opacity.Value;
 
-                REG.Schreiben("Config", "BG_OPACITY", bg_opacity.Value.ToString());
-                Truck_Daten.BG_OPACITY = bg_opacity.Value;
-            }
-            catch { }
-        }
 
         private void OPEN_BG_FILE(object sender, RoutedEventArgs e)
         {
@@ -1302,6 +1308,26 @@ namespace Janus_Client_V1
                 return false;
             else
                 return true;
+        }
+
+        private void bg_opacity_ValueChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                REG.Schreiben("Config", "BG_OPACITY", (string)bg_opacity.SelectedValue);
+
+
+
+                Truck_Daten.BG_OPACITY = (string)bg_opacity.SelectedValue;
+
+                this.Hauptfenster.Opacity = (double)bg_opacity.SelectedValue;
+
+                MessageBox.Show(this.Hauptfenster.Opacity.ToString());
+
+            } catch
+            {
+
+            }
         }
     }
 }
