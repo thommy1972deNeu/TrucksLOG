@@ -52,13 +52,22 @@ namespace Janus_Client_V1
         public bool InvokeRequired { get; private set; }
         public static Window ActivatedWindow { get; set; }
 
+
+
+
+
         public MainWindow()
         {
+
+
+
             InitializeComponent();
             Logging.Make_Log_File();
             // BETA_CHECK();
 
             Lade_Voreinstellungen();
+
+        
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -127,13 +136,32 @@ namespace Janus_Client_V1
             Telemetry.RefuelEnd += TelemetryRefuelEnd;
             Telemetry.RefuelPayed += TelemetryRefuelPayed;
 
-
-            if (REG.Lesen("Config", "Systemsounds") == "An")
-                SoundPlayer.Sound_Willkommen();
+            if (MainWindow.AlreadyRunning())
+            {
+                Application.Current.Shutdown();
+                return;
+            }
 
         }
 
+        private static bool AlreadyRunning()
+        {
+            Process current = Process.GetCurrentProcess();
+            Process[] processes = Process.GetProcessesByName(current.ProcessName);
 
+            foreach (Process process in processes)
+            {
+                if (process.Id != current.Id)
+                {
+                    if (Assembly.GetExecutingAssembly().Location.Replace("/", "\\") == current.MainModule.FileName)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
 
         private bool CheckIfAProcessIsRunning(string processname)
         {
@@ -497,7 +525,7 @@ namespace Janus_Client_V1
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
                 }
 
-                post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
+                //post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 post_param.Add("STRECKE", Truck_Daten.ABGABE_GEF_STRECKE.ToString());
                 string response = API.HTTPSRequestPost(API.job_finish, post_param);
 
@@ -1337,8 +1365,10 @@ namespace Janus_Client_V1
 
         private void Hauptfenster_Closed(object sender, EventArgs e)
         {
-
-      
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("STATUS", "OFFLINE");
+            string response = API.HTTPSRequestPost(API.c_online, post_param);
         }
 
         private void Oeffne_Andras_TV(object sender, RoutedEventArgs e)
