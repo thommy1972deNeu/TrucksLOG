@@ -263,7 +263,7 @@
 
 
 
-            <mah:Flyout x:Name="BottomFlyOut" Height="180" Position="Bottom" Background="Orange" Foreground="Black">
+            <mah:Flyout x:Name="BottomFlyOut" Height="180" Position="Bottom" Background="Orange" Foreground="Black" IsOpen="False">
 
                 <StackPanel Orientation="Vertical">
                     <Label Content="Bitte gib das Land und den Tankpreis ein !" Foreground="Black" FontSize="26"/>
@@ -359,7 +359,7 @@
                 </ToggleButton.ContentTemplate>
             </ToggleButton>
 
-          
+
 
             <!-- DISABLED WEIL DIE TELE AUS GEHT IM MINIMIZE
             <Button Click="Minimize_Window" ToolTip="Minimiere das Fenster">
@@ -441,7 +441,6 @@
 
 
             <!-- WAITING ZONE -->
-
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="3" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Panel.ZIndex="1002" IsIndeterminate="True" EllipseDiameter="15" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
@@ -450,7 +449,7 @@
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="ETS2 im Singel-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="ATS im Single-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-           
+        
             <!-- WAITING ZONE ENDE-->
 
             <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" Opacity="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
@@ -475,8 +474,8 @@
             <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="45,28,45,32" Foreground="Black" Height="10" Width="10"/>
 
             <!-- TANKANZEIGE -->
-            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="16" Grid.ColumnSpan="3" VerticalAlignment="Center" Width="180" HorizontalAlignment="Left" Height="50" Margin="0,10">
-                <mah:MetroProgressBar Height="50" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Center" Width="250" HorizontalAlignment="Left" Height="60" Margin="0,10">
+                <mah:MetroProgressBar Height="60" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
                     <mah:MetroProgressBar.Foreground>
                         <LinearGradientBrush EndPoint="0,1" StartPoint="1,0">
                             <GradientStop Color="#FF3AFF00"/>
@@ -486,9 +485,15 @@
                 </mah:MetroProgressBar>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Image Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Width="30" Height="30" Margin="10,-50,0,0"/>
-                    <Label Content="{Binding FUEL_GERADE}" Margin="5,-50,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
-                    <Label Content="L" Margin="0,-50,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                    <Image Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Width="20" Height="20" Margin="5,-90,0,0"/>
+                    <Label Content="{Binding FUEL_GERADE}" Margin="5,-85,-5,0" Height="40" VerticalAlignment="Center" FontSize="18" Foreground="Black"/>
+                    <Label Content="{Binding LITER_GALLONEN}" Margin="0,-85,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="18" Foreground="Black"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Image Source="{iconPacks:MaterialImage Kind=MapMarkerDistance}" Width="20" Height="20" Margin="5,-35,0,0"/>
+                    <Label Content="{Binding STRECKE_MIT_FUEL}" Margin="5,-35,-5,0" Height="40" VerticalAlignment="Center" FontSize="18" Foreground="Black"/>
+                    <Label Content="{Binding KM_MI}" Margin="0,-35,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="18" Foreground="Black"/>
                 </StackPanel>
             </StackPanel>
 
