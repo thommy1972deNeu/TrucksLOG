@@ -9,7 +9,6 @@ namespace Janus_Client_V1.Spieldaten
         private string telemetry_version;
         private string dll_version;
         private string client_version;
-        private string gameversion;
         private bool sdk_active;
         private bool sdk_active2;
         private string fahrinfo_1;
@@ -76,7 +75,6 @@ namespace Janus_Client_V1.Spieldaten
         private int fuel;
         private int fuel_max;
         private int fuel_gerade;
-        private int strecke_mit_fuel;
         private string liter_gallonen;
         // Warnings
 
@@ -129,7 +127,7 @@ namespace Janus_Client_V1.Spieldaten
         private double frachtschaden_abgabe;
         private bool autoparking;
         private bool autoloading;
-        private int earned_xp;
+
 
         // TRANSPORT FERRY
         private int ferry_pay_amount;
@@ -145,47 +143,6 @@ namespace Janus_Client_V1.Spieldaten
         private int rest_km_sa;
         private int gesamt_km_sa;
         // -----------------------------------------------------------------------------------
-
-        public string GAMEVERSION
-        {
-            get { return gameversion; }
-            set
-            {
-                if (gameversion != value)
-                {
-                    gameversion = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-
-        public int STRECKE_MIT_FUEL
-        {
-            get { return strecke_mit_fuel; }
-            set
-            {
-                if (strecke_mit_fuel != value)
-                {
-                    strecke_mit_fuel = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-
-        public int EARNED_XP
-        {
-            get { return earned_xp; }
-            set
-            {
-                if (earned_xp != value)
-                {
-                    earned_xp = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
 
         public string ONLINEUSER
         {

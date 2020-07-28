@@ -12,7 +12,7 @@ namespace Janus_Client_V1.Klassen
         public static string server = "https://projekt-janus.de/api/";
         public static string job_delivered = server + "job_delivered.php";
         public static string job_started = server + "start_tour.php";
-        public static string job_cancel = server + "job_cancel.php";
+        public static string job_cancel = "https://projekt-janus.de/api/job_cancel.php";
         public static string job_update = server + "job_update.php";
         public static string job_finish = server + "job_finish.php";
         public static string strafe = server + "strafe.php";

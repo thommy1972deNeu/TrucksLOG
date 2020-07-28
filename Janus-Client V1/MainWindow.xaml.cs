@@ -25,7 +25,6 @@ using DiscordRPC.Logging;
 using Microsoft.Win32;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System.Net.NetworkInformation;
 
 namespace Janus_Client_V1
 {
@@ -97,7 +96,7 @@ namespace Janus_Client_V1
             zu_schnell.Tick += zu_schnell_tick;
 
             // JOB UPDATE TIMER
-            job_update_timer.Interval = TimeSpan.FromSeconds(2);
+            job_update_timer.Interval = TimeSpan.FromSeconds(5);
 
             // ANTI_AFK TIMER
             anti_afk_timer.Interval = TimeSpan.FromMinutes(Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER")));
@@ -285,6 +284,10 @@ namespace Janus_Client_V1
             } catch { }
         }
 
+
+
+
+
         private void timer_Tick(object sender, EventArgs e)
             {
             try
@@ -313,35 +316,16 @@ namespace Janus_Client_V1
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
 
-               // Logging.WriteClientLog("[UPDATE] Tour-Update: " + Truck_Daten.FRACHTSCHADEN.ToString() + ((float)Truck_Daten.REST_KM / 1000).ToString());
+                Logging.WriteClientLog("[UPDATE] Tour-Update: " + Truck_Daten.FRACHTSCHADEN.ToString() + ((float)Truck_Daten.REST_KM / 1000).ToString());
 
             } catch (Exception ex)
             {
                 Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
             }
 
-
-            Server_PingAsync();
         }
 
-        protected void Server_PingAsync()
-        {
-            Ping ping = new Ping();
-            try
-            {
-                PingReply pingresult_Xenonserver = ping.Send("rdbs5.xenonserver.de");
-                Server_1_Icon_Online.Visibility = Visibility.Visible;
 
-            } catch
-            {
-                Server_1_Icon_Offline.Visibility = Visibility.Visible;
-
-                MessageBox.Show("Die Server sind Offline.\n\nDer Client wird jetzt beendet !", "Fehler in der Kommunikation mit den Servern!", MessageBoxButton.OK, MessageBoxImage.Error);
-                Application.Current.Shutdown();
-            }
-            
-            
-        }
 
 
         private void BETA_CHECK()
@@ -389,9 +373,6 @@ namespace Janus_Client_V1
 
         private void TelemetryOnJobStarted(object sender, EventArgs e)
         {
-            
-
-
             if (!Truck_Daten.CARGO_LOADED)
             {
                 Stopwatch stopWatch = new Stopwatch(); //as timeout
@@ -414,11 +395,9 @@ namespace Janus_Client_V1
 
                 if (REG.Lesen("Config", "TOUR_ID_ETS2") == "")
                 {
-                    Logging.WriteClientLog("[INFO ETS] Tour-ID ETS ist leer !");
                     try
                     {
                         REG.Schreiben("Config", "TOUR_ID_ETS2", GenerateString());
-                        Logging.WriteClientLog("[INFO ETS] Tour-ID ETS wurde neu Generiert !");
                     }
                     catch (Exception ex)
                     {
@@ -429,11 +408,9 @@ namespace Janus_Client_V1
             {
                 if (REG.Lesen("Config", "TOUR_ID_ATS") == "")
                 {
-                    Logging.WriteClientLog("[INFO ATS] Tour-ID ATS ist leer !");
                     try
                     {
                         REG.Schreiben("Config", "TOUR_ID_ATS", GenerateString());
-                        Logging.WriteClientLog("[INFO ATS] Tour-ID ATS wurde neu Generiert !");
                     }
                     catch (Exception ex)
                     {
@@ -476,31 +453,7 @@ namespace Janus_Client_V1
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
 
                 string response = API.HTTPSRequestPost(API.job_started, post_param);
-
-                if(response == "Neue")
-                {
-            
-                    if (Truck_Daten.SPIEL == "Ets2")
-                    {
-                        REG.Schreiben("Config", "TOUR_ID_ETS2", GenerateString());
-                    }
-                    else
-                    {
-                        REG.Schreiben("Config", "TOUR_ID_ATS", GenerateString());
-                    }
-                } else
-                {
-               
-                    if (Truck_Daten.SPIEL == "Ets2")
-                    {
-                        REG.Schreiben("Config", "TOUR_ID_ETS2", response);
-                    }
-                    else
-                    {
-                        REG.Schreiben("Config", "TOUR_ID_ATS", response);
-                    }
-                } 
-
+                Console.WriteLine(response);
                 REG.Schreiben("Config", "Frachtmarkt", Truck_Daten.FRACHTMARKT);
 
                 SoundPlayer.Sound_Tour_Gestartet();
@@ -532,8 +485,8 @@ namespace Janus_Client_V1
                 }
 
                 post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
-
                 string response = API.HTTPSRequestPost(API.job_cancel, post_param);
+                Console.WriteLine(response);
 
                 if(Truck_Daten.SPIEL == "Ets2")
                 {
@@ -542,8 +495,6 @@ namespace Janus_Client_V1
                 {
                     REG.Schreiben("Config", "TOUR_ID_ATS", "");
                 }
-
-                REG.Schreiben("Config", "Frachtmarkt", "");
 
                 SoundPlayer.Sound_Tour_Abgebrochen();
                 job_update_timer.Stop();
@@ -573,18 +524,17 @@ namespace Janus_Client_V1
                 {
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
                 }
-                //post_param.Add("FRACHTSCHADEN_ABGABE", Truck_Daten.FRACHTSCHADEN_ABGABE.ToString());
+
+                //post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 post_param.Add("STRECKE", Truck_Daten.ABGABE_GEF_STRECKE.ToString());
-                post_param.Add("EARNED_XP", Truck_Daten.EARNED_XP.ToString());
                 string response = API.HTTPSRequestPost(API.job_finish, post_param);
+
                     if (Truck_Daten.SPIEL == "Ets2") {
-                            REG.Schreiben("Config", "TOUR_ID_ETS2", "");
+                        REG.Schreiben("Config", "TOUR_ID_ETS2", "");
                         } else
                         {
                             REG.Schreiben("Config", "TOUR_ID_ATS", "");
                     }
-
-                REG.Schreiben("Config", "Frachtmarkt", "");
 
                 SoundPlayer.Sound_Tour_Beendet();
 
@@ -692,15 +642,13 @@ namespace Janus_Client_V1
             Logging.WriteClientLog("[INFO] Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
-
-
         private void TelemetryRefuelPayed(object sender, EventArgs e)
         {
             try
             {
                 if (string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2")) && string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS")))
                 {
-                    tour_id_tanken = "";
+                    tour_id_tanken = "0";
                 }
                 else
                 {
@@ -727,6 +675,7 @@ namespace Janus_Client_V1
             {
                 Logging.WriteClientLog("[ERROR] Fehler bei RefuelPayed " + ex.Message);
             }
+           
         }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
@@ -740,8 +689,6 @@ namespace Janus_Client_V1
 
                     Truck_Daten.TELEMETRY_VERSION = "Telemetry: " + data.TelemetryVersion.Major.ToString() + "." + data.TelemetryVersion.Minor.ToString();
                     Truck_Daten.DLL_VERSION = "DLL: " + data.DllVersion.ToString();
-                    Truck_Daten.GAMEVERSION = data.GameVersion.Major + "." + data.GameVersion.Minor;
-
                     Truck_Daten.EURO_DOLLAR = Truck_Daten.SPIEL == "Ets2" ? "€" : "$";
                     Truck_Daten.TONNEN_LBS = Truck_Daten.SPIEL == "Ets2" ? " t " : " lb ";
                     Truck_Daten.LITER_GALLONEN = (Truck_Daten.SPIEL == "Ets2") ? " L" : " Gal.";
@@ -769,26 +716,19 @@ namespace Janus_Client_V1
                     Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass / 1000).ToString();
                     Truck_Daten.GEWICHT2 = (int)(data.JobValues.CargoValues.Mass / 1000);
 
-                    
-                    
+                    Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
+                    Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
 
                     
                     if(Truck_Daten.SPIEL == "Ets2")
                     {
-                        Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
-                        Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
-
-                        Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
                         Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1000;
                     } else
                     {
-                        Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm / 1609;
-                        Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm / 1609;
-
-                        Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance / 1609;
                         Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1609;
-
                     }
+
+                    Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
 
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
@@ -811,9 +751,12 @@ namespace Janus_Client_V1
                     Truck_Daten.BLINKER_LINKS = data.TruckValues.CurrentValues.LightsValues.BlinkerLeftOn;
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
                     Truck_Daten.GEAR = data.TruckValues.CurrentValues.MotorValues.GearValues.Selected;
+              
+
                     Truck_Daten.STANDLICHT = data.TruckValues.CurrentValues.LightsValues.Parking;
                     Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
                     Truck_Daten.FERNLICHT = data.TruckValues.CurrentValues.LightsValues.BeamHigh;
+
                     Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
                     Truck_Daten.TRAILER_ANGEHANGEN = data.TrailerValues[0].Attached;
                     Truck_Daten.TEMPOLIMIT = (int)(Truck_Daten.SPIEL == "Ets2" ? Math.Round(data.NavigationValues.SpeedLimit.Kph) : Math.Round(data.NavigationValues.SpeedLimit.Mph));
@@ -864,23 +807,12 @@ namespace Janus_Client_V1
                     Truck_Daten.ABGABE_GEF_STRECKE = data.GamePlay.JobDelivered.DistanceKm;
                     Truck_Daten.AUTOPARKING = data.GamePlay.JobDelivered.AutoParked;
                     Truck_Daten.AUTOLOADING = data.GamePlay.JobDelivered.AutoLoaded;
-                    Truck_Daten.EARNED_XP = data.GamePlay.JobDelivered.EarnedXp;
-                    // TANKEN
-                    
 
-                    if(Truck_Daten.SPIEL == "Ets2")
-                    {
-                        Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
-                        Truck_Daten.FUEL_MAX = (int)data.TruckValues.ConstantsValues.CapacityValues.Fuel;
-                        Truck_Daten.FUEL_GERADE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount;
-                        Truck_Daten.STRECKE_MIT_FUEL = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Range;
-                    } else
-                    {
-                        Truck_Daten.LITER_GETANKT = (float)(data.GamePlay.RefuelEvent.Amount / 3.785);
-                        Truck_Daten.FUEL_MAX = (int)(data.TruckValues.ConstantsValues.CapacityValues.Fuel / 3.785);
-                        Truck_Daten.FUEL_GERADE = (int)(data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount / 3.785);
-                        Truck_Daten.STRECKE_MIT_FUEL = (int)(data.TruckValues.CurrentValues.DashboardValues.FuelValue.Range / 1.609);
-                    }
+                    // TANKEN
+                    Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
+                    Truck_Daten.FUEL_MAX = (int)data.TruckValues.ConstantsValues.CapacityValues.Fuel;
+                    Truck_Daten.FUEL_GERADE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount;
+                    
 
                     // Transport FERRY
                     Truck_Daten.FERRY_SOURCE_NAME = data.GamePlay.FerryEvent.SourceName;
@@ -891,6 +823,9 @@ namespace Janus_Client_V1
                     Truck_Daten.TRAIN_SOURCE_NAME = data.GamePlay.TrainEvent.SourceName;
                     Truck_Daten.TRAIN_TARGET_NAME = data.GamePlay.TrainEvent.TargetName;
                     Truck_Daten.TRAIN_PAY_AMOUNT = (int)data.GamePlay.TrainEvent.PayAmount;
+
+
+
 
                     // DISCORD
                     Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_HERSTELLER_ID, Truck_Daten.LKW_SCHADEN);
@@ -908,14 +843,13 @@ namespace Janus_Client_V1
                         }
                     }
 
-                    
+                        
+
                 }
             }
             catch
             { }
         }
-
-
 
         private void Update_Discord(string HERSTELLER, string MODELL, string FRACHT, int GEWICHT, string STARTORT, string ZIELORT, string BRAND_ID, double SCHADEN)
         {
@@ -1129,17 +1063,6 @@ namespace Janus_Client_V1
 
             anti_afk.SelectedValue = "Aus";
             anti_afk_timer.Stop();
-
-  
-            if(!string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD"))) {
-                System.Diagnostics.FileVersionInfo fi = System.Diagnostics.FileVersionInfo.GetVersionInfo(REG.Lesen("Pfade", "ETS2_PFAD"));
-                REG.Schreiben("Config", "VERSION_ETS2", fi.ProductVersion);
-            }
-            if (!string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD")))
-            {
-                System.Diagnostics.FileVersionInfo fi = System.Diagnostics.FileVersionInfo.GetVersionInfo(REG.Lesen("Pfade", "ATS_PFAD"));
-                REG.Schreiben("Config", "VERSION_ATS", fi.ProductVersion);
-            }
 
         }
 
@@ -1492,6 +1415,8 @@ namespace Janus_Client_V1
             {
                 REG.Schreiben("Config", "BG_OPACITY", (string)bg_opacity.SelectedValue);
 
+
+
                 Truck_Daten.BG_OPACITY = (string)bg_opacity.SelectedValue;
 
                 this.Hauptfenster.Opacity = (double)bg_opacity.SelectedValue;
@@ -1511,6 +1436,5 @@ namespace Janus_Client_V1
             post_param.Add("STATUS", "OFFLINE");
             string response = API.HTTPSRequestPost(API.c_online, post_param);
         }
-
     }
 }
