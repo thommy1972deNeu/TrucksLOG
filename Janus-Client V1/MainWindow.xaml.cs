@@ -686,6 +686,7 @@ namespace Janus_Client_V1
                 {
                     // ALLGEMEIN
                     Truck_Daten.SDK_AKTIVE = !data.SdkActive;
+                    Truck_Daten.SPIEL = data.Game.ToString();
 
                     Truck_Daten.TELEMETRY_VERSION = "Telemetry: " + data.TelemetryVersion.Major.ToString() + "." + data.TelemetryVersion.Minor.ToString();
                     Truck_Daten.DLL_VERSION = "DLL: " + data.DllVersion.ToString();
@@ -743,7 +744,7 @@ namespace Janus_Client_V1
                     //Truck_Daten.SPEED =  (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
                     Truck_Daten.SPEED = Truck_Daten.SPIEL == "Ets2" ? (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph : (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Mph;
 
-                    Truck_Daten.SPIEL = data.Game.ToString();
+                    
         
                     Truck_Daten.ELEKTRIK_AN = data.TruckValues.CurrentValues.ElectricEnabled;
                     Truck_Daten.MOTOR_AN = data.TruckValues.CurrentValues.EngineEnabled;
