@@ -25,6 +25,7 @@ using DiscordRPC.Logging;
 using Microsoft.Win32;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System.Net.NetworkInformation;
 
 namespace Janus_Client_V1
 {
@@ -284,10 +285,6 @@ namespace Janus_Client_V1
             } catch { }
         }
 
-
-
-
-
         private void timer_Tick(object sender, EventArgs e)
             {
             try
@@ -323,54 +320,27 @@ namespace Janus_Client_V1
                 Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
             }
 
-            if(Truck_Daten.STARTORT == "" && Truck_Daten.ZIELORT == "")
-            {
-                tour_wot_abbrechen();
-            }
 
-
+            Server_PingAsync();
         }
 
-        private void tour_wot_abbrechen()
+        protected void Server_PingAsync()
         {
+            Ping ping = new Ping();
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                PingReply pingresult_Xenonserver = ping.Send("rdbs5.xenonserver.de");
+                Server_1_Icon_Online.Visibility = Visibility.Visible;
 
-                if (Truck_Daten.SPIEL == "Ets2")
-                {
-                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
-                }
-                else
-                {
-                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
-                }
-
-                post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT);
-
-                string response = API.HTTPSRequestPost(API.job_cancel, post_param);
-
-                if (Truck_Daten.SPIEL == "Ets2")
-                {
-                    REG.Schreiben("Config", "TOUR_ID_ETS2", "");
-                }
-                else
-                {
-                    REG.Schreiben("Config", "TOUR_ID_ATS", "");
-                }
-
-                REG.Schreiben("Config", "Frachtmarkt", "");
-
-              
-                job_update_timer.Stop();
-
-                Logging.WriteClientLog("[INFO] Tour abgebrochen: " + response);
-            }
-            catch (Exception ex)
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Tour abbrechen !" + ex.Message);
+                Server_1_Icon_Offline.Visibility = Visibility.Visible;
+
+                MessageBox.Show("Die Server sind Offline.\n\nDer Client wird jetzt beendet !", "Fehler in der Kommunikation mit den Servern!", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
             }
+            
+            
         }
 
 
