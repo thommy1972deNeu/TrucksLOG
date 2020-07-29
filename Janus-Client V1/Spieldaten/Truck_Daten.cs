@@ -24,6 +24,8 @@ namespace Janus_Client_V1.Spieldaten
         private string bg_opacity;
         private int patreon_level;
         private string onlineuser;
+        private string tmp_versionen;
+
         // Truck Daten
         private string lkw_hersteller;
         private string lkw_hersteller_id;
@@ -127,7 +129,7 @@ namespace Janus_Client_V1.Spieldaten
         private double frachtschaden_abgabe;
         private bool autoparking;
         private bool autoloading;
-
+        private int earned_xp;
 
         // TRANSPORT FERRY
         private int ferry_pay_amount;
@@ -143,6 +145,32 @@ namespace Janus_Client_V1.Spieldaten
         private int rest_km_sa;
         private int gesamt_km_sa;
         // -----------------------------------------------------------------------------------
+        public string TMP_VERSIONEN
+        {
+            get { return tmp_versionen; }
+            set
+            {
+                if (tmp_versionen != value)
+                {
+                    tmp_versionen = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+        public int EARNED_XP
+        {
+            get { return earned_xp; }
+            set
+            {
+                if (earned_xp != value)
+                {
+                    earned_xp = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public string ONLINEUSER
         {

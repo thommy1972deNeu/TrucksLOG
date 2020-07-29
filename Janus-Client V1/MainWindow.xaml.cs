@@ -66,8 +66,7 @@ namespace Janus_Client_V1
             // BETA_CHECK();
 
             Lade_Voreinstellungen();
-
-        
+            lade_GameVersionen();
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -100,7 +99,6 @@ namespace Janus_Client_V1
 
             // ANTI_AFK TIMER
             anti_afk_timer.Interval = TimeSpan.FromMinutes(Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER")));
-            // anti_afk_timer.Interval = TimeSpan.FromMinutes(1);
 
             if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")))
             {
@@ -292,6 +290,7 @@ namespace Janus_Client_V1
             {
             try
             {
+
                 lade_Patreon();
                 setzt_antiAFK();
 
@@ -366,7 +365,25 @@ namespace Janus_Client_V1
             }
             catch
             {
-                //MessageBox.Show("Fehler beim Abrufen PS!" + ex.Message + ex.StackTrace);
+                Truck_Daten.PATREON_LEVEL = 0;
+            }
+        }
+
+
+        private void lade_GameVersionen()
+        {
+            try
+            {
+                string unixTimestamp = Convert.ToString((int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("TIMESTAMP", unixTimestamp);
+                string response = API.HTTPSRequestPost(API.tmp_versionen, post_param);
+                Truck_Daten.TMP_VERSIONEN = response;
+                ZEIGE_TMP.Content += "\n" + Truck_Daten.TMP_VERSIONEN;
+            }
+            catch
+            {
                 Truck_Daten.PATREON_LEVEL = 0;
             }
         }
@@ -527,6 +544,9 @@ namespace Janus_Client_V1
 
                 //post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 post_param.Add("STRECKE", Truck_Daten.ABGABE_GEF_STRECKE.ToString());
+                post_param.Add("EARNED_XP", Truck_Daten.EARNED_XP.ToString());
+                post_param.Add("AUTOPARKING", Truck_Daten.AUTOPARKING.ToString());
+                post_param.Add("AUTOLOADING", Truck_Daten.AUTOLOADING.ToString());
                 string response = API.HTTPSRequestPost(API.job_finish, post_param);
 
                     if (Truck_Daten.SPIEL == "Ets2") {
@@ -713,23 +733,35 @@ namespace Janus_Client_V1
                     Truck_Daten.LADUNG_NAME = data.JobValues.CargoValues.Name;
                     Truck_Daten.LADUNG_ID = data.JobValues.CargoValues.Id;
 
-                    // Gewicht
-                    Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass / 1000).ToString();
-                    Truck_Daten.GEWICHT2 = (int)(data.JobValues.CargoValues.Mass / 1000);
 
-                    Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
-                    Truck_Daten.REST_KM = (float)data.NavigationValues.NavigationDistance;
-
-                    
-                    if(Truck_Daten.SPIEL == "Ets2")
+                    if(Truck_Daten.SPIEL == "Ats")
                     {
-                        Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1000;
+                        Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass * 2.205 / 1000).ToString();
+                        Truck_Daten.GEWICHT2 = (int)(data.JobValues.CargoValues.Mass * 2.205 / 1000);
+                       
+
+                        Truck_Daten.GESAMT_KM = (float)(data.JobValues.PlannedDistanceKm / 1.609);
+                        Truck_Daten.REST_KM = (float)data.JobValues.PlannedDistanceKm / 1609;
+
+                        Truck_Daten.GESAMT_KM_SA = (int)(data.JobValues.PlannedDistanceKm / 1.609);
+                        Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1609;
                     } else
                     {
-                        Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1609;
+                        Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass / 1000).ToString();
+                        Truck_Daten.GEWICHT2 = (int)(data.JobValues.CargoValues.Mass / 1000);
+
+                        Truck_Daten.GESAMT_KM = (float)data.JobValues.PlannedDistanceKm;
+                        Truck_Daten.REST_KM = (float)data.JobValues.PlannedDistanceKm;
+
+                        Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
+                        Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance;
                     }
 
-                    Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
+
+                    //MessageBox.Show(Truck_Daten.REST_KM_SA.ToString());
+                
+           
+                    //Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
 
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
@@ -744,8 +776,6 @@ namespace Janus_Client_V1
                     //Truck_Daten.SPEED =  (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
                     Truck_Daten.SPEED = Truck_Daten.SPIEL == "Ets2" ? (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph : (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Mph;
 
-                    
-        
                     Truck_Daten.ELEKTRIK_AN = data.TruckValues.CurrentValues.ElectricEnabled;
                     Truck_Daten.MOTOR_AN = data.TruckValues.CurrentValues.EngineEnabled;
                     Truck_Daten.PARKING_BRAKE = data.TruckValues.CurrentValues.MotorValues.BrakeValues.ParkingBrake;
@@ -753,12 +783,12 @@ namespace Janus_Client_V1
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
                     Truck_Daten.GEAR = data.TruckValues.CurrentValues.MotorValues.GearValues.Selected;
               
-
+                    // LICHTER
                     Truck_Daten.STANDLICHT = data.TruckValues.CurrentValues.LightsValues.Parking;
                     Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
                     Truck_Daten.FERNLICHT = data.TruckValues.CurrentValues.LightsValues.BeamHigh;
-
                     Truck_Daten.BREMSLICHT = data.TruckValues.CurrentValues.LightsValues.Brake;
+
                     Truck_Daten.TRAILER_ANGEHANGEN = data.TrailerValues[0].Attached;
                     Truck_Daten.TEMPOLIMIT = (int)(Truck_Daten.SPIEL == "Ets2" ? Math.Round(data.NavigationValues.SpeedLimit.Kph) : Math.Round(data.NavigationValues.SpeedLimit.Mph));
                     Truck_Daten.AIR_WARNUNG = data.TruckValues.CurrentValues.DashboardValues.WarningValues.AirPressure;
@@ -808,7 +838,7 @@ namespace Janus_Client_V1
                     Truck_Daten.ABGABE_GEF_STRECKE = data.GamePlay.JobDelivered.DistanceKm;
                     Truck_Daten.AUTOPARKING = data.GamePlay.JobDelivered.AutoParked;
                     Truck_Daten.AUTOLOADING = data.GamePlay.JobDelivered.AutoLoaded;
-
+                    Truck_Daten.EARNED_XP = data.GamePlay.JobDelivered.EarnedXp;
                     // TANKEN
                     Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
                     Truck_Daten.FUEL_MAX = (int)data.TruckValues.ConstantsValues.CapacityValues.Fuel;
@@ -1314,6 +1344,7 @@ namespace Janus_Client_V1
 
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
         {
+            AutoUpdater.ShowSkipButton = false;
             AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();

@@ -26,6 +26,7 @@ namespace Janus_Client_V1.Klassen
         public static string email_daten = server + "email_daten.php";
         public static string key_check = server + "key_check.php";
         public static string c_online = server + "c_online.php";
+        public static string tmp_versionen = server + "tmp_version.php";
         public static string user_zu_schnell = server + "zu_schnell.php";
         public static string updatetext_uri = "http://clientupdates.projekt-janus.de/changelog.html";
         public static string useronline_url = "https://projekt-janus.de/api/client_useronline.php";
