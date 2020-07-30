@@ -384,7 +384,7 @@ namespace Janus_Client_V1
             }
             catch
             {
-                Truck_Daten.PATREON_LEVEL = 0;
+                Truck_Daten.TMP_VERSIONEN = "Ladefehler...";
             }
         }
 
@@ -754,9 +754,10 @@ namespace Janus_Client_V1
                         Truck_Daten.REST_KM = (float)data.JobValues.PlannedDistanceKm;
 
                         Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
-                        Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance;
+                        Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1000;
                     }
 
+                    
 
                     //MessageBox.Show(Truck_Daten.REST_KM_SA.ToString());
                 
@@ -767,7 +768,7 @@ namespace Janus_Client_V1
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
                     Truck_Daten.CARGO_LOADED = data.JobValues.CargoLoaded;
                     Truck_Daten.GEF_STRECKE = (int)data.GamePlay.JobDelivered.DistanceKm;
-
+                    Truck_Daten.RESTSTRECKE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Range;
                     // LKW DATEN
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;

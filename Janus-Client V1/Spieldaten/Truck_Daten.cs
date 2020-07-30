@@ -123,7 +123,7 @@ namespace Janus_Client_V1.Spieldaten
 
         // Tanken
         private float liter_getankt;
-
+        private int reststrecke;
 
         // JOB ABGABE
         private double frachtschaden_abgabe;
@@ -145,6 +145,19 @@ namespace Janus_Client_V1.Spieldaten
         private int rest_km_sa;
         private int gesamt_km_sa;
         // -----------------------------------------------------------------------------------
+        public int RESTSTRECKE
+        {
+            get { return reststrecke; }
+            set
+            {
+                if (reststrecke != value)
+                {
+                    reststrecke = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public string TMP_VERSIONEN
         {
             get { return tmp_versionen; }

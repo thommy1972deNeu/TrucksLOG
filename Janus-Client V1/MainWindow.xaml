@@ -476,8 +476,8 @@
             <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="45,28,45,32" Foreground="Black" Height="10" Width="10"/>
 
             <!-- TANKANZEIGE -->
-            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="16" Grid.ColumnSpan="3" VerticalAlignment="Center" Width="180" HorizontalAlignment="Left" Height="50" Margin="0,10">
-                <mah:MetroProgressBar Height="50" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="4" VerticalAlignment="Center" Width="250" HorizontalAlignment="Left" Height="80" Margin="0,20,0,0">
+                <mah:MetroProgressBar Height="80" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
                     <mah:MetroProgressBar.Foreground>
                         <LinearGradientBrush EndPoint="0,1" StartPoint="1,0">
                             <GradientStop Color="#FF3AFF00"/>
@@ -487,10 +487,17 @@
                 </mah:MetroProgressBar>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Image Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Width="30" Height="30" Margin="10,-50,0,0"/>
-                    <Label Content="{Binding FUEL_GERADE}" Margin="5,-50,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
-                    <Label Content="L" Margin="0,-50,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                    <Image Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Width="30" Height="30" Margin="10,-120,0,0"/>
+                    <Label Content="{Binding FUEL_GERADE}" Margin="5,-120,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                    <Label Content="L" Margin="0,-120,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
                 </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Image Source="{iconPacks:MaterialImage Kind=MapMarkerDistance}" Width="30" Height="30" Margin="10,-40,0,0"/>
+                    <Label Content="{Binding RESTSTRECKE}" Margin="5,-40,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                    <Label Content="KM" Margin="0,-40,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                </StackPanel>
+                
             </StackPanel>
 
 
@@ -536,7 +543,7 @@
             </Border>
 
             <!-- PARKING BRAKE -->
-            <Border x:Name="BRAKE" Grid.Row="1" Grid.Column="18" Grid.RowSpan="1" Background="red" BorderBrush="Yellow" BorderThickness="2" CornerRadius="100" Visibility="{Binding PARKING_BRAKE, Converter={StaticResource parking_brake}}">
+            <Border x:Name="BRAKE" Grid.Row="1" Grid.Column="14" Grid.RowSpan="1" Grid.ColumnSpan="3" Background="red" Margin="0,0,0,0" BorderBrush="Yellow" Width="130" HorizontalAlignment="Left" BorderThickness="2" CornerRadius="100" Visibility="{Binding PARKING_BRAKE, Converter={StaticResource parking_brake}}">
                 <Image Source="{iconPacks:MaterialImage Kind=CarBrakeParking}" Margin="10" Visibility="{Binding PARKING_BRAKE, Converter={StaticResource parking_brake}}"/>
             </Border>
 
