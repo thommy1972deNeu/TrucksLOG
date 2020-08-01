@@ -131,7 +131,7 @@
 
                         <Button x:Name="anti_afk_text_save" Width="150" Height="40" Click="anti_afk_text_save_Click" Content="Anti-AFK speichern" Margin="0,0,0,10" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
                         <Separator/>
-                        
+
                         <Label Content="Hintergrund" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Label Content="Hintergrundbild:" HorizontalAlignment="Center" FontSize="14"/>
                         <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" Margin="0,0,0,20">
@@ -179,8 +179,8 @@
                             <ComboBoxItem Tag="0.2">20 %</ComboBoxItem>
                             <ComboBoxItem Tag="0.1">10 %</ComboBoxItem>
                         </ComboBox>
-                        
-                        
+
+
                         <Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
 
                         <Separator Margin="0,20,0,20"/>
@@ -226,19 +226,30 @@
                                 <TextBlock Width="160" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap">Werde Unterstützer des Projekts</TextBlock>
                             </StackPanel>
                         </Button>
+                        
+                        <Separator/>
+                        <Label Content="Suche Client Updates" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
+                        <Button x:Name="Client_Updates" Click="Client_Update_Manuell" Content="Suche manuell nach Updates" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
 
                         <Separator/>
                         <Label Content="Client-Reset" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Button x:Name="Werksteinstellungen" Click="Werksteinstellungen_Click" Content="Client RESET!" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
+
+                        <Separator/>
+                        <Label Content="ETS-Tour löschen" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
+                        <Button x:Name="ETS_TOUR_delete" Click="ets_tour_delete" Content="ETS Tour löschen" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
+                       
+                        <Separator/>
+                        <Label Content="ATS-Tour löschen" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
+                        <Button x:Name="ATS_TOUR_delete" Click="ats_tour_delete" Content="ATS Tour löschen" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
+
 
                     </StackPanel>
                 </ScrollViewer>
             </mah:Flyout>
 
             <mah:Flyout x:Name="RightFlyOut" Width="600" Position="Right" Foreground="White">
-                <mah:Flyout.Background>
-                    <ImageBrush ImageSource="bg2.png"/>
-                </mah:Flyout.Background>
+           
                 <StackPanel Orientation="Vertical">
                     <Label FontSize="20" x:Name="credit_text" Margin="30,0,0,0"/>
                     <Button Width="300" Click="Andras_Click">
@@ -248,7 +259,6 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
-
                 </StackPanel>
 
             </mah:Flyout>
@@ -359,7 +369,7 @@
                 </ToggleButton.ContentTemplate>
             </ToggleButton>
 
-          
+
 
             <!-- DISABLED WEIL DIE TELE AUS GEHT IM MINIMIZE
             <Button Click="Minimize_Window" ToolTip="Minimiere das Fenster">
@@ -388,7 +398,7 @@
                 </StackPanel>
 
             </StatusBarItem>
-            
+
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <StatusBarItem x:Name="status_bar_version"/>
@@ -435,8 +445,8 @@
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
                 <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="101"/>
-                <ColumnDefinition Width="99"/>
+                <ColumnDefinition Width="59"/>
+                <ColumnDefinition Width="141"/>
             </Grid.ColumnDefinitions>
 
 
@@ -451,7 +461,7 @@
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="ETS2 im Singel-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="ATS im Single-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-         
+   
             <!-- WAITING ZONE ENDE-->
 
             <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" Opacity="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
@@ -476,7 +486,7 @@
             <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="45,28,45,32" Foreground="Black" Height="10" Width="10"/>
 
             <!-- TANKANZEIGE -->
-            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="4" VerticalAlignment="Center" Width="250" HorizontalAlignment="Left" Height="80" Margin="0,20,0,0">
+            <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Center" Width="250" HorizontalAlignment="Left" Height="80" Margin="0,33,0,14">
                 <mah:MetroProgressBar Height="80" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
                     <mah:MetroProgressBar.Foreground>
                         <LinearGradientBrush EndPoint="0,1" StartPoint="1,0">
@@ -489,15 +499,15 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Image Source="{iconPacks:FontAwesomeImage Kind=GasPumpSolid}" Width="30" Height="30" Margin="10,-120,0,0"/>
                     <Label Content="{Binding FUEL_GERADE}" Margin="5,-120,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
-                    <Label Content="L" Margin="0,-120,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                    <Label Content="{Binding LITER_GALLONEN}" Margin="0,-120,0,0" Width="80" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Image Source="{iconPacks:MaterialImage Kind=MapMarkerDistance}" Width="30" Height="30" Margin="10,-40,0,0"/>
                     <Label Content="{Binding RESTSTRECKE}" Margin="5,-40,-5,0" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
-                    <Label Content="KM" Margin="0,-40,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
+                    <Label Content="{Binding KM_MI}" Margin="0,-40,0,0" Width="40" Height="40" VerticalAlignment="Center" FontSize="22" Foreground="Black"/>
                 </StackPanel>
-                
+
             </StackPanel>
 
 
@@ -509,8 +519,8 @@
             <Image Grid.Row="1" Grid.Column="12" Source="{iconPacks:MaterialLightImage Kind=ArrowRightCircle}" Margin="3" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
             <!-- BLINKER ENDE -->
 
-            
-            
+
+
             <!-- LICENSE PLATE -->
 
 
@@ -520,22 +530,22 @@
 
             <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" FontSize="30" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
 
-            <Border Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,5,0,0" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Margin="0,-5,0,0"/>
+            <Border Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,5,0,0" Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="3" Margin="0,25,0,0"/>
 
             <Label Content="{Binding LKW_HERSTELLER}" Grid.Row="14" Grid.RowSpan="2" FontSize="16" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Grid.Column="0" HorizontalContentAlignment="Right" Foreground="Black" Grid.ColumnSpan="1" Margin="0"/>
             <Label Content="{Binding LKW_MODELL}" Grid.Row="14" Grid.RowSpan="2" FontSize="16" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Grid.Column="1" Grid.ColumnSpan="2" Foreground="Black" Margin="0"/>
 
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="14" Grid.RowSpan="2" VerticalAlignment="Stretch" Grid.ColumnSpan="3" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="17" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="18" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,0,5,0" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Margin="0" Grid.ColumnSpan="2"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="15" Grid.RowSpan="2" VerticalAlignment="Stretch" Grid.ColumnSpan="3" FontSize="16" x:Name="Frachtschaden" Content="Frachtschaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="18" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" x:Name="Schaden" Content="{Binding FRACHTSCHADEN2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="19" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="16" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,0,5,0" x:Name="Schaden2" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
 
             <Label Grid.Row="14" Foreground="Black" Grid.Column="4" Grid.RowSpan="2" VerticalAlignment="Stretch" Grid.ColumnSpan="3" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,0,0,0" FontSize="14" x:Name="LKW_SCHADEN_1" Content="LKW-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
             <Label Grid.Row="14" Foreground="Black" Grid.Column="7" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="14" x:Name="LKW_SCHADEN_2" Content="{Binding LKW_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
             <Label Grid.Row="14" Foreground="Black" Grid.Column="8" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="14" x:Name="LKW_SCHADEN_3" Content="%" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
 
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="9" Grid.RowSpan="2" VerticalAlignment="Stretch" Grid.ColumnSpan="3" FontSize="14" x:Name="TRAILER_SCHADEN_1" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,0,0,0" Content="Trailer-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="12" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="14" x:Name="TRAILERSCHADEN_2" Content="{Binding TRAILER_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
-            <Label Grid.Row="14" Foreground="Black" Grid.Column="13" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="14" x:Name="TRAILER_SCHADEN_3" Content="%" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="10" Grid.RowSpan="2" VerticalAlignment="Stretch" Grid.ColumnSpan="3" FontSize="14" x:Name="TRAILER_SCHADEN_1" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="5,0,0,0" Content="Trailer-Schaden:" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold" Margin="0"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="13" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="14" x:Name="TRAILERSCHADEN_2" Content="{Binding TRAILER_SCHADEN}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontFamily="Oswald" FontWeight="Bold"/>
+            <Label Grid.Row="14" Foreground="Black" Grid.Column="14" Grid.RowSpan="2" VerticalAlignment="Stretch" FontSize="14" x:Name="TRAILER_SCHADEN_3" Content="%" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,0,5,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontFamily="Oswald" FontWeight="Bold"/>
 
             <!-- TEMPOLIMIT -->
             <Border x:Name="TEMPOLIMIT" BorderBrush="Red" BorderThickness="20" CornerRadius="150" Grid.Row="1" Grid.Column="0" Height="150" Grid.RowSpan="2" VerticalAlignment="Top" Grid.ColumnSpan="2" Background="White" Margin="20,0,21,0">
@@ -549,7 +559,7 @@
 
             <!-- Streckenverlauf -->
             <Grid Grid.Row="12" Grid.Column="2" Grid.ColumnSpan="16" Grid.RowSpan="2" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}">
-              
+
                 <mah:MetroProgressBar 
                     Minimum="0"
                     Height="50"
@@ -572,7 +582,7 @@
                            FontSize="30"
                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
            VerticalAlignment="Center" />
-                <TextBlock Text="{Binding KM_MI}"  
+                    <TextBlock Text="{Binding KM_MI}"  
                            TextAlignment="Left"
                            FontSize="30"
                            Margin="10,0,0,0"

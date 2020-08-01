@@ -39,5 +39,12 @@ namespace Janus_Client_V1.Klassen
             System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Strafe_Erhalten);
             player.Play();
         }
+
+        public static void Sound_Starting()
+        {
+            System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Starting);
+            player.Play();
+        }
+
     }
 }

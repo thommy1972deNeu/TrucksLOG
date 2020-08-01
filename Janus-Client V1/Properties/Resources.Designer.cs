@@ -112,6 +112,15 @@ namespace Janus_Client_V1.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Starting {
+            get {
+                return ResourceManager.GetStream("Starting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream Strafe_Erhalten {
             get {
                 return ResourceManager.GetStream("Strafe_Erhalten", resourceCulture);

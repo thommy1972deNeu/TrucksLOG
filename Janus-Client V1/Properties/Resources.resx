@@ -133,6 +133,9 @@
   <data name="scs_telemetry" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\scs-telemetry.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Starting" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Starting.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Strafe_Erhalten" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Strafe_Erhalten.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

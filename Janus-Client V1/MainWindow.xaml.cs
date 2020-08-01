@@ -30,6 +30,8 @@ namespace Janus_Client_V1
 {
     public partial class MainWindow
     {
+        public int beta = 0;
+
         public DiscordRpcClient client;
         private static RichPresence jobRPC;
         private const string DiscordAppID = "730374187025170472";
@@ -62,8 +64,8 @@ namespace Janus_Client_V1
 
 
             InitializeComponent();
+
             Logging.Make_Log_File();
-            // BETA_CHECK();
 
             Lade_Voreinstellungen();
             lade_GameVersionen();
@@ -78,12 +80,12 @@ namespace Janus_Client_V1
 
             credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
             credit_text.Content += " - Quasselboy Patti [COO]" + Environment.NewLine;
-            credit_text.Content += " - Daniel1983 [Beta-Tester]" + Environment.NewLine;
-            credit_text.Content += " - TOBI_𝟙Ƽ⊘५ [Beta-Tester]" + Environment.NewLine;
+            credit_text.Content += " - Daniel1983 [Main-Support][Beta-Tester]" + Environment.NewLine;
+            credit_text.Content += " - TOBI_𝟙Ƽ⊘५ [Main-Support][Beta-Tester]" + Environment.NewLine;
             credit_text.Content += " - Angelo Riechmann [WebDesigner]" + Environment.NewLine;
-            credit_text.Content += "Einen Extra Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der Zeit unterstützt." + Environment.NewLine;
-            credit_text.Content += "und natürlich auch an" + Environment.NewLine;
-            credit_text.Content += "unsere(n) Live-Streamer:" + Environment.NewLine;
+            credit_text.Content += "Einen Super-Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der PJ-Zeit unterstützt." + Environment.NewLine;
+            credit_text.Content += "Und natürlich auch an" + Environment.NewLine;
+            credit_text.Content += "unseren One & Only-Live-Streamer:" + Environment.NewLine;
 
             Logging.WriteClientLog("Version: " + CLIENT_VERSION);
 
@@ -93,6 +95,9 @@ namespace Janus_Client_V1
 
             zu_schnell.Interval = TimeSpan.FromSeconds(1);
             zu_schnell.Tick += zu_schnell_tick;
+
+            if (REG.Lesen("Config", "Systemsounds") == "An")
+                SoundPlayer.Sound_Willkommen();
 
             // JOB UPDATE TIMER
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
@@ -140,6 +145,7 @@ namespace Janus_Client_V1
                 return;
             }
 
+           
         }
 
         private static bool AlreadyRunning()
@@ -290,6 +296,8 @@ namespace Janus_Client_V1
             {
             try
             {
+                ETS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2")) ? false : true;
+                ATS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS")) ? false : true;
 
                 lade_Patreon();
                 setzt_antiAFK();
@@ -768,7 +776,7 @@ namespace Janus_Client_V1
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
                     Truck_Daten.CARGO_LOADED = data.JobValues.CargoLoaded;
                     Truck_Daten.GEF_STRECKE = (int)data.GamePlay.JobDelivered.DistanceKm;
-                    Truck_Daten.RESTSTRECKE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Range;
+                    
                     // LKW DATEN
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
@@ -841,9 +849,20 @@ namespace Janus_Client_V1
                     Truck_Daten.AUTOLOADING = data.GamePlay.JobDelivered.AutoLoaded;
                     Truck_Daten.EARNED_XP = data.GamePlay.JobDelivered.EarnedXp;
                     // TANKEN
+
                     Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
-                    Truck_Daten.FUEL_MAX = (int)data.TruckValues.ConstantsValues.CapacityValues.Fuel;
-                    Truck_Daten.FUEL_GERADE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount;
+                    if(Truck_Daten.SPIEL == "Ets2")
+                    {
+                        Truck_Daten.FUEL_MAX = (int)data.TruckValues.ConstantsValues.CapacityValues.Fuel;
+                        Truck_Daten.FUEL_GERADE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount;
+                        Truck_Daten.RESTSTRECKE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Range;
+                    } else
+                    {
+                        Truck_Daten.RESTSTRECKE = (int)(data.TruckValues.CurrentValues.DashboardValues.FuelValue.Range / 1.609);
+                        Truck_Daten.FUEL_MAX = (int)(data.TruckValues.ConstantsValues.CapacityValues.Fuel / 3.785);
+                        Truck_Daten.FUEL_GERADE = (int)(data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount / 3.785);
+                    }
+                
                     
 
                     // Transport FERRY
@@ -1037,6 +1056,9 @@ namespace Janus_Client_V1
                 {
                     Logging.WriteClientLog("Fehler beim setzen des DataContext" + ex.Message);
                 }
+
+                ETS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2")) ? false : true;
+                ATS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS")) ? false : true;
 
                 Logging.WriteClientLog("Voreinstellungen geladen !");
             }
@@ -1346,7 +1368,15 @@ namespace Janus_Client_V1
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
         {
             AutoUpdater.ShowSkipButton = false;
-            AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
+
+            if(beta == 1)
+            {
+                AutoUpdater.Start("http://betaclient.projekt-janus.de/version.xml");
+            } else
+            {
+                AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
+            }
+            
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
@@ -1468,6 +1498,39 @@ namespace Janus_Client_V1
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("STATUS", "OFFLINE");
             string response = API.HTTPSRequestPost(API.c_online, post_param);
+        }
+
+        private void ets_tour_delete(object sender, RoutedEventArgs e)
+        {
+
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            string response = API.HTTPSRequestPost(API.delete_tour, post_param);
+
+                REG.Schreiben("Config", "TOUR_ID_ETS2", "");
+            ETS_TOUR_delete.IsEnabled = false;
+                msg.Schreiben("Tour ETS2 gelöscht", "Die Tour wurde in ETS2 entfernt. Du kannst jetzt einfach eine neue Tour starten...");
+
+            
+        }
+
+        private void ats_tour_delete(object sender, RoutedEventArgs e)
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            string response = API.HTTPSRequestPost(API.delete_tour, post_param);
+    
+                REG.Schreiben("Config", "TOUR_ID_ATS", "");
+            ATS_TOUR_delete.IsEnabled = false;
+                msg.Schreiben("Tour ATS gelöscht", "Die Tour wurde in ATS entfernt. Du kannst jetzt einfach eine neue Tour starten...");
+
+       }
+
+        private void Client_Update_Manuell(object sender, RoutedEventArgs e)
+        {
+            AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
         }
     }
 }

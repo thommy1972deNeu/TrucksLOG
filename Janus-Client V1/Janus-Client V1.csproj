@@ -443,6 +443,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Starting.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Resource Include="icons\kupplung.png" />
     <Resource Include="Images\key_image.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
