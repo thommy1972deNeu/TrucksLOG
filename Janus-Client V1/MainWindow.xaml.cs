@@ -36,7 +36,7 @@ namespace Janus_Client_V1
         private static RichPresence jobRPC;
         private const string DiscordAppID = "730374187025170472";
         private const string DefaultDiscordLargeImageKey = "pj_512";
-
+        private string UpdateString = "";
 
         public string CLIENT_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private readonly MSG msg = new MSG();
@@ -60,15 +60,14 @@ namespace Janus_Client_V1
 
         public MainWindow()
         {
-
-
-
             InitializeComponent();
 
             Logging.Make_Log_File();
 
             Lade_Voreinstellungen();
             lade_GameVersionen();
+            BETA_CHECK();
+
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -228,7 +227,7 @@ namespace Janus_Client_V1
 
             } catch (Exception ex)
             {
-                Logging.WriteClientLog("[ERROR] Fehler bei SendKeys " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler bei anti_afk_timer " + ex.Message);
             }
 
         }
@@ -243,7 +242,7 @@ namespace Janus_Client_V1
             }
             catch (Exception ex)
             {
-                Logging.WriteClientLog("[ERROR] Fehler bei SendKeys " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler bei zu_schnell_tick " + ex.Message);
             }
 
         }
@@ -343,17 +342,14 @@ namespace Janus_Client_V1
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 int response = Convert.ToInt32(API.HTTPSRequestPost(API.beta, post_param));
 
-                if (response == 0)
+                if (response == 1)
                 {
-                    MessageBox.Show("Du bist leider kein BETA-TESTER oder noch nicht freigeschaltet." + Environment.NewLine + "Bitte wende dich auf unserem Discord Server: https://discord.gg/jvD2Y7H an einen der Verantwortlichen." + Environment.NewLine + Environment.NewLine + "Diese Anwendung wird jetzt beendet !", "Fehler BETA-Tester", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                    string key = REG.Lesen("Config", "CLIENT_KEY");
-                    Logging.WriteClientLog("[DISMISS] Fehlversuch sich als Beta-Tester anzumelden wurde an die Administration gemeldet !");
-                    EmailHandler mail = new EmailHandler();
-                    mail.Email_BETA_TESTER_FEHLER(key, "Unzulässige Beta-Tester Anmeldung");
+                    UpdateString = "http://betaclient.projekt-janus.de/version.xml";
+                    beta_tester_icon.Visibility = Visibility.Visible;
                 } else
                 {
-                    Logging.WriteClientLog("[DISMISS] BETA-Tester Nutzerstatus: " + response);
+                    UpdateString = "http://clientupdates.projekt-janus.de/version.xml";
+                    beta_tester_icon.Visibility = Visibility.Hidden;
                 }
             } catch (Exception ex)
             {
@@ -1368,15 +1364,7 @@ namespace Janus_Client_V1
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
         {
             AutoUpdater.ShowSkipButton = false;
-
-            if(beta == 1)
-            {
-                AutoUpdater.Start("http://betaclient.projekt-janus.de/version.xml");
-            } else
-            {
-                AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
-            }
-            
+            AutoUpdater.Start(UpdateString);
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
@@ -1530,7 +1518,7 @@ namespace Janus_Client_V1
 
         private void Client_Update_Manuell(object sender, RoutedEventArgs e)
         {
-            AutoUpdater.Start("http://clientupdates.projekt-janus.de/version.xml");
+                AutoUpdater.Start(UpdateString);
         }
     }
 }

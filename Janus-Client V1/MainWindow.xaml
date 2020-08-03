@@ -48,12 +48,16 @@
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl>
             <mah:Flyout x:Name="LeftFlyOut" Width="270">
+
                 <ScrollViewer Name="scrlMain"
                     CanContentScroll="True"
                     HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Auto"
                     VerticalAlignment="Stretch">
                     <StackPanel Orientation="Vertical">
+
+                        <Image x:Name="beta_tester_icon" Source="{iconPacks:FontAwesomeImage Kind=UserShieldSolid}" Width="50"/>
+
                         <Label Content="Farbschema wählen:" HorizontalAlignment="Center"/>
                         <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged" Margin="0,0,0,20">
                             <ComboBoxItem Tag="Dark.Red">Dunkel Rot</ComboBoxItem>
