@@ -56,7 +56,7 @@
                     VerticalAlignment="Stretch">
                     <StackPanel Orientation="Vertical">
 
-                        <Image x:Name="beta_tester_icon" Source="{iconPacks:FontAwesomeImage Kind=UserShieldSolid}" Width="50"/>
+                        <Image x:Name="beta_tester_icon" Width="150" Source="Resources\BETA_CLIENT.jpg"/>
 
                         <Label Content="Farbschema wählen:" HorizontalAlignment="Center"/>
                         <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged" Margin="0,0,0,20">

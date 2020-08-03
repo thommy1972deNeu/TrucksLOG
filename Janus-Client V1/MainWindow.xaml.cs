@@ -66,8 +66,6 @@ namespace Janus_Client_V1
 
             Lade_Voreinstellungen();
             lade_GameVersionen();
-            BETA_CHECK();
-
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -273,7 +271,6 @@ namespace Janus_Client_V1
                 anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
-
         }
         private void Useronline_Tick(object sender, EventArgs e)
         {
@@ -334,7 +331,7 @@ namespace Janus_Client_V1
 
 
 
-        private void BETA_CHECK()
+        private int BETA_CHECK()
         {
             try
             {
@@ -342,18 +339,12 @@ namespace Janus_Client_V1
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 int response = Convert.ToInt32(API.HTTPSRequestPost(API.beta, post_param));
 
-                if (response == 1)
-                {
-                    UpdateString = "http://betaclient.projekt-janus.de/version.xml";
-                    beta_tester_icon.Visibility = Visibility.Visible;
-                } else
-                {
-                    UpdateString = "http://clientupdates.projekt-janus.de/version.xml";
-                    beta_tester_icon.Visibility = Visibility.Hidden;
-                }
+                return response;
+
             } catch (Exception ex)
             {
                 Logging.WriteClientLog("[DISMISS] Fehler beim Abfrage des BETA-Tester-Status: " + ex.Message + ex.StackTrace);
+                return 0;
             }
         }
 
@@ -366,6 +357,8 @@ namespace Janus_Client_V1
                 string response = API.HTTPSRequestPost(API.patreon_state, post_param);
                 Truck_Daten.PATREON_LEVEL = Convert.ToInt32(response);
 
+                if (BETA_CHECK() == 1)
+                    Truck_Daten.PATREON_LEVEL = 3;
             }
             catch
             {
@@ -1024,10 +1017,6 @@ namespace Janus_Client_V1
                     Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
                 }
 
-                // Hintergrund Transparenz Beginn
-
-
-                // Hintergrund Transparenz Ende
 
                 // Pfade Auslesen Beginn
                 try

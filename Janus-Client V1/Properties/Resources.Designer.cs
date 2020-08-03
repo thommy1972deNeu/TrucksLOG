@@ -73,6 +73,16 @@ namespace Janus_Client_V1.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BETA_CLIENT {
+            get {
+                object obj = ResourceManager.GetObject("BETA_CLIENT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ets2_logo_ {
             get {
                 object obj = ResourceManager.GetObject("ets2_logo_", resourceCulture);
