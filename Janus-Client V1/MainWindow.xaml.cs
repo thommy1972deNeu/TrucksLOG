@@ -36,7 +36,7 @@ namespace Janus_Client_V1
         private static RichPresence jobRPC;
         private const string DiscordAppID = "730374187025170472";
         private const string DefaultDiscordLargeImageKey = "pj_512";
-        private string UpdateString = "";
+        private string UpdateString = "http://clientupdates.projekt-janus.de/version.xml";
 
         public string CLIENT_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private readonly MSG msg = new MSG();
@@ -204,25 +204,32 @@ namespace Janus_Client_V1
         {
             try
             {
-                if (Truck_Daten.SPEED == 0)
+                if (Truck_Daten.SDK_AKTIVE == false)
                 {
-                    if (Truck_Daten.SPIEL == "Ets2")
+                    if (Truck_Daten.SPEED == 0 && Truck_Daten.SDK_AKTIVE == false)
                     {
-                        BringMainWindowToFront("eurotrucks2");
-                    } else
-                    {
-                        BringMainWindowToFront("amtrucks");
+                        if (Truck_Daten.SPIEL == "Ets2")
+                        {
+                            BringMainWindowToFront("eurotrucks2");
+                        }
+                        else
+                        {
+                            BringMainWindowToFront("amtrucks");
+                        }
+                        sim.Keyboard.KeyPress(VirtualKeyCode.VK_Y);
+                        sim.Keyboard.TextEntry("PJ-BOT:");
+                        sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
+                        sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
+                        Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
                     }
-                    sim.Keyboard.KeyPress(VirtualKeyCode.VK_Y);
-                    sim.Keyboard.TextEntry("PJ-BOT:");
-                    sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
-                    sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-                    Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
+                    else
+                    {
+                        Logging.WriteClientLog("[INFO] Keys nicht gesendet! Kein Spiel gestartet oder Geschwindigkeit: " + Truck_Daten.SPEED);
+                    }
                 } else
                 {
-                    Logging.WriteClientLog("[INFO] Keys nicht gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
+                    Logging.WriteClientLog("[INFO] ANT-AFK ist an, aber kein Spiel gestartet...");
                 }
-
             } catch (Exception ex)
             {
                 Logging.WriteClientLog("[ERROR] Fehler bei anti_afk_timer " + ex.Message);
@@ -328,26 +335,6 @@ namespace Janus_Client_V1
 
         }
 
-
-
-
-        private int BETA_CHECK()
-        {
-            try
-            {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                int response = Convert.ToInt32(API.HTTPSRequestPost(API.beta, post_param));
-
-                return response;
-
-            } catch (Exception ex)
-            {
-                Logging.WriteClientLog("[DISMISS] Fehler beim Abfrage des BETA-Tester-Status: " + ex.Message + ex.StackTrace);
-                return 0;
-            }
-        }
-
         private void lade_Patreon()
         {
             try
@@ -357,8 +344,6 @@ namespace Janus_Client_V1
                 string response = API.HTTPSRequestPost(API.patreon_state, post_param);
                 Truck_Daten.PATREON_LEVEL = Convert.ToInt32(response);
 
-                if (BETA_CHECK() == 1)
-                    Truck_Daten.PATREON_LEVEL = 3;
             }
             catch
             {
@@ -598,6 +583,12 @@ namespace Janus_Client_V1
             {
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                if(Truck_Daten.SPIEL == "Ets2")
+                {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
+                } else {
+                    post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
+                }
                 post_param.Add("BETRAG", Truck_Daten.MAUT_BETRAG.ToString());
                 string response = API.HTTPSRequestPost(API.tollgate, post_param);
                 Console.WriteLine(response);
@@ -1024,7 +1015,10 @@ namespace Janus_Client_V1
                     ets2_content.Content = REG.Lesen("Pfade", "ETS2_PFAD") != "" ? "OK" : "Fehlt";
                     ats_content.Content = REG.Lesen("Pfade", "ATS_PFAD") != "" ? "OK" : "Fehlt";
                     tmp_content.Content = REG.Lesen("Pfade", "TMP_PFAD") != "" ? "OK" : "Fehlt";
+           
                     status_bar_version.Content = "Client Version: " + CLIENT_VERSION;
+             
+                    
                     Logging.WriteClientLog("Pfade aus REG gelesen und in Seitenmenü angezeigt !");
                 }
                 catch (Exception ex)
@@ -1374,6 +1368,7 @@ namespace Janus_Client_V1
                 {
                     msg.Schreiben("Fehler", "Starte zuerst ein Spiel !");
                     anti_afk.SelectedValue = "Aus";
+                    anti_afk_timer.Stop();
                 }
                
 
