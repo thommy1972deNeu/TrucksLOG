@@ -797,7 +797,7 @@ namespace Janus_Client_V1
                     // Fahrtinfo
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT2 + Truck_Daten.TONNEN_LBS + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.REMAININGTIME = TimeSpan.FromSeconds(data.JobValues.RemainingDeliveryTime.Value);
-                    Truck_Daten.FAHRINFO_2 = "Restzeit: " + Truck_Daten.REMAININGTIME.Hours + " Tage, " + Truck_Daten.REMAININGTIME.Minutes + " Stunden, " + Truck_Daten.REMAININGTIME.Seconds + " Minuten";
+                    Truck_Daten.FAHRINFO_2 = "Restzeit: " + Truck_Daten.REMAININGTIME.Minutes + " Std. " + Truck_Daten.REMAININGTIME.Seconds + " Min.";
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
                     Truck_Daten.POS_Y = data.TruckValues.Positioning.Cabin.Y;

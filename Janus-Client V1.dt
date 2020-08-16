@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-16"?>
-<DevTrackerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SolutionTotalEditTime="PT4H36M12.111718S" SolutionTotalViewTime="PT6H52M8.6850051S" SolutionTotalDebugTime="PT33M20.9088956S">
+<DevTrackerData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" SolutionTotalEditTime="PT4H43M59.4606598S" SolutionTotalViewTime="PT7H2M20.0828491S" SolutionTotalDebugTime="PT34M47.8980501S">
   <FileVersion>
     <Major>1</Major>
     <Minor>0</Minor>
@@ -18,56 +18,68 @@
   </ProjectsCreatedDateList>
   <SessionTimeList />
   <LastSessionTimeList>
-    <DevTrackerDataItem ViewActiveTime="PT11.6976605S" EditActiveTime="PT6.3815658S">
-      <ModifiedDate>2020-08-12T23:24:58.0607598+02:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT49.1875747S" EditActiveTime="PT2.5372411S">
+      <ModifiedDate>2020-08-16T12:28:03.3518286+02:00</ModifiedDate>
       <ModifiedBy>edvbl</ModifiedBy>
       <EditedCount>1</EditedCount>
       <ViewedCount>1</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Properties\AssemblyInfo.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
-      <CreatedDate>2020-08-12T23:24:49.8676587+02:00</CreatedDate>
+      <CreatedDate>2020-08-16T12:27:58.6648776+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT4.4144217S" EditActiveTime="PT0S">
+    <DevTrackerDataItem ViewActiveTime="PT1M26.9891545S" EditActiveTime="PT0S">
       <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
       <EditedCount>0</EditedCount>
       <ViewedCount>1</ViewedCount>
       <Item>Debug Mode</Item>
       <ItemType>DebugModeItem</ItemType>
       <ProjectName />
-      <CreatedDate>2020-08-12T23:20:58.0555195+02:00</CreatedDate>
+      <CreatedDate>2020-08-16T12:07:04.3976726+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT3M39.298334S" EditActiveTime="PT0S">
-      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
-      <EditedCount>0</EditedCount>
+    <DevTrackerDataItem ViewActiveTime="PT1M21.9797589S" EditActiveTime="PT48.7019562S">
+      <ModifiedDate>2020-08-16T12:25:42.9332105+02:00</ModifiedDate>
+      <ModifiedBy>edvbl</ModifiedBy>
+      <EditedCount>1</EditedCount>
       <ViewedCount>1</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\MainWindow.xaml</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
-      <CreatedDate>2020-08-12T23:21:06.3435703+02:00</CreatedDate>
+      <CreatedDate>2020-08-16T12:02:15.0607915+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT2M38.7043394S" EditActiveTime="PT1M22.140815S">
-      <ModifiedDate>2020-08-12T23:20:52.1286771+02:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT5M27.452658S" EditActiveTime="PT5M6.6294699S">
+      <ModifiedDate>2020-08-16T12:24:45.2257901+02:00</ModifiedDate>
       <ModifiedBy>edvbl</ModifiedBy>
       <EditedCount>1</EditedCount>
       <ViewedCount>1</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\MainWindow.xaml.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
-      <CreatedDate>2020-08-12T23:15:44.1095136+02:00</CreatedDate>
+      <CreatedDate>2020-08-16T12:01:41.856611+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT4.8131416S" EditActiveTime="PT0S">
+    <DevTrackerDataItem ViewActiveTime="PT0.9183756S" EditActiveTime="PT0S">
       <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
       <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Klassen\MSG.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
+      <CreatedDate>2020-08-16T12:02:12.0070952+02:00</CreatedDate>
+      <ViewedBy>edvbl</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT2M31.8684721S" EditActiveTime="PT1M49.4782765S">
+      <ModifiedDate>2020-08-16T12:21:05.0090589+02:00</ModifiedDate>
+      <ModifiedBy>edvbl</ModifiedBy>
+      <EditedCount>1</EditedCount>
       <ViewedCount>1</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Spieldaten\Truck_Daten.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
-      <CreatedDate>2020-08-12T23:17:45.7091435+02:00</CreatedDate>
+      <CreatedDate>2020-08-16T11:55:35.1372034+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
   </LastSessionTimeList>
@@ -104,11 +116,11 @@
       <CreatedDate>2020-08-01T11:42:38.9365032+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT42M44.4820111S" EditActiveTime="PT2M25.3730194S">
-      <ModifiedDate>2020-08-12T23:24:58.0607598+02:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT43M33.6635884S" EditActiveTime="PT2M27.9102605S">
+      <ModifiedDate>2020-08-16T12:28:03.3518286+02:00</ModifiedDate>
       <ModifiedBy>edvbl</ModifiedBy>
-      <EditedCount>15</EditedCount>
-      <ViewedCount>19</ViewedCount>
+      <EditedCount>16</EditedCount>
+      <ViewedCount>20</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Properties\AssemblyInfo.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
@@ -125,10 +137,10 @@
       <CreatedDate>2020-08-10T10:48:11.3303432+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT33M20.9088956S" EditActiveTime="PT21M51.6015164S">
+    <DevTrackerDataItem ViewActiveTime="PT34M47.8980501S" EditActiveTime="PT21M51.6015164S">
       <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
       <EditedCount>5</EditedCount>
-      <ViewedCount>21</ViewedCount>
+      <ViewedCount>22</ViewedCount>
       <Item>Debug Mode</Item>
       <ItemType>DebugModeItem</ItemType>
       <ProjectName />
@@ -177,32 +189,32 @@
       <CreatedDate>2020-08-05T19:59:18.212711+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT1H33M4.2158227S" EditActiveTime="PT58M21.3888424S">
-      <ModifiedDate>2020-08-05T20:04:39.5898898+02:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT1H34M26.1955816S" EditActiveTime="PT59M10.0907986S">
+      <ModifiedDate>2020-08-16T12:25:42.9332105+02:00</ModifiedDate>
       <ModifiedBy>edvbl</ModifiedBy>
-      <EditedCount>16</EditedCount>
-      <ViewedCount>22</ViewedCount>
+      <EditedCount>17</EditedCount>
+      <ViewedCount>23</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\MainWindow.xaml</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
       <CreatedDate>2020-07-22T07:12:58.8479863+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT4H11M20.2700157S" EditActiveTime="PT2H53M26.7544882S">
-      <ModifiedDate>2020-08-12T23:20:52.1286771+02:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT4H16M47.7226737S" EditActiveTime="PT2H58M33.3839581S">
+      <ModifiedDate>2020-08-16T12:24:45.2257901+02:00</ModifiedDate>
       <ModifiedBy>edvbl</ModifiedBy>
-      <EditedCount>20</EditedCount>
-      <ViewedCount>22</ViewedCount>
+      <EditedCount>21</EditedCount>
+      <ViewedCount>23</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\MainWindow.xaml.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
       <CreatedDate>2020-07-22T08:24:45.096781+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT2.6552857S" EditActiveTime="PT0S">
+    <DevTrackerDataItem ViewActiveTime="PT3.5736613S" EditActiveTime="PT0S">
       <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
       <EditedCount>0</EditedCount>
-      <ViewedCount>2</ViewedCount>
+      <ViewedCount>3</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Klassen\MSG.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
@@ -293,11 +305,11 @@
       <CreatedDate>2020-07-29T10:24:46.1102992+02:00</CreatedDate>
       <ViewedBy>edvbl</ViewedBy>
     </DevTrackerDataItem>
-    <DevTrackerDataItem ViewActiveTime="PT6M6.7064495S" EditActiveTime="PT4M51.6159009S">
-      <ModifiedDate>2020-07-30T07:06:56.9052125+02:00</ModifiedDate>
+    <DevTrackerDataItem ViewActiveTime="PT8M38.5749216S" EditActiveTime="PT6M41.0941774S">
+      <ModifiedDate>2020-08-16T12:21:05.0090589+02:00</ModifiedDate>
       <ModifiedBy>edvbl</ModifiedBy>
-      <EditedCount>6</EditedCount>
-      <ViewedCount>11</ViewedCount>
+      <EditedCount>7</EditedCount>
+      <ViewedCount>12</ViewedCount>
       <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Spieldaten\Truck_Daten.cs</Item>
       <ItemType>ProjectItem</ItemType>
       <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
@@ -306,6 +318,70 @@
     </DevTrackerDataItem>
   </TotalTimeList>
   <HistoryTimeList>
+    <DevTrackerDataItem ViewActiveTime="PT49.1825772S" EditActiveTime="PT2.5372411S">
+      <ModifiedDate>2020-08-16T12:28:03.3518286+02:00</ModifiedDate>
+      <ModifiedBy>edvbl</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Properties\AssemblyInfo.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
+      <CreatedDate>2020-08-16T12:27:58.6648776+02:00</CreatedDate>
+      <ViewedBy>edvbl</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT1M26.9891545S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>Debug Mode</Item>
+      <ItemType>DebugModeItem</ItemType>
+      <ProjectName />
+      <CreatedDate>2020-08-16T12:07:04.3976726+02:00</CreatedDate>
+      <ViewedBy>edvbl</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT1M21.9797589S" EditActiveTime="PT48.7019562S">
+      <ModifiedDate>2020-08-16T12:25:42.9332105+02:00</ModifiedDate>
+      <ModifiedBy>edvbl</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\MainWindow.xaml</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
+      <CreatedDate>2020-08-16T12:02:15.0607915+02:00</CreatedDate>
+      <ViewedBy>edvbl</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT0.9183756S" EditActiveTime="PT0S">
+      <ModifiedDate>0001-01-01T00:00:00</ModifiedDate>
+      <EditedCount>0</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Klassen\MSG.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
+      <CreatedDate>2020-08-16T12:02:12.0070952+02:00</CreatedDate>
+      <ViewedBy>edvbl</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT5M27.452658S" EditActiveTime="PT5M6.6294699S">
+      <ModifiedDate>2020-08-16T12:24:45.2257901+02:00</ModifiedDate>
+      <ModifiedBy>edvbl</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\MainWindow.xaml.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
+      <CreatedDate>2020-08-16T12:01:41.856611+02:00</CreatedDate>
+      <ViewedBy>edvbl</ViewedBy>
+    </DevTrackerDataItem>
+    <DevTrackerDataItem ViewActiveTime="PT2M31.8684721S" EditActiveTime="PT1M49.4782765S">
+      <ModifiedDate>2020-08-16T12:21:05.0090589+02:00</ModifiedDate>
+      <ModifiedBy>edvbl</ModifiedBy>
+      <EditedCount>1</EditedCount>
+      <ViewedCount>1</ViewedCount>
+      <Item>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Spieldaten\Truck_Daten.cs</Item>
+      <ItemType>ProjectItem</ItemType>
+      <ProjectName>C:\Users\edvbl\source\repos\Janus-Client V1\Janus-Client V1\Janus-Client V1.csproj</ProjectName>
+      <CreatedDate>2020-08-16T11:55:35.1372034+02:00</CreatedDate>
+      <ViewedBy>edvbl</ViewedBy>
+    </DevTrackerDataItem>
     <DevTrackerDataItem ViewActiveTime="PT11.6976605S" EditActiveTime="PT6.3815658S">
       <ModifiedDate>2020-08-12T23:24:58.0607598+02:00</ModifiedDate>
       <ModifiedBy>edvbl</ModifiedBy>
