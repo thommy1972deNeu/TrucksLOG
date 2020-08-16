@@ -465,7 +465,7 @@
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="ETS2 im Singel-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="ATS im Single-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-   
+
             <!-- WAITING ZONE ENDE-->
 
             <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" Opacity="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
@@ -533,6 +533,7 @@
 
 
             <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="20" FontSize="30" x:Name="INFO_LBL_1" Content="{Binding FAHRINFO_1}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
+            <Label Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="20" FontSize="20" x:Name="INFO_LBL_2" Content="{Binding FAHRINFO_2}" HorizontalContentAlignment="Center" FontFamily="Oswald" FontWeight="Bold" Visibility="{Binding CARGO_LOADED, Converter={StaticResource job_angenommen}}"/>
 
             <Border Background="LightGray" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,5,0,0" Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="3" Margin="0,25,0,0"/>
 

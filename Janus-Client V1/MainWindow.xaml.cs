@@ -25,6 +25,7 @@ using DiscordRPC.Logging;
 using Microsoft.Win32;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System.Threading.Tasks;
 
 namespace Janus_Client_V1
 {
@@ -795,7 +796,8 @@ namespace Janus_Client_V1
 
                     // Fahrtinfo
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT2 + Truck_Daten.TONNEN_LBS + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
-
+                    Truck_Daten.REMAININGTIME = TimeSpan.FromSeconds(data.JobValues.RemainingDeliveryTime.Value);
+                    Truck_Daten.FAHRINFO_2 = "Restzeit: " + Truck_Daten.REMAININGTIME.Hours + " Tage, " + Truck_Daten.REMAININGTIME.Minutes + " Stunden, " + Truck_Daten.REMAININGTIME.Seconds + " Minuten";
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
                     Truck_Daten.POS_Y = data.TruckValues.Positioning.Cabin.Y;
@@ -864,8 +866,9 @@ namespace Janus_Client_V1
                     // GESCHWINDIGKEITS_LOGGEN
                     if(Truck_Daten.TEMPOLIMIT != 0)
                     {
-                        if (Truck_Daten.SPEED >= (Truck_Daten.TEMPOLIMIT + 10))
+                        if (Truck_Daten.SPEED >= (Truck_Daten.TEMPOLIMIT + 11))
                         {
+                            this.waitForFiveSeconds();
                             zu_schnell.Start();
                         }
                         else
@@ -881,6 +884,12 @@ namespace Janus_Client_V1
             catch
             { }
         }
+
+        private async void waitForFiveSeconds()
+        {
+            await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(4));
+        }
+
 
         private void Update_Discord(string HERSTELLER, string MODELL, string FRACHT, int GEWICHT, string STARTORT, string ZIELORT, string BRAND_ID, double SCHADEN)
         {
@@ -1449,8 +1458,6 @@ namespace Janus_Client_V1
             try
             {
                 REG.Schreiben("Config", "BG_OPACITY", (string)bg_opacity.SelectedValue);
-
-
 
                 Truck_Daten.BG_OPACITY = (string)bg_opacity.SelectedValue;
 

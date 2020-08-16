@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Janus_Client_V1.Spieldaten
@@ -105,6 +106,7 @@ namespace Janus_Client_V1.Spieldaten
         private string ladung_name;
         private string ladung_id;
         private int gef_strecke;
+        private TimeSpan remainingTime;
 
         // POSITION
         private double pos_x;
@@ -145,6 +147,19 @@ namespace Janus_Client_V1.Spieldaten
         private int rest_km_sa;
         private int gesamt_km_sa;
         // -----------------------------------------------------------------------------------
+        public TimeSpan REMAININGTIME
+        {
+            get { return remainingTime; }
+            set
+            {
+                if (remainingTime != value)
+                {
+                    remainingTime = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public int RESTSTRECKE
         {
             get { return reststrecke; }
