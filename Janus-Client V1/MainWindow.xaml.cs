@@ -323,7 +323,7 @@ namespace Janus_Client_V1
                 {
                     post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1609).ToString());
                 }
-               
+                post_param.Add("RESTZEIT", Truck_Daten.RESTZEIT_INT.ToString());
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
 
@@ -797,7 +797,15 @@ namespace Janus_Client_V1
                     // Fahrtinfo
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT2 + Truck_Daten.TONNEN_LBS + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.REMAININGTIME = TimeSpan.FromSeconds(data.JobValues.RemainingDeliveryTime.Value);
-                    Truck_Daten.FAHRINFO_2 = "Restzeit: " + Truck_Daten.REMAININGTIME.Minutes + " Std. " + Truck_Daten.REMAININGTIME.Seconds + " Min.";
+                    Truck_Daten.RESTZEIT_INT = data.JobValues.RemainingDeliveryTime.Value; // FÜR FAHRTENABRECHNUNG POSITIVE UND NEGATIVE SEKUNDEN
+                    if(Truck_Daten.REMAININGTIME >= TimeSpan.FromSeconds(0))
+                    {
+                        Truck_Daten.FAHRINFO_2 = "Restzeit: " + Truck_Daten.REMAININGTIME.Minutes + " Std. " + Truck_Daten.REMAININGTIME.Seconds + " Min.";
+                    } else
+                    {
+                        Truck_Daten.FAHRINFO_2 = "Restzeit: Abgelaufen.";
+                    }
+                    
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
                     Truck_Daten.POS_Y = data.TruckValues.Positioning.Cabin.Y;

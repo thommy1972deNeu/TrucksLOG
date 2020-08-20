@@ -107,6 +107,7 @@ namespace Janus_Client_V1.Spieldaten
         private string ladung_id;
         private int gef_strecke;
         private TimeSpan remainingTime;
+        private int restzeit_int;
 
         // POSITION
         private double pos_x;
@@ -155,6 +156,19 @@ namespace Janus_Client_V1.Spieldaten
                 if (remainingTime != value)
                 {
                     remainingTime = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public int RESTZEIT_INT
+        {
+            get { return restzeit_int; }
+            set
+            {
+                if (restzeit_int != value)
+                {
+                    restzeit_int = value;
                     NotifyPropertyChanged();
                 }
             }
