@@ -244,6 +244,8 @@ namespace Janus_Client_V1
             {
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("SPEED", Truck_Daten.SPEED.ToString());
+                post_param.Add("LIMIT", Truck_Daten.TEMPOLIMIT.ToString());
                 string response = API.HTTPSRequestPost(API.user_zu_schnell, post_param);
             }
             catch (Exception ex)
