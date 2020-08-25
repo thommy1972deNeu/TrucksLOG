@@ -147,6 +147,7 @@ namespace Janus_Client_V1.Spieldaten
         // Strdckenverlauf
         private int rest_km_sa;
         private int gesamt_km_sa;
+
         // -----------------------------------------------------------------------------------
         public TimeSpan REMAININGTIME
         {

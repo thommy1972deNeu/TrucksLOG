@@ -516,10 +516,10 @@
 
 
             <!-- BLINKER -->
-            <Border Background="LightGray" BorderBrush="White" Grid.Row="1" Grid.Column="7" CornerRadius="20" Visibility="{Binding BLINKER_LINKS, Converter={StaticResource blinker_links}}"/>
+            <Border Background="#FF01FF01" BorderBrush="White" Grid.Row="1" Grid.Column="7" CornerRadius="10" Visibility="{Binding BLINKER_LINKS, Converter={StaticResource blinker_links}}"/>
             <Image Grid.Row="1" Grid.Column="7" Source="{iconPacks:MaterialLightImage Kind=ArrowLeftCircle}" Margin="3" Visibility="{Binding BLINKER_LINKS, Converter={StaticResource blinker_links}}"/>
 
-            <Border Background="LightGray" BorderBrush="White" Grid.Row="1" Grid.Column="12" CornerRadius="20" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
+            <Border Background="#FF01FF01" BorderBrush="White" Grid.Row="1" Grid.Column="12" CornerRadius="10" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
             <Image Grid.Row="1" Grid.Column="12" Source="{iconPacks:MaterialLightImage Kind=ArrowRightCircle}" Margin="3" Visibility="{Binding BLINKER_RECHTS, Converter={StaticResource blinker_rechts}}"/>
             <!-- BLINKER ENDE -->
 

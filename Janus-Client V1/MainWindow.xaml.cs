@@ -300,6 +300,7 @@ namespace Janus_Client_V1
 
         private void timer_Tick(object sender, EventArgs e)
             {
+            string restkilometer;
             try
             {
                 ETS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2")) ? false : true;
@@ -320,16 +321,18 @@ namespace Janus_Client_V1
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 if(Truck_Daten.SPIEL == "Ets2")
                 {
-                    post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1000).ToString());
+                    post_param.Add("REST_KM", Truck_Daten.REST_KM_SA.ToString());
+                    restkilometer = Truck_Daten.REST_KM_SA.ToString();
                 } else
                 {
-                    post_param.Add("REST_KM", ((float)Truck_Daten.REST_KM / 1609).ToString());
+                    post_param.Add("REST_KM", Truck_Daten.REST_KM_SA.ToString());
+                    restkilometer = Truck_Daten.REST_KM_SA.ToString();
                 }
                 post_param.Add("RESTZEIT", Truck_Daten.RESTZEIT_INT.ToString());
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
 
-                Logging.WriteClientLog("[UPDATE] Tour-Update: " + Truck_Daten.FRACHTSCHADEN.ToString() + ((float)Truck_Daten.REST_KM / 1000).ToString());
+                Logging.WriteClientLog("[UPDATE] Tour-Update: " + Truck_Daten.FRACHTSCHADEN.ToString() + ", Rest-KM: " + restkilometer);
 
             } catch (Exception ex)
             {
