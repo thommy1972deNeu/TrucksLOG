@@ -26,6 +26,7 @@ using Microsoft.Win32;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Janus_Client_V1
 {
@@ -286,12 +287,13 @@ namespace Janus_Client_V1
         {
             try
             {
-               
+                
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 post_param.Add("SECRET", "fZhdgte4fdgDDgfet567ufghf");
                 string response_online = API.HTTPSRequestPost(API.useronline_url, post_param);
                 Truck_Daten.ONLINEUSER = "User: " + response_online;
-            } catch { }
+                SpeedLimiter();
+            } catch{ }
         }
 
 
@@ -338,6 +340,8 @@ namespace Janus_Client_V1
             {
                 Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
             }
+
+           
 
         }
 
@@ -975,6 +979,41 @@ namespace Janus_Client_V1
             return numbers.Max();
         }
 
+        private void SpeedLimiter()
+        {
+            try
+            {
+                string docPath1 = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Euro Truck Simulator 2\profiles\";
+                List<string> dirs1 = new List<string>(Directory.EnumerateDirectories(docPath1));
+                foreach (var dir1 in dirs1)
+                {
+                    String dateiPfad = dir1 + @"\config.cfg";
+
+                    StreamReader inputStreamReader = File.OpenText(dateiPfad);
+                    String Inhalt = inputStreamReader.ReadToEnd();
+                    inputStreamReader.Close();
+
+                    String ersetzen = "uset g_hud_speed_limit \"0\"";
+                    String durch = "uset g_hud_speed_limit \"1\"";
+
+                    Inhalt = Inhalt.Replace(ersetzen, durch);
+
+                    StreamWriter outputStreamWriter = File.CreateText(dateiPfad);
+                    outputStreamWriter.Write(Inhalt);
+                    outputStreamWriter.Close();
+                }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (PathTooLongException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+        }
 
 
         private void Lade_Voreinstellungen()
@@ -1368,14 +1407,16 @@ namespace Janus_Client_V1
 
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
         {
+           
             AutoUpdater.ShowSkipButton = false;
+            AutoUpdater.ShowRemindLaterButton = false;
             AutoUpdater.Start(UpdateString);
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("STATUS", "ONLINE");
             string response = API.HTTPSRequestPost(API.c_online, post_param);
-
+            
         }
 
         private void AntiAFK_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1524,5 +1565,6 @@ namespace Janus_Client_V1
         {
                 AutoUpdater.Start(UpdateString);
         }
+
     }
 }
