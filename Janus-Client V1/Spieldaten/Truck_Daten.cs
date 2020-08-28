@@ -148,7 +148,23 @@ namespace Janus_Client_V1.Spieldaten
         private int rest_km_sa;
         private int gesamt_km_sa;
 
+        private int game_speed_limiter;
+
         // -----------------------------------------------------------------------------------
+
+        public int GAME_SPEED_LIMITER
+        {
+            get { return game_speed_limiter; }
+            set
+            {
+                if (game_speed_limiter != value)
+                {
+                    game_speed_limiter = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public TimeSpan REMAININGTIME
         {
             get { return remainingTime; }

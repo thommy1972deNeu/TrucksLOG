@@ -56,10 +56,6 @@ namespace Janus_Client_V1
         public bool InvokeRequired { get; private set; }
         public static Window ActivatedWindow { get; set; }
 
-
-
-
-
         public MainWindow()
         {
             InitializeComponent();
@@ -292,7 +288,7 @@ namespace Janus_Client_V1
                 post_param.Add("SECRET", "fZhdgte4fdgDDgfet567ufghf");
                 string response_online = API.HTTPSRequestPost(API.useronline_url, post_param);
                 Truck_Daten.ONLINEUSER = "User: " + response_online;
-                SpeedLimiter();
+                
             } catch{ }
         }
 
@@ -310,6 +306,7 @@ namespace Janus_Client_V1
 
                 lade_Patreon();
                 setzt_antiAFK();
+                
 
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 if(Truck_Daten.SPIEL == "Ets2")
@@ -439,6 +436,8 @@ namespace Janus_Client_V1
                 {
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
                 }
+
+                post_param.Add("SPEED_LIMITER", Truck_Daten.GAME_SPEED_LIMITER.ToString());
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 post_param.Add("STARTORT", Truck_Daten.STARTORT.ToString());
                 post_param.Add("STARTORT_ID", Truck_Daten.STARTORT_ID);
@@ -875,6 +874,7 @@ namespace Janus_Client_V1
                     Truck_Daten.TRAIN_PAY_AMOUNT = (int)data.GamePlay.TrainEvent.PayAmount;
 
 
+                    SpeedLimiter();
 
 
                     // DISCORD
@@ -994,13 +994,38 @@ namespace Janus_Client_V1
                     inputStreamReader.Close();
 
                     String ersetzen = "uset g_hud_speed_limit \"0\"";
+                    String ersetzen2 = "uset g_hud_speed_limit \"2\"";
                     String durch = "uset g_hud_speed_limit \"1\"";
 
-                    Inhalt = Inhalt.Replace(ersetzen, durch);
+                    if (Inhalt.Contains("uset g_hud_speed_limit \"0\""))
+                    {
+                        Truck_Daten.GAME_SPEED_LIMITER = 0;
+                        Logging.WriteClientLog("[INFO] Ingame Speed Limiter ist jetzt Ausgeschaltet");
+                        Inhalt = Inhalt.Replace(ersetzen, durch);
+                        StreamWriter outputStreamWriter = File.CreateText(dateiPfad);
+                        outputStreamWriter.Write(Inhalt);
+                        outputStreamWriter.Close();
+                    }
+                    if (Inhalt.Contains("uset g_hud_speed_limit \"2\""))
+                    {
+                        Truck_Daten.GAME_SPEED_LIMITER = 2;
+                        Logging.WriteClientLog("[INFO] Ingame Speed Limiter steht jetzt auf PKW Modus");
+                        Inhalt = Inhalt.Replace(ersetzen2, durch);
+                        StreamWriter outputStreamWriter = File.CreateText(dateiPfad);
+                        outputStreamWriter.Write(Inhalt);
+                        outputStreamWriter.Close();
+                    }
 
-                    StreamWriter outputStreamWriter = File.CreateText(dateiPfad);
-                    outputStreamWriter.Write(Inhalt);
-                    outputStreamWriter.Close();
+                    if (Inhalt.Contains("uset g_hud_speed_limit \"1\""))
+                    {
+                        Truck_Daten.GAME_SPEED_LIMITER = 1;
+                        Logging.WriteClientLog("[INFO] Ingame Speed Limiter steht auf LKW Modus");
+                        StreamWriter outputStreamWriter = File.CreateText(dateiPfad);
+                        outputStreamWriter.Write(Inhalt);
+                        outputStreamWriter.Close();
+                    }
+
+
                 }
             }
             catch (UnauthorizedAccessException ex)
