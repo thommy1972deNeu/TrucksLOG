@@ -242,7 +242,6 @@ namespace Janus_Client_V1
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 post_param.Add("SPEED", Truck_Daten.SPEED.ToString());
-                post_param.Add("LIMIT", Truck_Daten.TEMPOLIMIT.ToString());
                 string response = API.HTTPSRequestPost(API.user_zu_schnell, post_param);
             }
             catch (Exception ex)
@@ -436,8 +435,6 @@ namespace Janus_Client_V1
                 {
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
                 }
-
-                post_param.Add("SPEED_LIMITER", Truck_Daten.GAME_SPEED_LIMITER.ToString());
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 post_param.Add("STARTORT", Truck_Daten.STARTORT.ToString());
                 post_param.Add("STARTORT_ID", Truck_Daten.STARTORT_ID);
@@ -806,13 +803,24 @@ namespace Janus_Client_V1
                     Truck_Daten.FAHRINFO_1 = "Du fährst mit " + Truck_Daten.GEWICHT2 + Truck_Daten.TONNEN_LBS + Truck_Daten.LADUNG_NAME + " von " + Truck_Daten.STARTORT + " nach " + Truck_Daten.ZIELORT;
                     Truck_Daten.REMAININGTIME = TimeSpan.FromSeconds(data.JobValues.RemainingDeliveryTime.Value);
                     Truck_Daten.RESTZEIT_INT = data.JobValues.RemainingDeliveryTime.Value; // FÜR FAHRTENABRECHNUNG POSITIVE UND NEGATIVE SEKUNDEN
-                    if(Truck_Daten.REMAININGTIME >= TimeSpan.FromSeconds(0))
+
+                    if(Truck_Daten.FRACHTMARKT == "external_contracts")
                     {
-                        Truck_Daten.FAHRINFO_2 = "Restzeit: " + Truck_Daten.REMAININGTIME.Minutes + " Std. " + Truck_Daten.REMAININGTIME.Seconds + " Min.";
+                        Truck_Daten.RESTZEIT_INT = 0;
+                        Truck_Daten.FAHRINFO_2 = "World of Trucks-Auftrag";
                     } else
                     {
-                        Truck_Daten.FAHRINFO_2 = "Restzeit: Abgelaufen.";
+                        if (Truck_Daten.REMAININGTIME >= TimeSpan.FromSeconds(1))
+                        {
+                            Truck_Daten.FAHRINFO_2 = "Restzeit: " + Truck_Daten.REMAININGTIME.Minutes + " Std. " + Truck_Daten.REMAININGTIME.Seconds + " Min.";
+                        }
+                        else
+                        {
+                            Truck_Daten.FAHRINFO_2 = "Restzeit: Abgelaufen.";
+                        }
                     }
+
+
                     
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
@@ -874,38 +882,24 @@ namespace Janus_Client_V1
                     Truck_Daten.TRAIN_PAY_AMOUNT = (int)data.GamePlay.TrainEvent.PayAmount;
 
 
-                    SpeedLimiter();
-
-
                     // DISCORD
                     Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_HERSTELLER_ID, Truck_Daten.LKW_SCHADEN);
 
                     // GESCHWINDIGKEITS_LOGGEN
-                    if(Truck_Daten.TEMPOLIMIT != 0)
+                    if (Truck_Daten.SPEED >= 100)
                     {
-                        if (Truck_Daten.SPEED >= (Truck_Daten.TEMPOLIMIT + 11))
-                        {
-                            this.waitForFiveSeconds();
-                            zu_schnell.Start();
-                        }
-                        else
-                        {
-                            zu_schnell.Stop();
-                        }
+                        zu_schnell.Start();
                     }
-
-                        
-
+                    else
+                    {
+                        zu_schnell.Stop();
+                    }   
                 }
             }
             catch
             { }
         }
 
-        private async void waitForFiveSeconds()
-        {
-            await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(4));
-        }
 
 
         private void Update_Discord(string HERSTELLER, string MODELL, string FRACHT, int GEWICHT, string STARTORT, string ZIELORT, string BRAND_ID, double SCHADEN)
@@ -979,66 +973,7 @@ namespace Janus_Client_V1
             return numbers.Max();
         }
 
-        private void SpeedLimiter()
-        {
-            try
-            {
-                string docPath1 = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Euro Truck Simulator 2\profiles\";
-                List<string> dirs1 = new List<string>(Directory.EnumerateDirectories(docPath1));
-                foreach (var dir1 in dirs1)
-                {
-                    String dateiPfad = dir1 + @"\config.cfg";
 
-                    StreamReader inputStreamReader = File.OpenText(dateiPfad);
-                    String Inhalt = inputStreamReader.ReadToEnd();
-                    inputStreamReader.Close();
-
-                    String ersetzen = "uset g_hud_speed_limit \"0\"";
-                    String ersetzen2 = "uset g_hud_speed_limit \"2\"";
-                    String durch = "uset g_hud_speed_limit \"1\"";
-
-                    if (Inhalt.Contains("uset g_hud_speed_limit \"0\""))
-                    {
-                        Truck_Daten.GAME_SPEED_LIMITER = 0;
-                        Logging.WriteClientLog("[INFO] Ingame Speed Limiter ist jetzt Ausgeschaltet");
-                        Inhalt = Inhalt.Replace(ersetzen, durch);
-                        StreamWriter outputStreamWriter = File.CreateText(dateiPfad);
-                        outputStreamWriter.Write(Inhalt);
-                        outputStreamWriter.Close();
-                    }
-                    if (Inhalt.Contains("uset g_hud_speed_limit \"2\""))
-                    {
-                        Truck_Daten.GAME_SPEED_LIMITER = 2;
-                        Logging.WriteClientLog("[INFO] Ingame Speed Limiter steht jetzt auf PKW Modus");
-                        Inhalt = Inhalt.Replace(ersetzen2, durch);
-                        StreamWriter outputStreamWriter = File.CreateText(dateiPfad);
-                        outputStreamWriter.Write(Inhalt);
-                        outputStreamWriter.Close();
-                    }
-
-                    if (Inhalt.Contains("uset g_hud_speed_limit \"1\""))
-                    {
-                        Truck_Daten.GAME_SPEED_LIMITER = 1;
-                        Logging.WriteClientLog("[INFO] Ingame Speed Limiter steht auf LKW Modus");
-                        StreamWriter outputStreamWriter = File.CreateText(dateiPfad);
-                        outputStreamWriter.Write(Inhalt);
-                        outputStreamWriter.Close();
-                    }
-
-
-                }
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (PathTooLongException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-
-        }
 
 
         private void Lade_Voreinstellungen()
