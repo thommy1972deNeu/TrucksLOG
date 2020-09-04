@@ -282,13 +282,16 @@ namespace Janus_Client_V1
         {
             try
             {
-                
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 post_param.Add("SECRET", "fZhdgte4fdgDDgfet567ufghf");
                 string response_online = API.HTTPSRequestPost(API.useronline_url, post_param);
-                Truck_Daten.ONLINEUSER = "User: " + response_online;
-                
-            } catch{ }
+                Truck_Daten.ONLINEUSER = "Fahrer: " + response_online;
+
+                lade_Punktekonto();
+
+            } catch{
+                Logging.WriteClientLog("[ERROR] Fehler beim Useronline-Tick !");
+            }
         }
 
 
@@ -305,7 +308,6 @@ namespace Janus_Client_V1
 
                 lade_Patreon();
                 setzt_antiAFK();
-                
 
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 if(Truck_Daten.SPIEL == "Ets2")
@@ -354,6 +356,22 @@ namespace Janus_Client_V1
             catch
             {
                 Truck_Daten.PATREON_LEVEL = 0;
+            }
+        }
+
+        private void lade_Punktekonto()
+        {
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                string response = API.HTTPSRequestPost(API.punktekonto, post_param);
+                Truck_Daten.PUNKTEKONTO = "JanBurg: " + response;
+                
+            }
+            catch
+            { 
+                Logging.WriteClientLog("[ERROR] Fehler beim laden des Punktekontos !"); 
             }
         }
 
@@ -925,8 +943,6 @@ namespace Janus_Client_V1
                 tourdaten = GEWICHT + " T " + FRACHT + " von " + STARTORT + " nach " + ZIELORT;
             }
 
-            
-
             jobRPC = new RichPresence()
             {
                
@@ -1129,6 +1145,7 @@ namespace Janus_Client_V1
             }
             catch (Exception ex)
             {
+                Logging.WriteClientLog("[ERROR] Fehler Beta_Tester: " + ex.Message);
                 msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1010). Bitte versuche es später erneut oder gib uns diesen Fehlercode in Discord." + ex.Message);
             }
         }
@@ -1145,6 +1162,7 @@ namespace Janus_Client_V1
             }
             catch (Exception ex)
             {
+                Logging.WriteClientLog("[ERROR] Fehler beim Spende_Kaffee: " + ex.Message);
                 msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut..." + ex.Message);
             }
         }
@@ -1223,11 +1241,13 @@ namespace Janus_Client_V1
 
         private void spende_paypal(object sender, RoutedEventArgs e)
         {
+            Logging.WriteClientLog("[INFO] Spende_PayPal wurde angeklickt!");
             Process.Start("https://paypal.me/ErIstWiederDa/2,00");
         }
 
         private void patreon_link(object sender, RoutedEventArgs e)
         {
+            Logging.WriteClientLog("[INFO] Patreon Link wurde angeklickt!");
             Process.Start("https://www.patreon.com/projektjanus");
         }
 
@@ -1256,7 +1276,7 @@ namespace Janus_Client_V1
             post_param.Add("LINK", "Andras.tv");
             post_param.Add("USER", REG.Lesen("Config", "CLIENT_KEY"));
             string response = API.HTTPSRequestPost(API.link_click, post_param);
-
+            Logging.WriteClientLog("[INFO] Andras.TV wurde angeklickt!");
             Process.Start("https://www.twitch.tv/andras_tv");
         }
 
@@ -1285,7 +1305,15 @@ namespace Janus_Client_V1
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Application.Current.Shutdown();
+            Logging.WriteClientLog("[INFO] Programm wurde beendet!");
+            try
+            {
+                System.Windows.Application.Current.Shutdown();
+            } catch(Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim herunterfahren des Client: " + ex.Message);
+            }
+          
         }
 
         private void settings_Click(object sender, RoutedEventArgs e)
@@ -1376,7 +1404,8 @@ namespace Janus_Client_V1
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("STATUS", "ONLINE");
             string response = API.HTTPSRequestPost(API.c_online, post_param);
-            
+
+            lade_Punktekonto();
         }
 
         private void AntiAFK_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

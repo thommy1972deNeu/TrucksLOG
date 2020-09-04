@@ -360,6 +360,7 @@
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
+            <Label x:Name="punktekonto_anzeige" Content="{Binding PUNKTEKONTO}" FontSize="16" Margin="0,7,0,0"/>
 
             <Label x:Name="user_online_anzeige" Content="{Binding ONLINEUSER}" FontSize="16" Margin="0,7,0,0"/>
 
