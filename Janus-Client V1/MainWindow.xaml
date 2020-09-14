@@ -35,7 +35,8 @@
         <BooleanToVisibilityConverter x:Key="trailer_attached" />
         <BooleanToVisibilityConverter x:Key="SDK_Aktiv" />
         <BooleanToVisibilityConverter x:Key="SDK_Aktiv2" />
-
+        <BooleanToVisibilityConverter x:Key="warning_lights" />
+        
         <ContextMenu x:Key="contextMenu" MenuItem.Click="ContextMenu_Click">
             <MenuItem Header="Item 1"/>
         </ContextMenu>
@@ -487,7 +488,7 @@
             <Image Grid.Row="3" Grid.Column="11" Source="{iconPacks:FontAwesomeImage Kind=HotjarBrands}" Margin="3" Visibility="{Binding WATER_WARNUNG, Converter={StaticResource water_warnung}}" ToolTip="Temperatur zu hoch"/>
             <Image Grid.Row="3" Grid.Column="12" Source="{iconPacks:MaterialImage Kind=BatteryCharging10}" Margin="3" Visibility="{Binding BATTERY_WARNUNG, Converter={StaticResource battery_warnung}}" ToolTip="Batterie fast leer"/>
             <Image Grid.Row="3" Grid.Column="13" Source="icons/kupplung.png" Margin="3" Visibility="{Binding TRAILER_ANGEHANGEN, Converter={StaticResource trailer_attached}}" ToolTip="Anhänger gekuppelt"/>
-
+            <Image Grid.Row="3" Grid.Column="14" Source="{iconPacks:MaterialImage Kind=HazardLights}" Margin="3" Visibility="{Binding WARNLICHT, Converter={StaticResource warning_lights}}" ToolTip="Warnleuchten AN"/>
             <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="45,28,45,32" Foreground="Black" Height="10" Width="10"/>
 
             <!-- TANKANZEIGE -->

@@ -73,6 +73,7 @@ namespace Janus_Client_V1.Spieldaten
         private bool blinker_links;
         private bool blinker_rechts;
         private bool standlicht;
+        private bool warnlicht;
 
         // FUEL / ADBLUE
         private int fuel;
@@ -777,6 +778,18 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
+        public bool WARNLICHT
+        {
+            get { return warnlicht; }
+            set
+            {
+                if (warnlicht != value)
+                {
+                    warnlicht = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public bool LICHT_HIGH
         {
             get { return licht_high; }

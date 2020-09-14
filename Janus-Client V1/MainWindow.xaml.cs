@@ -366,7 +366,7 @@ namespace Janus_Client_V1
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
                 string response = API.HTTPSRequestPost(API.punktekonto, post_param);
-                Truck_Daten.PUNKTEKONTO = "JanBurg: " + response;
+                Truck_Daten.PUNKTEKONTO = "Punkte: " + response;
                 
             }
             catch
@@ -785,6 +785,7 @@ namespace Janus_Client_V1
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
                     Truck_Daten.LKW_HERSTELLER_ID = data.TruckValues.ConstantsValues.BrandId;
+                    Truck_Daten.WARNLICHT = data.TruckValues.CurrentValues.LightsValues.Beacon;
 
                     //Truck_Daten.SPEED =  (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph;
                     Truck_Daten.SPEED = Truck_Daten.SPIEL == "Ets2" ? (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Kph : (int)data.TruckValues.CurrentValues.DashboardValues.Speed.Mph;
@@ -904,7 +905,7 @@ namespace Janus_Client_V1
                     Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_HERSTELLER_ID, Truck_Daten.LKW_SCHADEN);
 
                     // GESCHWINDIGKEITS_LOGGEN
-                    if (Truck_Daten.SPEED >= 100)
+                    if (Truck_Daten.SPEED >= 101)
                     {
                         zu_schnell.Start();
                     }
