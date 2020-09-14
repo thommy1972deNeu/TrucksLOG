@@ -64,6 +64,10 @@ namespace Janus_Client_V1
 
             Lade_Voreinstellungen();
             lade_GameVersionen();
+            if (TrucksBook_Running() == true)
+                Logging.WriteClientLog("[DUAL-APPS] - TrucksBook Client läuft mit !");
+            if (SpedV_Running() == true)
+                Logging.WriteClientLog("[DUAL-APPS] - SpedV Client läuft mit !");
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -288,6 +292,9 @@ namespace Janus_Client_V1
                 Truck_Daten.ONLINEUSER = "Fahrer: " + response_online;
 
                 lade_Punktekonto();
+                // TRUCKSBOOK CHECK
+                Truck_Daten.TRUCKSBOOK = TrucksBook_Running();
+                Truck_Daten.SPEDV = SpedV_Running();
 
             } catch{
                 Logging.WriteClientLog("[ERROR] Fehler beim Useronline-Tick !");
@@ -358,6 +365,23 @@ namespace Janus_Client_V1
                 Truck_Daten.PATREON_LEVEL = 0;
             }
         }
+
+        public static bool SpedV_Running()
+        {
+            string process = "FPH SpedV";
+            if (Process.GetProcessesByName(process).Length > 0)
+                return true;
+            return false;
+        }
+        public static bool TrucksBook_Running()
+        {
+            string process = "TB Client";
+            if (Process.GetProcessesByName(process).Length > 0)
+                return true;
+            return false;
+        }
+       
+
 
         private void lade_Punktekonto()
         {
@@ -769,10 +793,10 @@ namespace Janus_Client_V1
                         Truck_Daten.REST_KM_SA = (int)data.NavigationValues.NavigationDistance / 1000;
                     }
 
-                    
+
 
                     //MessageBox.Show(Truck_Daten.REST_KM_SA.ToString());
-                
+                   
            
                     //Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
 
@@ -1556,5 +1580,14 @@ namespace Janus_Client_V1
                 AutoUpdater.Start(UpdateString);
         }
 
+        private void spedv_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("SpedV läuft bei dir mit unserem Projekt-JANUS!-Client zusammen.\n\nDies ist im Normalfall kein Problem. Sollte es dennoch zu Problemen mit der Tour-Annahme oder Abgabe kommen, versuche bitte zuerst unseren Client ohne SpedV laufen zu lassen.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void trucksbook_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Der TrucksBook Client läuft bei dir mit unserem Projekt-JANUS!-Client zusammen.\n\nIn der Vergangenheit kam es dadurch zu Problemen mit der Annahme oder Abgabe der Touren. Sollte es zu solchen Problemen kommen, versuche bitte zuerst unseren Client ohne TrucksBook laufen zu lassen.\nFalls dies nicht Funktioniert, kontaktiere uns bitte über Discord.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

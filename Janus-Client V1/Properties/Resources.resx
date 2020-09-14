@@ -136,6 +136,9 @@
   <data name="scs_telemetry" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\scs-telemetry.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="SPEDV_ICON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SPEDV_ICON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Starting" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Starting.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -144,6 +147,9 @@
   </data>
   <data name="szjBrQbB_400x400" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\szjBrQbB_400x400.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TB_ICON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TB_ICON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Tour_Abgebrochen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tour_Abgebrochen.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

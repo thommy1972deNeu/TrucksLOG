@@ -81,8 +81,8 @@ namespace Janus_Client_V1.Spieldaten
         private int fuel_gerade;
         private string liter_gallonen;
         // Warnings
-
-
+        private bool trucksbook;
+        private bool spedv;
         // JOB_CANCEL
         private double cancel_strafe;
 
@@ -145,7 +145,7 @@ namespace Janus_Client_V1.Spieldaten
         private string train_target_name;
 
 
-        // Strdckenverlauf
+        // Streckenverlauf
         private int rest_km_sa;
         private int gesamt_km_sa;
         private string punktekonto;
@@ -243,6 +243,31 @@ namespace Janus_Client_V1.Spieldaten
             }
         }
 
+        public bool TRUCKSBOOK
+        {
+            get { return trucksbook; }
+            set
+            {
+                if (trucksbook != value)
+                {
+                    trucksbook = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool SPEDV
+        {
+            get { return spedv; }
+            set
+            {
+                if (spedv != value)
+                {
+                    spedv = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public bool SDK_AKTIVE
         {

@@ -36,6 +36,8 @@
         <BooleanToVisibilityConverter x:Key="SDK_Aktiv" />
         <BooleanToVisibilityConverter x:Key="SDK_Aktiv2" />
         <BooleanToVisibilityConverter x:Key="warning_lights" />
+        <BooleanToVisibilityConverter x:Key="trucksbook" />
+        <BooleanToVisibilityConverter x:Key="spedv" />
         
         <ContextMenu x:Key="contextMenu" MenuItem.Click="ContextMenu_Click">
             <MenuItem Header="Item 1"/>
@@ -361,6 +363,8 @@
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
+            <Label x:Name="spedv_anzeige" Content="{iconPacks:Material Kind=ShieldAlert}" Height="30" ToolTip="SpedV läuft mit! Für weitere Informationen klicken..." Visibility="{Binding SPEDV, Converter={StaticResource spedv}}" MouseDown="spedv_anzeige_MouseDown"/>
+            <Label x:Name="trucksbook_anzeige" Content="{iconPacks:Material Kind=ShieldAlertOutline}" Height="30" ToolTip="TrucksBook läuft mit! Für weitere Informationen klicken..." Visibility="{Binding TRUCKSBOOK, Converter={StaticResource trucksbook}}" MouseDown="trucksbook_anzeige_MouseDown"/>
             <Label x:Name="punktekonto_anzeige" Content="{Binding PUNKTEKONTO}" FontSize="16" Margin="0,7,0,0"/>
 
             <Label x:Name="user_online_anzeige" Content="{Binding ONLINEUSER}" FontSize="16" Margin="0,7,0,0"/>

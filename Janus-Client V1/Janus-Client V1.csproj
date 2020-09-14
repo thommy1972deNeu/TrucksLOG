@@ -444,6 +444,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\TB_ICON.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\SPEDV_ICON.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Starting.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

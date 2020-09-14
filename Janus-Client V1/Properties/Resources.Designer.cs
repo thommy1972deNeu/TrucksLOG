@@ -120,6 +120,16 @@ namespace Janus_Client_V1.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SPEDV_ICON {
+            get {
+                object obj = ResourceManager.GetObject("SPEDV_ICON", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream Starting {
@@ -143,6 +153,16 @@ namespace Janus_Client_V1.Properties {
         internal static System.Drawing.Bitmap szjBrQbB_400x400 {
             get {
                 object obj = ResourceManager.GetObject("szjBrQbB_400x400", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TB_ICON {
+            get {
+                object obj = ResourceManager.GetObject("TB_ICON", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
