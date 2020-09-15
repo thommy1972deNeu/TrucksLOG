@@ -292,6 +292,8 @@ namespace Janus_Client_V1
                 Truck_Daten.ONLINEUSER = "Fahrer: " + response_online;
 
                 lade_Punktekonto();
+                set_online();
+
                 // TRUCKSBOOK CHECK
                 Truck_Daten.TRUCKSBOOK = TrucksBook_Running();
                 Truck_Daten.SPEDV = SpedV_Running();
@@ -1425,12 +1427,16 @@ namespace Janus_Client_V1
             AutoUpdater.ShowRemindLaterButton = false;
             AutoUpdater.Start(UpdateString);
 
+            set_online();
+            lade_Punktekonto();
+        }
+
+        private void set_online()
+        {
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("STATUS", "ONLINE");
             string response = API.HTTPSRequestPost(API.c_online, post_param);
-
-            lade_Punktekonto();
         }
 
         private void AntiAFK_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
