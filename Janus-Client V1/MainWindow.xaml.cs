@@ -27,6 +27,8 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Threading.Tasks;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Janus_Client_V1
 {
@@ -59,6 +61,15 @@ namespace Janus_Client_V1
         public MainWindow()
         {
             InitializeComponent();
+
+            Bann_Check();
+
+            if (ServerCheck("https://projekt-janus.de") == false)
+            {
+                MessageBox.Show("Der Server ist leider Offline\n Das Programm wird beendet!", "Fehler bei Verbindung zum Server", MessageBoxButton.OK, MessageBoxImage.Error);
+                Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
+                Application.Current.Shutdown();
+            }
 
             Logging.Make_Log_File();
 
@@ -146,6 +157,50 @@ namespace Janus_Client_V1
 
            
         }
+
+        public static async void Bann_Check()
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            string response = API.HTTPSRequestPost(API.bann_check, post_param);
+            string[] ausgabe = response.Split(':');
+
+            if (Convert.ToInt32(ausgabe[0]) == 0)
+            {
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                await metroWindow.ShowMessageAsync("Account Freischaltung", "Dein Account wurde noch nicht Freigeschaltet.\n\nBitte wende dich an unseren Discord-Support");
+                Application.Current.Shutdown();
+            }
+            if (Convert.ToInt32(ausgabe[0]) == 3)
+            {
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                await metroWindow.ShowMessageAsync("Account Gesperrt", "Dein Account wurde von =- " + ausgabe[1] + " -= temporär Gesperrt\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
+                Application.Current.Shutdown();
+            }
+            if (Convert.ToInt32(ausgabe[0]) == 6)
+            {
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                await metroWindow.ShowMessageAsync("Account Gebannt", "Dein Account wurde von =- " + ausgabe[1] + " -= permanent Gebannt\n\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
+                Application.Current.Shutdown();
+            }
+        }
+
+        public static bool ServerCheck(string host)
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(host);
+                request.Method = "HEAD";
+                request.Timeout = 5000;
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                return response.StatusCode == HttpStatusCode.OK;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
 
         private static bool AlreadyRunning()
         {
@@ -1122,7 +1177,6 @@ namespace Janus_Client_V1
                 string response = API.HTTPSRequestPost(API.updatetext_uri, post_param);
                 string response2 = response.Replace("<br/>", "");
                 string response3 = response2.Replace("<hr/>", "");
-
                 update_text.Text = response3;
 
             } catch (Exception ex)

@@ -30,6 +30,7 @@ namespace Janus_Client_V1.Klassen
         public static string user_zu_schnell = server + "zu_schnell.php";
         public static string delete_tour = server + "del_tour.php";
         public static string punktekonto = server + "punktekonto.php";
+        public static string bann_check = server + "bann_check.php";
         public static string updatetext_uri = "http://clientupdates.projekt-janus.de/changelog.html";
         public static string useronline_url = "https://projekt-janus.de/api/client_useronline.php";
 
@@ -44,7 +45,6 @@ namespace Janus_Client_V1.Klassen
 
             HttpWebRequest myHttpWebRequest = (HttpWebRequest)HttpWebRequest.Create(url);
             myHttpWebRequest.Method = "POST";
-
             byte[] data = Encoding.ASCII.GetBytes(s);
 
             myHttpWebRequest.ContentType = "application/x-www-form-urlencoded";
