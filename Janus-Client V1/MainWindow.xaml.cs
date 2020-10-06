@@ -62,7 +62,7 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
 
-            Bann_Check();
+           
 
             if (ServerCheck("https://projekt-janus.de") == false)
             {
@@ -92,7 +92,7 @@ namespace Janus_Client_V1
             credit_text.Content += " - Quasselboy Patti [COO]" + Environment.NewLine;
             credit_text.Content += " - Daniel1983 [Main-Support][Beta-Tester]" + Environment.NewLine;
             credit_text.Content += " - TOBI_𝟙Ƽ⊘५ [Main-Support][Beta-Tester]" + Environment.NewLine;
-            credit_text.Content += " - Angelo Riechmann [WebDesigner]" + Environment.NewLine;
+            credit_text.Content += " - Bandit|Basti [Beta-Tester]" + Environment.NewLine;
             credit_text.Content += "Einen Super-Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der PJ-Zeit unterstützt." + Environment.NewLine;
             credit_text.Content += "Und natürlich auch an" + Environment.NewLine;
             credit_text.Content += "unseren One & Only-Live-Streamer:" + Environment.NewLine;
@@ -120,6 +120,9 @@ namespace Janus_Client_V1
                 Pfad_Angeben pf = new Pfad_Angeben();
                 pf.ShowDialog();
                 return;
+            } else
+            {
+                Bann_Check();
             }
 
             if (REG.Lesen("Pfade", "ETS2_PFAD") == "" && REG.Lesen("Pfade", "ATS_PFAD") == "")
@@ -165,24 +168,26 @@ namespace Janus_Client_V1
             string response = API.HTTPSRequestPost(API.bann_check, post_param);
             string[] ausgabe = response.Split(':');
 
-            if (Convert.ToInt32(ausgabe[0]) == 0)
-            {
-                var metroWindow = (Application.Current.MainWindow as MetroWindow);
-                await metroWindow.ShowMessageAsync("Account Freischaltung", "Dein Account wurde noch nicht Freigeschaltet.\n\nBitte wende dich an unseren Discord-Support");
-                Application.Current.Shutdown();
-            }
-            if (Convert.ToInt32(ausgabe[0]) == 3)
-            {
-                var metroWindow = (Application.Current.MainWindow as MetroWindow);
-                await metroWindow.ShowMessageAsync("Account Gesperrt", "Dein Account wurde von =- " + ausgabe[1] + " -= temporär Gesperrt\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
-                Application.Current.Shutdown();
-            }
-            if (Convert.ToInt32(ausgabe[0]) == 6)
-            {
-                var metroWindow = (Application.Current.MainWindow as MetroWindow);
-                await metroWindow.ShowMessageAsync("Account Gebannt", "Dein Account wurde von =- " + ausgabe[1] + " -= permanent Gebannt\n\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
-                Application.Current.Shutdown();
-            }
+            
+                if (Convert.ToInt32(ausgabe[0]) == 0)
+                {
+                    var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                    await metroWindow.ShowMessageAsync("Account Freischaltung", "Dein Account wurde noch nicht Freigeschaltet.\n\nBitte wende dich an unseren Discord-Support");
+                    Application.Current.Shutdown();
+                }
+                if (Convert.ToInt32(ausgabe[0]) == 3)
+                {
+                    var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                    await metroWindow.ShowMessageAsync("Account Gesperrt", "Dein Account wurde von =- " + ausgabe[1] + " -= temporär Gesperrt\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
+                    Application.Current.Shutdown();
+                }
+                if (Convert.ToInt32(ausgabe[0]) == 6)
+                {
+                    var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                    await metroWindow.ShowMessageAsync("Account Gebannt", "Dein Account wurde von =- " + ausgabe[1] + " -= permanent Gebannt\n\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
+                    Application.Current.Shutdown();
+                }
+            
         }
 
         public static bool ServerCheck(string host)
