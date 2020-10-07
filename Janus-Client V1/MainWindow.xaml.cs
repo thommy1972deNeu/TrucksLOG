@@ -1495,6 +1495,10 @@ namespace Janus_Client_V1
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             post_param.Add("STATUS", "ONLINE");
+            post_param.Add("GAME", Truck_Daten.SPIEL);
+            post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
+            post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
+            post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
             string response = API.HTTPSRequestPost(API.c_online, post_param);
         }
 
