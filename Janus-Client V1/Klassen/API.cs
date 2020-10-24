@@ -9,10 +9,10 @@ namespace Janus_Client_V1.Klassen
 {
     public class API
     {
-        public static string server = "https://projekt-janus.de/api/";
+        public static string server = "https://truckslog.org/";
         public static string job_delivered = server + "job_delivered.php";
         public static string job_started = server + "start_tour.php";
-        public static string job_cancel = "https://projekt-janus.de/api/job_cancel.php";
+        public static string job_cancel = "https://truckslog.org/job_cancel.php";
         public static string job_update = server + "job_update.php";
         public static string job_finish = server + "job_finish.php";
         public static string strafe = server + "strafe.php";
@@ -31,8 +31,8 @@ namespace Janus_Client_V1.Klassen
         public static string delete_tour = server + "del_tour.php";
         public static string punktekonto = server + "punktekonto.php";
         public static string bann_check = server + "bann_check.php";
-        public static string updatetext_uri = "http://clientupdates.projekt-janus.de/changelog.html";
-        public static string useronline_url = "https://projekt-janus.de/api/client_useronline.php";
+        public static string updatetext_uri = "http://client.truckslog.org/changelog.html";
+        public static string useronline_url = "https://truckslog.org/client_useronline.php";
 
         public static string HTTPSRequestPost(string url, Dictionary<string, string> postParameters)
         {

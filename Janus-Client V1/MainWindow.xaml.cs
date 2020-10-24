@@ -40,7 +40,7 @@ namespace Janus_Client_V1
         private static RichPresence jobRPC;
         private const string DiscordAppID = "730374187025170472";
         private const string DefaultDiscordLargeImageKey = "pj_512";
-        private string UpdateString = "http://clientupdates.projekt-janus.de/version.xml";
+        private string UpdateString = "http://client.truckslog.org/version.xml";
 
         public string CLIENT_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private readonly MSG msg = new MSG();
@@ -64,9 +64,9 @@ namespace Janus_Client_V1
 
            
 
-            if (ServerCheck("https://projekt-janus.de") == false)
+            if (ServerCheck("https://truckslog.org") == false)
             {
-                MessageBox.Show("Der Server ist leider Offline\n Das Programm wird beendet!", "Fehler bei Verbindung zum Server", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Der Server ist leider Offline\n Das Programm wird jetzt beendet!", "Fehler bei Verbindung zum Server", MessageBoxButton.OK, MessageBoxImage.Error);
                 Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
                 Application.Current.Shutdown();
             }
@@ -106,9 +106,7 @@ namespace Janus_Client_V1
             zu_schnell.Interval = TimeSpan.FromSeconds(1);
             zu_schnell.Tick += zu_schnell_tick;
 
-            if (REG.Lesen("Config", "Systemsounds") == "An")
-                SoundPlayer.Sound_Willkommen();
-
+        
             // JOB UPDATE TIMER
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
 
@@ -321,19 +319,19 @@ namespace Janus_Client_V1
         {
             if (Truck_Daten.PATREON_LEVEL == 0)
             {
-                REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!");
-                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
-                anti_ak_text.MaxLength = 0;
-                laenge_antiafk_text.Content = "Keine Änderung möglich";
+                REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!");
+                anti_ak_text.Text = "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.MaxLength = 150;
+                laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 1)
             {
-                anti_ak_text.MaxLength = 50;
+                anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 50 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 2)
             {
-                anti_ak_text.MaxLength = 100;
+                anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 100 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 3)
@@ -1094,7 +1092,7 @@ namespace Janus_Client_V1
                     REG.Schreiben("Config", "FIRST_RUN", "0");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
-                    REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine gute und sichere Fahrt!");
+                    REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
@@ -1193,26 +1191,26 @@ namespace Janus_Client_V1
 
             if (Truck_Daten.PATREON_LEVEL == 0)
             {
-                REG.Schreiben("Config", "ANTI_AFK_TEXT", "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!");
-                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!");
+                anti_ak_text.Text = "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!";
                 anti_ak_text.MaxLength = 0;
                 laenge_antiafk_text.Content = "Keine Änderung möglich";
             }
             else if (Truck_Daten.PATREON_LEVEL == 1)
             {
-                anti_ak_text.Text = "Projekt-Janus.de wünscht eine gute Fahrt!";
+                anti_ak_text.Text = "TrucksLOG wünscht eine gute Fahrt!";
                 anti_ak_text.MaxLength = 50;
                 laenge_antiafk_text.Content = "Max. 50 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 2)
             {
-                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.Text = "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!";
                 anti_ak_text.MaxLength = 100;
                 laenge_antiafk_text.Content = "Max. 100 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 3)
             {
-                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.Text = "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!";
                 anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
@@ -1227,7 +1225,7 @@ namespace Janus_Client_V1
         {
             try
             {
-                Process.Start("https://projekt-janus.de/beta_bewerbung.php");
+                //Process.Start("https://projekt-janus.de/beta_bewerbung.php");
             }
             catch (Exception ex)
             {
@@ -1528,18 +1526,12 @@ namespace Janus_Client_V1
 
         private void anti_afk_text_save_Click(object sender, RoutedEventArgs e)
         {
-            if(Truck_Daten.PATREON_LEVEL >= 1)
+            if(Truck_Daten.PATREON_LEVEL >= 0)
             {
                 REG.Schreiben("Config", "ANTI_AFK_TEXT", anti_ak_text.Text);
                 REG.Schreiben("Config", "ANTI_AFK_TIMER", antiafk_zeit.Value.ToString());
                 REG.Schreiben("Config", "ANTI_AFK_TIMER", antiafk_zeit.Value.ToString());
                 anti_ak_text.Text = anti_ak_text.Text;
-            }
-            else
-            {
-                msg.Schreiben("Fehler!", "Du kannst mit deinem Patreon-Level den Text nicht ändern !" + Environment.NewLine + "Änderung des Textes und der Zeit erst ab Patreon Level 1 möglich.");
-                anti_ak_text.Text = "Projekt-Janus.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
-                antiafk_zeit.Value = 4;
             }
             
         }
@@ -1651,12 +1643,12 @@ namespace Janus_Client_V1
 
         private void spedv_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("SpedV läuft bei dir mit unserem Projekt-JANUS!-Client zusammen.\n\nDies ist im Normalfall kein Problem. Sollte es dennoch zu Problemen mit der Tour-Annahme oder Abgabe kommen, versuche bitte zuerst unseren Client ohne SpedV laufen zu lassen.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("SpedV läuft bei dir mit unserem Client zusammen.\n\nDies ist im Normalfall kein Problem. Sollte es dennoch zu Problemen mit der Tour-Annahme oder Abgabe kommen, versuche bitte zuerst unseren Client ohne SpedV laufen zu lassen.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void trucksbook_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Der TrucksBook Client läuft bei dir mit unserem Projekt-JANUS!-Client zusammen.\n\nIn der Vergangenheit kam es dadurch zu Problemen mit der Annahme oder Abgabe der Touren. Sollte es zu solchen Problemen kommen, versuche bitte zuerst unseren Client ohne TrucksBook laufen zu lassen.\nFalls dies nicht Funktioniert, kontaktiere uns bitte über Discord.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Der TrucksBook Client läuft bei dir mit unserem Client zusammen.\n\nIn der Vergangenheit kam es dadurch zu Problemen mit der Annahme oder Abgabe der Touren. Sollte es zu solchen Problemen kommen, versuche bitte zuerst unseren Client ohne TrucksBook laufen zu lassen.\nFalls dies nicht Funktioniert, kontaktiere uns bitte über Discord.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

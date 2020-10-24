@@ -495,6 +495,9 @@
     <Resource Include="Images\werb4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\wirdzu.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\BETA_CLIENT.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

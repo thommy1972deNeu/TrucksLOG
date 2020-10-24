@@ -4,11 +4,11 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("Janus-Client V2")]
-[assembly: AssemblyDescription("Spielclient von Projekt-Janus.de")]
+[assembly: AssemblyTitle("TrucksLOG-Client V2")]
+[assembly: AssemblyDescription("Spielclient von Projekt-Janus.de / Truckslog.de")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Projekt-Janus.de")]
-[assembly: AssemblyProduct("Janus-Client V2")]
+[assembly: AssemblyCompany("TrucksLOG.de")]
+[assembly: AssemblyProduct("Janus/TrucksLOG-Client V2")]
 [assembly: AssemblyCopyright("Copyright © 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -18,5 +18,5 @@ using System.Windows;
     ResourceDictionaryLocation.SourceAssembly 
 )]
 
-[assembly: AssemblyVersion("2.1.9.0")]
-[assembly: AssemblyFileVersion("2.1.9.0")]
+[assembly: AssemblyVersion("2.2.0.0")]
+[assembly: AssemblyFileVersion("2.2.0.0")]
