@@ -1484,9 +1484,27 @@ namespace Janus_Client_V1
             AutoUpdater.ShowRemindLaterButton = false;
             AutoUpdater.Start(UpdateString);
 
+            OnlineCheck();
+
             set_online();
             lade_Punktekonto();
         }
+
+        private async void OnlineCheck()
+        {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
+
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            string response = API.HTTPSRequestPost(API.onlinecheck, post_param);
+            if (Convert.ToInt32(response) >= 1)
+            {
+                await metroWindow.ShowMessageAsync("Mehrmaliges Ausführen des Clients...", "Der Client darf nur 1x gestartet werden und wird deshalb jetzt beendet.");
+                Logging.WriteClientLog("[ERROR] -> Spielclient wurde mehrmals Ausgeführt");
+                Application.Current.Shutdown();
+            }
+        }
+
 
         private void set_online()
         {

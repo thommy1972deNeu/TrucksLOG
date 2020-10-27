@@ -31,8 +31,10 @@ namespace Janus_Client_V1.Klassen
         public static string delete_tour = server + "del_tour.php";
         public static string punktekonto = server + "punktekonto.php";
         public static string bann_check = server + "bann_check.php";
+        public static string useronline_url = server + "client_useronline.php";
+        public static string onlinecheck = server + "onlinecheck.php";
         public static string updatetext_uri = "http://client.truckslog.org/changelog.html";
-        public static string useronline_url = "https://truckslog.org/client_useronline.php";
+        
 
         public static string HTTPSRequestPost(string url, Dictionary<string, string> postParameters)
         {
