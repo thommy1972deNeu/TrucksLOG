@@ -25,7 +25,6 @@ namespace Janus_Client_V1.Klassen
 
         public static void WriteClientLog(string text, [CallerLineNumber] int linenumber = 0, [CallerFilePath] string file = null)
         {
-            if (File.Exists(Config.LogRoot + Config.ClientLogFileName))
                 File.AppendAllText(Config.LogRoot + Config.ClientLogFileName, "<" + DateTime.Now + "> " + text + ", Line Number: " + linenumber + ", File: " + file + Environment.NewLine);
         }
 

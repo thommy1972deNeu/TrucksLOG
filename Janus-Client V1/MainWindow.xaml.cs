@@ -1243,6 +1243,7 @@ namespace Janus_Client_V1
             try
             {
                 Process.Start("https://paypal.me/ErIstWiederDa/2,00");
+                Logging.WriteClientLog("PayPal Spenden Button geklickt");
             }
             catch (Exception ex)
             {
@@ -1485,13 +1486,15 @@ namespace Janus_Client_V1
             AutoUpdater.Start(UpdateString);
 
             OnlineCheck();
-
             set_online();
             lade_Punktekonto();
         }
 
         private async void OnlineCheck()
         {
+
+            Logging.WriteClientLog("Client ist das erste mal geöffnet worden...");
+
             var metroWindow = (Application.Current.MainWindow as MetroWindow);
 
             Dictionary<string, string> post_param = new Dictionary<string, string>();
@@ -1571,7 +1574,7 @@ namespace Janus_Client_V1
         {
             var metroWindow = (Application.Current.MainWindow as MetroWindow);
         
-            var result = await metroWindow.ShowMessageAsync("Client Reset durchführen ?", "Soll der Client wirklich Resettet werden ?" + Environment.NewLine + "Du musst alle Pfade und den Client Key neu eintragen !", MessageDialogStyle.AffirmativeAndNegative);
+            var result = await metroWindow.ShowMessageAsync("Client Reset durchführen ?", "Soll der Client wirklich Zurückgesetzt werden ?" + Environment.NewLine + "Du musst alle Pfade und den Client Key neu eintragen !", MessageDialogStyle.AffirmativeAndNegative);
             
             if (result == MessageDialogResult.Affirmative)
             {
