@@ -62,7 +62,7 @@ namespace Janus_Client_V1
         {
             InitializeComponent();
 
-           
+            OnlineCheck();
 
             if (ServerCheck("https://truckslog.org") == false)
             {
@@ -1243,7 +1243,7 @@ namespace Janus_Client_V1
             try
             {
                 Process.Start("https://paypal.me/ErIstWiederDa/2,00");
-                Logging.WriteClientLog("PayPal Spenden Button geklickt");
+                Logging.WriteClientLog("[INFO] PayPal Spenden Button geklickt");
             }
             catch (Exception ex)
             {
@@ -1485,7 +1485,6 @@ namespace Janus_Client_V1
             AutoUpdater.ShowRemindLaterButton = false;
             AutoUpdater.Start(UpdateString);
 
-            OnlineCheck();
             set_online();
             lade_Punktekonto();
         }

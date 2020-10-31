@@ -13,7 +13,7 @@
                  ShowIconOnTitleBar="True"
                  AllowsTransparency="True"
                  Opacity="{Binding BG_OPACITY}"
-                 Title="Trucks::LOG - ClientV2" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen" MaxWidth="1200" MaxHeight="700" Loaded="Hauptfenster_Loaded" Closed="Hauptfenster_Closed" Closing="Hauptfenster_Closing">
+                 Title="Trucks::LOG - ClientV2" TitleAlignment="Center" Height="700" Width="1200" ResizeMode="NoResize" Icon="apple-icon-72x72.png" WindowStartupLocation="CenterScreen" MaxWidth="1200" MaxHeight="700" MinWidth="1200" MinHeight="700" Loaded="Hauptfenster_Loaded" Closed="Hauptfenster_Closed" Closing="Hauptfenster_Closing">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="job_angenommen" />
