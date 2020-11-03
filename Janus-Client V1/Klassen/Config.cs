@@ -10,11 +10,11 @@ namespace Janus_Client_V1.Klassen
     {
         // ALLGEMEIN
         public static string dll_Version = "10";
-
+        static string Datum = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
         // LOGGING
         public static string LogRoot = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Projekt-JANUS";
-        public static string ClientLogFileName = @"\Client_Log.txt";
-        public static string SystemLogFileName = @"\System_Log.txt";
+        public static string ClientLogFileName = @"\Client_Log_" + Datum + ".txt";
+        public static string SystemLogFileName = @"\System_Log_" + Datum + ".txt";
 
     }
 }

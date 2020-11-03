@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 using System.Windows;
 
 [assembly: AssemblyTitle("TrucksLOG-Client V2")]
-[assembly: AssemblyDescription("Spielclient von Projekt-Janus.de / Truckslog.de")]
+[assembly: AssemblyDescription("Spielclient von Truckslog.de")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("TrucksLOG.de")]
-[assembly: AssemblyProduct("Janus/TrucksLOG-Client V2")]
-[assembly: AssemblyCopyright("Copyright © 2020")]
+[assembly: AssemblyProduct("TrucksLOG-Client V2")]
+[assembly: AssemblyCopyright("Copyright © 2019-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
@@ -18,5 +18,5 @@ using System.Windows;
     ResourceDictionaryLocation.SourceAssembly 
 )]
 
-[assembly: AssemblyVersion("2.2.0.0")]
-[assembly: AssemblyFileVersion("2.2.0.0")]
+[assembly: AssemblyVersion("2.2.4.0")]
+[assembly: AssemblyFileVersion("2.2.4.0")]

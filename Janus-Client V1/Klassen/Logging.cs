@@ -8,6 +8,8 @@ namespace Janus_Client_V1.Klassen
     {
         public static void Make_Log_File()
         {
+            
+
             if (!Directory.Exists(Config.LogRoot))
                 Directory.CreateDirectory(Config.LogRoot);
 
@@ -18,7 +20,7 @@ namespace Janus_Client_V1.Klassen
             else
             {
                 // Dateien exisitieren -> erstmal Leeren
-                File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, String.Empty);
+                File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, "<-------------------------   NEW START   ----------------------->");
             }
 
         }
