@@ -15,19 +15,19 @@ namespace Janus_Client_V1.Klassen
 
             if (!File.Exists(Config.LogRoot + Config.ClientLogFileName))
             {
-                File.Create(Config.LogRoot + Config.ClientLogFileName); File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, String.Empty);
+                //File.Create(Config.LogRoot + Config.ClientLogFileName); File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, String.Empty);
             }
             else
             {
                 // Dateien exisitieren -> erstmal Leeren
-                File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, "<-------------------------   NEW START   ----------------------->");
+               // File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, "<-------------------------   NEW START   ----------------------->");
             }
 
         }
 
         public static void WriteClientLog(string text, [CallerLineNumber] int linenumber = 0, [CallerFilePath] string file = null)
         {
-                File.AppendAllText(Config.LogRoot + Config.ClientLogFileName, "<" + DateTime.Now + "> " + text + ", Line Number: " + linenumber + ", File: " + file + Environment.NewLine);
+                //File.AppendAllText(Config.LogRoot + Config.ClientLogFileName, "<" + DateTime.Now + "> " + text + ", Line Number: " + linenumber + ", File: " + file + Environment.NewLine);
         }
 
 

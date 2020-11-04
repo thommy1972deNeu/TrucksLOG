@@ -34,7 +34,7 @@ namespace Janus_Client_V1
 {
     public partial class MainWindow
     {
-        public int beta = 0;
+        public string beta = "ALL"; // Update: ALL = Alle User, BETA = Nur Beta, NO = Keiner 
 
         public DiscordRpcClient client;
         private static RichPresence jobRPC;
@@ -67,18 +67,14 @@ namespace Janus_Client_V1
             if (ServerCheck("https://truckslog.org") == false)
             {
                 MessageBox.Show("Der Server ist leider Offline\n Das Programm wird jetzt beendet!", "Fehler bei Verbindung zum Server", MessageBoxButton.OK, MessageBoxImage.Error);
-                Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
+               /// Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
                 Application.Current.Shutdown();
             }
 
-            Logging.Make_Log_File();
+            //Logging.Make_Log_File();
 
             Lade_Voreinstellungen();
             lade_GameVersionen();
-            if (TrucksBook_Running() == true)
-                Logging.WriteClientLog("[DUAL-APPS] - TrucksBook Client läuft mit !");
-            if (SpedV_Running() == true)
-                Logging.WriteClientLog("[DUAL-APPS] - SpedV Client läuft mit !");
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -96,8 +92,6 @@ namespace Janus_Client_V1
             credit_text.Content += "Einen Super-Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der PJ-Zeit unterstützt." + Environment.NewLine;
             credit_text.Content += "Und natürlich auch an" + Environment.NewLine;
             credit_text.Content += "unseren One & Only-Live-Streamer:" + Environment.NewLine;
-
-            Logging.WriteClientLog("Version: " + CLIENT_VERSION);
 
             useronline_timer.Interval = TimeSpan.FromSeconds(5);
             useronline_timer.Tick += Useronline_Tick;
@@ -352,10 +346,6 @@ namespace Janus_Client_V1
                 lade_Punktekonto();
                 set_online();
 
-                // TRUCKSBOOK CHECK
-                Truck_Daten.TRUCKSBOOK = TrucksBook_Running();
-                Truck_Daten.SPEDV = SpedV_Running();
-
             } catch{
                 Logging.WriteClientLog("[ERROR] Fehler beim Useronline-Tick !");
             }
@@ -425,23 +415,6 @@ namespace Janus_Client_V1
                 Truck_Daten.PATREON_LEVEL = 0;
             }
         }
-
-        public static bool SpedV_Running()
-        {
-            string process = "FPH SpedV";
-            if (Process.GetProcessesByName(process).Length > 0)
-                return true;
-            return false;
-        }
-        public static bool TrucksBook_Running()
-        {
-            string process = "TB Client";
-            if (Process.GetProcessesByName(process).Length > 0)
-                return true;
-            return false;
-        }
-       
-
 
         private void lade_Punktekonto()
         {
@@ -1480,10 +1453,25 @@ namespace Janus_Client_V1
 
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
         {
-           
-            AutoUpdater.ShowSkipButton = false;
-            AutoUpdater.ShowRemindLaterButton = false;
-            AutoUpdater.Start(UpdateString);
+            if (beta == "ALL" || beta == "BETA")
+            {
+                if(beta == "BETA")
+                {
+                    if(Convert.ToInt32(Ist_BETA_Tester()) >= 1)
+                    {
+                        AutoUpdater.ShowSkipButton = false;
+                        AutoUpdater.ShowRemindLaterButton = false;
+                        AutoUpdater.Start(UpdateString);
+                    }
+                }
+                if(beta == "ALL")
+                {
+                    AutoUpdater.ShowSkipButton = false;
+                    AutoUpdater.ShowRemindLaterButton = false;
+                    AutoUpdater.Start(UpdateString);
+                }
+
+            }
 
             set_online();
             lade_Punktekonto();
@@ -1492,7 +1480,7 @@ namespace Janus_Client_V1
         private async void OnlineCheck()
         {
 
-            Logging.WriteClientLog("Client ist das erste mal geöffnet worden...");
+            //Logging.WriteClientLog("Client ist das erste mal geöffnet worden...");
 
             var metroWindow = (Application.Current.MainWindow as MetroWindow);
 
@@ -1502,9 +1490,16 @@ namespace Janus_Client_V1
             if (Convert.ToInt32(response) >= 1)
             {
                 await metroWindow.ShowMessageAsync("Mehrmaliges Ausführen des Clients...", "Der Client darf nur 1x gestartet werden und wird deshalb jetzt beendet.");
-                Logging.WriteClientLog("[ERROR] -> Spielclient wurde mehrmals Ausgeführt");
+                //Logging.WriteClientLog("[ERROR] -> Spielclient wurde mehrmals Ausgeführt");
                 Application.Current.Shutdown();
             }
+        }
+
+        private static string Ist_BETA_Tester()
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            return API.HTTPSRequestPost(API.beta_tester, post_param);
         }
 
 

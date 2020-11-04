@@ -234,10 +234,12 @@
                             </StackPanel>
                         </Button>
                         
+                        <!-- DEAKTIVIERT 04.11.2020
                         <Separator/>
                         <Label Content="Suche Client Updates" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Button x:Name="Client_Updates" Click="Client_Update_Manuell" Content="Suche manuell nach Updates" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
-
+                        -->
+                        
                         <Separator/>
                         <Label Content="Client-Reset" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Button x:Name="Werksteinstellungen" Click="Werksteinstellungen_Click" Content="Client RESET!" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
