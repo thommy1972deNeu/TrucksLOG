@@ -22,6 +22,7 @@ namespace Janus_Client_V1.Klassen
         public static string link_click = server + "link_click.php";
         public static string patreon_state = server + "patreon.php";
         public static string beta_tester = server + "beta.php";
+        public static string updates = server + "updates.php";
         public static string nutzerdaten = server + "nutzerdaten.php";
         public static string email_daten = server + "email_daten.php";
         public static string key_check = server + "key_check.php";

@@ -34,8 +34,7 @@ namespace Janus_Client_V1
 {
     public partial class MainWindow
     {
-        public string beta = "ALL"; // Update: ALL = Alle User, BETA = Nur Beta, NO = Keiner 
-
+       
         public DiscordRpcClient client;
         private static RichPresence jobRPC;
         private const string DiscordAppID = "730374187025170472";
@@ -1453,24 +1452,21 @@ namespace Janus_Client_V1
 
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
         {
-            if (beta == "ALL" || beta == "BETA")
+            if(Updates_FUER() == "ALLE")
             {
-                if(beta == "BETA")
-                {
-                    if(Convert.ToInt32(Ist_BETA_Tester()) >= 1)
-                    {
-                        AutoUpdater.ShowSkipButton = false;
-                        AutoUpdater.ShowRemindLaterButton = false;
-                        AutoUpdater.Start(UpdateString);
-                    }
-                }
-                if(beta == "ALL")
+                AutoUpdater.ShowSkipButton = false;
+                AutoUpdater.ShowRemindLaterButton = false;
+                AutoUpdater.Start(UpdateString);
+            }
+
+            if (Updates_FUER() == "BETA")
+            {
+                if (Convert.ToInt32(Ist_BETA_Tester()) >= 1)
                 {
                     AutoUpdater.ShowSkipButton = false;
                     AutoUpdater.ShowRemindLaterButton = false;
                     AutoUpdater.Start(UpdateString);
                 }
-
             }
 
             set_online();
@@ -1493,6 +1489,13 @@ namespace Janus_Client_V1
                 //Logging.WriteClientLog("[ERROR] -> Spielclient wurde mehrmals Ausgeführt");
                 Application.Current.Shutdown();
             }
+        }
+
+        private static string Updates_FUER()
+        {
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            return API.HTTPSRequestPost(API.updates, post_param);
         }
 
         private static string Ist_BETA_Tester()
