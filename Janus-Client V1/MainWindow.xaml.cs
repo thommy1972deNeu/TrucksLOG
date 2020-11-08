@@ -384,6 +384,7 @@ namespace Janus_Client_V1
                     post_param.Add("REST_KM", Truck_Daten.REST_KM_SA.ToString());
                     restkilometer = Truck_Daten.REST_KM_SA.ToString();
                 }
+                post_param.Add("FRACHTMARKT", Truck_Daten.FRACHTMARKT.ToString());
                 post_param.Add("RESTZEIT", Truck_Daten.RESTZEIT_INT.ToString());
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
