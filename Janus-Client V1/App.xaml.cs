@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Janus_Client_V1
+namespace TrucksLOG
 {
     public partial class App : Application
     {

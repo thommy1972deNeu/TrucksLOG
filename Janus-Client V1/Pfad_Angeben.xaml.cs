@@ -1,11 +1,11 @@
-﻿using Janus_Client_V1.Klassen;
+﻿using TrucksLOG.Klassen;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
-namespace Janus_Client_V1
+namespace TrucksLOG
 {
     /// <summary>
     /// Interaktionslogik für Pfad_Angeben.xaml

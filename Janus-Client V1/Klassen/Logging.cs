@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.CompilerServices;
 
-namespace Janus_Client_V1.Klassen
+namespace TrucksLOG.Klassen
 {
     public class Logging
     {

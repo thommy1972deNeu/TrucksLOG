@@ -1,10 +1,9 @@
-﻿using Janus_Client_V1.Spieldaten;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using VdfParser;
 
-namespace Janus_Client_V1.Klassen
+namespace TrucksLOG.Klassen
 {
     public class TelemetryInstaller
     {

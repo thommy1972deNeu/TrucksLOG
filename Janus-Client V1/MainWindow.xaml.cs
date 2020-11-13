@@ -1,6 +1,6 @@
 ﻿using ControlzEx.Theming;
-using Janus_Client_V1.Klassen;
-using Janus_Client_V1.Spieldaten;
+using TrucksLOG.Klassen;
+using TrucksLOG.Spieldaten;
 using SCSSdkClient;
 using SCSSdkClient.Object;
 using System;
@@ -14,23 +14,16 @@ using System.Windows.Threading;
 using AutoUpdaterDotNET;
 using System.Reflection;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Input;
 using WindowsInput.Native;
 using WindowsInput;
-using System.Threading;
-using ControlzEx.Native;
 using DiscordRPC;
-using DiscordRPC.Logging;
 using Microsoft.Win32;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System.Threading.Tasks;
-using System.IO;
 using System.Net;
-using System.Net.Sockets;
 
-namespace Janus_Client_V1
+namespace TrucksLOG
 {
     public partial class MainWindow
     {
@@ -341,7 +334,8 @@ namespace Janus_Client_V1
                 post_param.Add("SECRET", "fZhdgte4fdgDDgfet567ufghf");
                 string response_online = API.HTTPSRequestPost(API.useronline_url, post_param);
                 Truck_Daten.ONLINEUSER = "Fahrer: " + response_online;
-
+               
+                lade_fahrer();
                 lade_Punktekonto();
                 set_online();
 
@@ -351,7 +345,14 @@ namespace Janus_Client_V1
         }
 
 
-
+        private void lade_fahrer()
+        {
+            Dictionary<string, string> post_param2 = new Dictionary<string, string>();
+            post_param2.Add("VERSION", CLIENT_VERSION);
+            string response = API.HTTPSRequestPost(API.fahreronline_url, post_param2);
+            string respons_br = response.Replace("<br/>", "\n");
+            fahrer_text.Text = respons_br.ToString();
+        }
 
 
         private void timer_Tick(object sender, EventArgs e)
@@ -359,8 +360,8 @@ namespace Janus_Client_V1
             string restkilometer;
             try
             {
-                ETS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2")) ? false : true;
-                ATS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS")) ? false : true;
+                ETS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2"));
+                ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
 
                 lade_Patreon();
                 setzt_antiAFK();
@@ -396,7 +397,7 @@ namespace Janus_Client_V1
                 Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
             }
 
-           
+     
 
         }
 
@@ -1042,10 +1043,6 @@ namespace Janus_Client_V1
         }
 
 
-        static int Max(params int[] numbers)
-        {
-            return numbers.Max();
-        }
 
 
 
@@ -1131,8 +1128,8 @@ namespace Janus_Client_V1
                     Logging.WriteClientLog("Fehler beim setzen des DataContext" + ex.Message);
                 }
 
-                ETS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2")) ? false : true;
-                ATS_TOUR_delete.IsEnabled = string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS")) ? false : true;
+                ETS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2"));
+                ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
 
                 Logging.WriteClientLog("Voreinstellungen geladen !");
             }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
-using Janus_Client_V1.Klassen;
+using TrucksLOG.Klassen;
 
 namespace Janus_Client_V1
 {

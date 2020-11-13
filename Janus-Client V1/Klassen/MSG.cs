@@ -1,14 +1,8 @@
 ﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
 
-namespace Janus_Client_V1.Klassen
+namespace TrucksLOG.Klassen
 {
     public class MSG
     {

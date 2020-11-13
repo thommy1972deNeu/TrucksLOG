@@ -3,9 +3,8 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Web;
-using System.Windows;
 
-namespace Janus_Client_V1.Klassen
+namespace TrucksLOG.Klassen
 {
     public class API
     {
@@ -33,6 +32,7 @@ namespace Janus_Client_V1.Klassen
         public static string punktekonto = server + "punktekonto.php";
         public static string bann_check = server + "bann_check.php";
         public static string useronline_url = server + "client_useronline.php";
+        public static string fahreronline_url = server + "fahrer_online.php";
         public static string onlinecheck = server + "onlinecheck.php";
         public static string updatetext_uri = "http://client.truckslog.org/changelog.html";
         

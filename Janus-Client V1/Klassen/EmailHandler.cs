@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace Janus_Client_V1.Klassen
+namespace TrucksLOG.Klassen
 {
     public class EmailHandler
     {
-
-
-
         public void Email_BETA_TESTER_FEHLER(string client_key, string betreff)
         {
             Dictionary<string, string> post_param_e = new Dictionary<string, string>();

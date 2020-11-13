@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Janus_Client_V1.Spieldaten
+namespace TrucksLOG.Spieldaten
 {
     public class Truck_Daten : INotifyPropertyChanged
     {

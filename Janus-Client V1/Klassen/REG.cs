@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace Janus_Client_V1.Klassen
+namespace TrucksLOG.Klassen
 {
     public class REG
     {

@@ -1,4 +1,4 @@
-﻿<mah:MetroWindow x:Class="Janus_Client_V1.MainWindow"
+﻿<mah:MetroWindow x:Class="TrucksLOG.MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -280,6 +280,14 @@
 
             </mah:Flyout>
 
+            <mah:Flyout x:Name="Fahrer_FlyOut" Width="200" Position="Right" Foreground="White">
+
+                <ScrollViewer Width="200" VerticalScrollBarVisibility="Auto">
+                    <TextBlock x:Name="fahrer_text" Margin="20,0,0,0" FontSize="12" TextWrapping="Wrap"/>
+                </ScrollViewer>
+
+            </mah:Flyout>
+
 
 
             <mah:Flyout x:Name="BottomFlyOut" Height="180" Position="Bottom" Background="Orange" Foreground="Black">
@@ -350,6 +358,7 @@
                 </ToggleButton.ContentTemplate>
             </ToggleButton>
 
+
             <ToggleButton Content="Layers" ToolTip="CREDITS" Click="Oeffne_Credits" IsChecked="{Binding ElementName=RightFlyOut, Path=IsOpen}" Cursor="Hand">
                 <ToggleButton.ContentTemplate>
                     <DataTemplate>
@@ -369,7 +378,12 @@
             <Label x:Name="trucksbook_anzeige" Content="{iconPacks:Material Kind=ShieldAlertOutline}" Height="30" ToolTip="TrucksBook läuft mit! Für weitere Informationen klicken..." Visibility="{Binding TRUCKSBOOK, Converter={StaticResource trucksbook}}" MouseDown="trucksbook_anzeige_MouseDown"/>
             <Label x:Name="punktekonto_anzeige" Content="{Binding PUNKTEKONTO}" FontSize="16" Margin="0,7,0,0"/>
 
-            <Label x:Name="user_online_anzeige" Content="{Binding ONLINEUSER}" FontSize="16" Margin="0,7,0,0"/>
+
+
+            <ToggleButton Content="{Binding ONLINEUSER}" ToolTip="{Binding ONLINEUSER}" IsChecked="{Binding ElementName=Fahrer_FlyOut, Path=IsOpen}" Foreground="Beige" FontSize="16" Margin="0,12,0,0" Cursor="Hand">
+              
+                    
+            </ToggleButton>
 
             <ToggleButton Content="Layers" ToolTip="Zeige Client-Updates" IsChecked="{Binding ElementName=UpdatesFlyOut, Path=IsOpen}" Cursor="Hand">
                 <ToggleButton.ContentTemplate>

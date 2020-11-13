@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B7E86E4C-BE26-44B9-BE30-90388F15453A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Janus_Client_V1</RootNamespace>
-    <AssemblyName>Janus-Client V1</AssemblyName>
+    <RootNamespace>TrucksLOG</RootNamespace>
+    <AssemblyName>TrucksLOG</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -20,16 +20,17 @@
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <UpdateUrl>https://projekt-janus.de/client_updates/</UpdateUrl>
+    <SupportUrl>https://truckslog.de</SupportUrl>
     <ProductName>Spielclient</ProductName>
-    <PublisherName>Projekt-Janus.de</PublisherName>
+    <PublisherName>TrucksLOG</PublisherName>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.2.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
@@ -54,6 +55,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>14715183525EF9A9C834AC3F51C1718C04711CAB</ManifestCertificateThumbprint>
@@ -68,10 +70,13 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Janus_Client_V1.App</StartupObject>
+    <StartupObject>TrucksLOG.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>TL_ICON_2.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoUpdater.NET, Version=1.6.3.0, Culture=neutral, PublicKeyToken=501435c91b35f4bc, processorArchitecture=MSIL">
@@ -335,9 +340,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="apple-icon-72x72.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Sonstiges\" />
   </ItemGroup>
   <ItemGroup>
@@ -445,6 +447,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="TL_ICON_2.ico" />
     <Resource Include="tln.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -489,9 +492,7 @@
     <Resource Include="Images\pj_7.jpg" />
     <Resource Include="Images\pj_8.jpg" />
     <Resource Include="Images\pj_5.jpg" />
-    <Content Include="Images\PJ_ICON.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Images\PJ_ICON.ico" />
     <Resource Include="Images\werb_03.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -501,6 +502,9 @@
     <Resource Include="Images\wirdzu.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Images\TL_ICON_2.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\BETA_CLIENT.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
