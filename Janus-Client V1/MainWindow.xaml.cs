@@ -983,7 +983,7 @@ namespace TrucksLOG
         {
             string truckdaten;
             string tourdaten;
-            string DiscordLargeImageKey = "pj_512";
+            string DiscordLargeImageKey = "tl_6";
 
             if (string.IsNullOrEmpty(HERSTELLER))
             {
@@ -996,7 +996,7 @@ namespace TrucksLOG
             }
             if(string.IsNullOrEmpty(FRACHT))
             {
-                tourdaten = "Gerade keine Tour...";
+                tourdaten = "Keine Tour...";
             } else
             {
                 tourdaten = GEWICHT + " T " + FRACHT + " von " + STARTORT + " nach " + ZIELORT;
@@ -1019,33 +1019,6 @@ namespace TrucksLOG
          
             client.SetPresence(jobRPC);
         }
-
-        private static string getTruckImageKey(string truck_brand_id)
-        {
-            string DiscordLargeImageKey = DefaultDiscordLargeImageKey;
-            if (truck_brand_id == "renault")
-            {
-                DiscordLargeImageKey = "brand-renault";
-            }
-            else if (truck_brand_id == "scania")
-            {
-                DiscordLargeImageKey = "brand-scania";
-            }
-            else if (truck_brand_id == "mercedes")
-            {
-                DiscordLargeImageKey = "brand-mercedes";
-            }
-            else if (truck_brand_id == "volvo")
-            {
-                DiscordLargeImageKey = "brand-volvo";
-            }
-            return DiscordLargeImageKey;
-        }
-
-
-
-
-
 
         private void Lade_Voreinstellungen()
         {
