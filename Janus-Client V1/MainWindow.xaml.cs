@@ -56,7 +56,7 @@ namespace TrucksLOG
 
             OnlineCheck();
 
-            if (ServerCheck("https://truckslog.org") == false)
+            if (ServerCheck("https://truckslog.de") == false)
             {
                 MessageBox.Show("Der Server ist leider Offline\n Das Programm wird jetzt beendet!", "Fehler bei Verbindung zum Server", MessageBoxButton.OK, MessageBoxImage.Error);
                /// Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
@@ -67,6 +67,8 @@ namespace TrucksLOG
 
             Lade_Voreinstellungen();
             lade_GameVersionen();
+            SpeditionsCheck();
+
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -266,19 +268,19 @@ namespace TrucksLOG
                         sim.Keyboard.TextEntry("PJ-BOT:");
                         sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
                         sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-                        Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
+                        //Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
                     }
                     else
                     {
-                        Logging.WriteClientLog("[INFO] Keys nicht gesendet! Kein Spiel gestartet oder Geschwindigkeit: " + Truck_Daten.SPEED);
+                        //Logging.WriteClientLog("[INFO] Keys nicht gesendet! Kein Spiel gestartet oder Geschwindigkeit: " + Truck_Daten.SPEED);
                     }
                 } else
                 {
-                    Logging.WriteClientLog("[INFO] ANT-AFK ist an, aber kein Spiel gestartet...");
+                    //Logging.WriteClientLog("[INFO] ANT-AFK ist an, aber kein Spiel gestartet...");
                 }
-            } catch (Exception ex)
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler bei anti_afk_timer " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler bei anti_afk_timer " + ex.Message);
             }
 
         }
@@ -292,13 +294,38 @@ namespace TrucksLOG
                 post_param.Add("SPEED", Truck_Daten.SPEED.ToString());
                 string response = API.HTTPSRequestPost(API.user_zu_schnell, post_param);
             }
-            catch (Exception ex)
+            catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler bei zu_schnell_tick " + ex.Message);
+               // Logging.WriteClientLog("[ERROR] Fehler bei zu_schnell_tick " + ex.Message);
             }
 
         }
 
+
+        private async void SpeditionsCheck()
+        {
+            try
+            {
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                string response = API.HTTPSRequestPost(API.SpeditionsCheck, post_param);
+
+                if(response == "Ohne")
+                {
+                    await metroWindow.ShowMessageAsync("Keine Spedition !", "Du musst einer Spedition angehören um unser System nutzen zu können.\nDu findest alle Speditionen auf unserer Webseite TrucksLOG.de\n\nDas Programm wird jetzt beendet !");
+                    //Logging.WriteClientLog("[ERROR] -> Spielclient wurde mehrmals Ausgeführt");
+                    Application.Current.Shutdown();
+                }
+                Truck_Daten.SPEDITIONSNAME = "Spedition: " + response;
+
+            }
+            catch
+            {
+                // Logging.WriteClientLog("[ERROR] Fehler bei zu_schnell_tick " + ex.Message);
+            }
+
+        }
 
 
         private void setzt_antiAFK()
@@ -339,8 +366,8 @@ namespace TrucksLOG
                 lade_Punktekonto();
                 set_online();
 
-            } catch{
-                Logging.WriteClientLog("[ERROR] Fehler beim Useronline-Tick !");
+            } catch {
+                //Logging.WriteClientLog("[ERROR] Fehler beim Useronline-Tick !");
             }
         }
 
@@ -390,11 +417,11 @@ namespace TrucksLOG
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
 
-                Logging.WriteClientLog("[UPDATE] Tour-Update: " + Truck_Daten.FRACHTSCHADEN.ToString() + ", Rest-KM: " + restkilometer);
+                //Logging.WriteClientLog("[UPDATE] Tour-Update: " + Truck_Daten.FRACHTSCHADEN.ToString() + ", Rest-KM: " + restkilometer);
 
-            } catch (Exception ex)
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
             }
 
      
@@ -429,7 +456,7 @@ namespace TrucksLOG
             }
             catch
             { 
-                Logging.WriteClientLog("[ERROR] Fehler beim laden des Punktekontos !"); 
+                //Logging.WriteClientLog("[ERROR] Fehler beim laden des Punktekontos !"); 
             }
         }
 
@@ -480,9 +507,9 @@ namespace TrucksLOG
                     {
                         REG.Schreiben("Config", "TOUR_ID_ETS2", GenerateString());
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ETS2 mit GENERATE STRING(): " + ex.Message);
+                       // Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ETS2 mit GENERATE STRING(): " + ex.Message);
                     }
                 }
             } else
@@ -493,9 +520,9 @@ namespace TrucksLOG
                     {
                         REG.Schreiben("Config", "TOUR_ID_ATS", GenerateString());
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ATS mit GENERATE STRING(): " + ex.Message);
+                      //  Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ATS mit GENERATE STRING(): " + ex.Message);
                     }
                 }
             }
@@ -541,11 +568,11 @@ namespace TrucksLOG
 
                 job_update_timer.Tick += timer_Tick;
                 job_update_timer.Start();
-                Logging.WriteClientLog("[INFO] Tour gestartet: " + response);
+                //Logging.WriteClientLog("[INFO] Tour gestartet: " + response);
             }
-            catch (Exception ex)
+            catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Starten der Tour: " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler beim Starten der Tour: " + ex.Message);
             }
         }
 
@@ -580,10 +607,10 @@ namespace TrucksLOG
                 SoundPlayer.Sound_Tour_Abgebrochen();
                 job_update_timer.Stop();
 
-                Logging.WriteClientLog("[INFO] Tour abgebrochen: " + response);
-            } catch (Exception ex)
+                //Logging.WriteClientLog("[INFO] Tour abgebrochen: " + response);
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Tour abbrechen !" + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler beim Tour abbrechen !" + ex.Message);
             }
 
         }
@@ -623,10 +650,10 @@ namespace TrucksLOG
                 SoundPlayer.Sound_Tour_Beendet();
 
                 job_update_timer.Stop();
-                Logging.WriteClientLog("[INFO] Tour Abgeliefert: " + response);
+                //Logging.WriteClientLog("[INFO] Tour Abgeliefert: " + response);
             } catch(Exception ex)
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Abgeben der Tour ! - " + ex.Message);
+               // Logging.WriteClientLog("[ERROR] Fehler beim Abgeben der Tour ! - " + ex.Message);
             }
 
         }
@@ -651,10 +678,10 @@ namespace TrucksLOG
                 post_param.Add("GRUND", Truck_Daten.GRUND);
                 string response = API.HTTPSRequestPost(API.strafe, post_param);
                 if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Strafe_Erhalten();
-                Logging.WriteClientLog("[INFO] Strafe erhalten: " + response);
-            } catch (Exception ex)
+                //Logging.WriteClientLog("[INFO] Strafe erhalten: " + response);
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler bei Strafzuweisung" + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler bei Strafzuweisung" + ex.Message);
             }
 
         }
@@ -676,10 +703,10 @@ namespace TrucksLOG
                 Console.WriteLine(response);
 
                 if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
-                Logging.WriteClientLog("[INFO] Maut durchfahren: " + response);
-            } catch(Exception ex)
+                //Logging.WriteClientLog("[INFO] Maut durchfahren: " + response);
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Mautdurchfahrt " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler beim Mautdurchfahrt " + ex.Message);
             }
 
         }
@@ -695,10 +722,10 @@ namespace TrucksLOG
                 post_param.Add("PAY_AMOUNT", Truck_Daten.FERRY_PAY_AMOUNT.ToString());
 
                 string response = API.HTTPSRequestPost(API.transport, post_param);
-                Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
-            } catch (Exception ex)
+                //Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler bei Transport (Schiff)" + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler bei Transport (Schiff)" + ex.Message);
             }
 
         }
@@ -714,22 +741,22 @@ namespace TrucksLOG
                 post_param.Add("PAY_AMOUNT", Truck_Daten.TRAIN_PAY_AMOUNT.ToString());
 
                 string response = API.HTTPSRequestPost(API.transport, post_param);
-                Logging.WriteClientLog("[INFO] TRANSPORT - TRAIN - EVENT: " + response);
-            } catch (Exception ex)
+                //Logging.WriteClientLog("[INFO] TRANSPORT - TRAIN - EVENT: " + response);
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler bei Transport (Zug) " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler bei Transport (Zug) " + ex.Message);
             }
 
         }
 
         private void TelemetryRefuel(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("[INFO] Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
+            //Logging.WriteClientLog("[INFO] Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
         private void TelemetryRefuelEnd(object sender, EventArgs e)
         {
-            Logging.WriteClientLog("[INFO] Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
+            //Logging.WriteClientLog("[INFO] Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
@@ -760,10 +787,10 @@ namespace TrucksLOG
                 post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
 
                 string response = API.HTTPSRequestPost(API.tanken, post_param);
-                Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
-            } catch (Exception ex)
+                //Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler bei RefuelPayed " + ex.Message);
+               // Logging.WriteClientLog("[ERROR] Fehler bei RefuelPayed " + ex.Message);
             }
            
         }
@@ -963,14 +990,25 @@ namespace TrucksLOG
                     Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_HERSTELLER_ID, Truck_Daten.LKW_SCHADEN);
 
                     // GESCHWINDIGKEITS_LOGGEN
-                    if (Truck_Daten.SPEED >= 101)
+                    if(Truck_Daten.SPIEL == "Ats" && Truck_Daten.SPEED >= 75)
                     {
                         zu_schnell.Start();
                     }
                     else
                     {
                         zu_schnell.Stop();
-                    }   
+                    }
+
+                    if (Truck_Daten.SPIEL == "Ets2" && Truck_Daten.SPEED >= 101)
+                    {
+                        zu_schnell.Start();
+                    }
+                    else
+                    {
+                        zu_schnell.Stop();
+                    }
+
+
                 }
             }
             catch
@@ -1084,11 +1122,11 @@ namespace TrucksLOG
                     status_bar_version.Content = "Client Version: " + CLIENT_VERSION;
              
                     
-                    Logging.WriteClientLog("Pfade aus REG gelesen und in Seitenmenü angezeigt !");
+                   // Logging.WriteClientLog("Pfade aus REG gelesen und in Seitenmenü angezeigt !");
                 }
-                catch (Exception ex)
+                catch
                 {
-                    Logging.WriteClientLog("Fehler beim laden der Pfade aus Registry" + ex.Message);
+                    //Logging.WriteClientLog("Fehler beim laden der Pfade aus Registry" + ex.Message);
                 }
                 // Pfade Auslesen Ende
 
@@ -1096,19 +1134,19 @@ namespace TrucksLOG
                 {
                     this.DataContext = Truck_Daten;
                 }
-                catch (Exception ex)
+                catch
                 {
-                    Logging.WriteClientLog("Fehler beim setzen des DataContext" + ex.Message);
+                    //Logging.WriteClientLog("Fehler beim setzen des DataContext" + ex.Message);
                 }
 
                 ETS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2"));
                 ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
 
-                Logging.WriteClientLog("Voreinstellungen geladen !");
+               // Logging.WriteClientLog("Voreinstellungen geladen !");
             }
-            catch (Exception ex)
+            catch
             {
-                Logging.WriteClientLog("Fehler beim Laden der Voreinstellungen " + ex.Message);
+               // Logging.WriteClientLog("Fehler beim Laden der Voreinstellungen " + ex.Message);
             }
 
             /*
@@ -1125,9 +1163,9 @@ namespace TrucksLOG
                 string response3 = response2.Replace("<hr/>", "");
                 update_text.Text = response3;
 
-            } catch (Exception ex)
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Anzeigen der Update News " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler beim Anzeigen der Update News " + ex.Message);
             }
 
             lade_Patreon();
@@ -1172,7 +1210,7 @@ namespace TrucksLOG
             }
             catch (Exception ex)
             {
-                Logging.WriteClientLog("[ERROR] Fehler Beta_Tester: " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler Beta_Tester: " + ex.Message);
                 msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1010). Bitte versuche es später erneut oder gib uns diesen Fehlercode in Discord." + ex.Message);
             }
         }
@@ -1186,11 +1224,11 @@ namespace TrucksLOG
             try
             {
                 Process.Start("https://paypal.me/ErIstWiederDa/2,00");
-                Logging.WriteClientLog("[INFO] PayPal Spenden Button geklickt");
+                //Logging.WriteClientLog("[INFO] PayPal Spenden Button geklickt");
             }
             catch (Exception ex)
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Spende_Kaffee: " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler beim Spende_Kaffee: " + ex.Message);
                 msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut..." + ex.Message);
             }
         }
@@ -1223,7 +1261,7 @@ namespace TrucksLOG
 
         private void Preis_eintragen_Click(object sender, RoutedEventArgs e)
         {
-            Logging.WriteClientLog("Preis eintragen CLICK-EVENT");
+           // Logging.WriteClientLog("Preis eintragen CLICK-EVENT");
         }
 
         private void Systemsounds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1269,14 +1307,14 @@ namespace TrucksLOG
 
         private void spende_paypal(object sender, RoutedEventArgs e)
         {
-            Logging.WriteClientLog("[INFO] Spende_PayPal wurde angeklickt!");
+            //Logging.WriteClientLog("[INFO] Spende_PayPal wurde angeklickt!");
             Process.Start("https://paypal.me/ErIstWiederDa/2,00");
         }
 
         private void patreon_link(object sender, RoutedEventArgs e)
         {
-            Logging.WriteClientLog("[INFO] Patreon Link wurde angeklickt!");
-            Process.Start("https://www.patreon.com/projektjanus");
+            //Logging.WriteClientLog("[INFO] Patreon Link wurde angeklickt!");
+            Process.Start("https://www.patreon.com/TrucksLOG");
         }
 
         private void Background_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1288,9 +1326,9 @@ namespace TrucksLOG
                 myBrush.ImageSource = new BitmapImage(new Uri(BaseUriHelper.GetBaseUri(this), "Images/" + (string)Background_WEchsler.SelectedValue));
                 this.Hauptfenster.Background = myBrush;
             }
-            catch (Exception ex)
+            catch
             {
-                Logging.WriteClientLog("Designer: Konnte den Background " + (string)(Background_WEchsler.SelectedValue) + " nicht laden." + ex.Message + ex.StackTrace);
+                //Logging.WriteClientLog("Designer: Konnte den Background " + (string)(Background_WEchsler.SelectedValue) + " nicht laden." + ex.Message + ex.StackTrace);
             }
         }
 
@@ -1304,7 +1342,7 @@ namespace TrucksLOG
             post_param.Add("LINK", "Andras.tv");
             post_param.Add("USER", REG.Lesen("Config", "CLIENT_KEY"));
             string response = API.HTTPSRequestPost(API.link_click, post_param);
-            Logging.WriteClientLog("[INFO] Andras.TV wurde angeklickt!");
+           // Logging.WriteClientLog("[INFO] Andras.TV wurde angeklickt!");
             Process.Start("https://www.twitch.tv/andras_tv");
         }
 
@@ -1333,13 +1371,13 @@ namespace TrucksLOG
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Logging.WriteClientLog("[INFO] Programm wurde beendet!");
+           // Logging.WriteClientLog("[INFO] Programm wurde beendet!");
             try
             {
                 System.Windows.Application.Current.Shutdown();
-            } catch(Exception ex)
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim herunterfahren des Client: " + ex.Message);
+                //Logging.WriteClientLog("[ERROR] Fehler beim herunterfahren des Client: " + ex.Message);
             }
           
         }
@@ -1361,12 +1399,12 @@ namespace TrucksLOG
                 else
                 {
                     msg.Schreiben("Fehler bei der Pfadangabe - TruckersMP", "Der Pfad zu TruckersMP wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von TMP. Kein Pfad angegeben");
+                   // Logging.WriteClientLog("[ERROR] Fehler beim Starten von TMP. Kein Pfad angegeben");
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Logging.WriteClientLog("[ERROR] Exception throw " + ex.Message + ex.StackTrace);
+               // Logging.WriteClientLog("[ERROR] Exception throw " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -1380,11 +1418,11 @@ namespace TrucksLOG
                 } else
                 {
                     msg.Schreiben("Fehler bei der Pfadangabe ATS", "Der Pfad zu ATS wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer");
+                   // Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer");
                 }
-            } catch (Exception ex)
+            } catch
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer" + ex.Message + ex.StackTrace);
+                //Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer" + ex.Message + ex.StackTrace);
             }
            
         }
@@ -1400,12 +1438,12 @@ namespace TrucksLOG
                 else
                 {
                     msg.Schreiben("Fehler bei der Pfadangabe - ETS2", "Der Pfad zu Euro Truck Simulator 2 wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von ETS2. Kein Pfad angegeben");
+                   // Logging.WriteClientLog("[ERROR] Fehler beim Starten von ETS2. Kein Pfad angegeben");
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Logging.WriteClientLog("[ERROR] Exception throw " + ex.Message + ex.StackTrace);
+               // Logging.WriteClientLog("[ERROR] Exception throw " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -1505,11 +1543,11 @@ namespace TrucksLOG
                 }
                
 
-                Logging.WriteClientLog("[INFO] SendKeys gestartet...");
+               // Logging.WriteClientLog("[INFO] SendKeys gestartet...");
             } else
             {
                 anti_afk_timer.Stop();
-                Logging.WriteClientLog("[INFO] ANTI_AFK gestoppt");
+               // Logging.WriteClientLog("[INFO] ANTI_AFK gestoppt");
             }
         }
 

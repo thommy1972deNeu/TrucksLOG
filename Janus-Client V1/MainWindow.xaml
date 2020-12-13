@@ -142,14 +142,6 @@
                         <Label Content="Hintergrund" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Label Content="Hintergrundbild:" HorizontalAlignment="Center" FontSize="14"/>
                         <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" Margin="0,0,0,20">
-                            <ComboBoxItem Tag="pj_1.jpg">Janus 1 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_2.jpg">Janus 2 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_3.jpg">Janus 3 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_4.jpg">Janus 4 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_5.jpg">Janus 5 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_6.jpg">Janus 6 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_7.jpg">Janus 7 (Neu)</ComboBoxItem>
-                            <ComboBoxItem Tag="pj_8.jpg">Janus 8 (Neu)</ComboBoxItem>
                             <ComboBoxItem Tag="div_1.jpg">Divers 1</ComboBoxItem>
                             <ComboBoxItem Tag="div_2.jpg">Divers 2</ComboBoxItem>
                             <ComboBoxItem Tag="lkw_1.jpg">LKW 1</ComboBoxItem>
@@ -411,6 +403,9 @@
     <DockPanel>
 
         <StatusBar DockPanel.Dock="Bottom" Height="30" FontSize="12" HorizontalAlignment="Stretch">
+            <StatusBarItem>
+                <Label Content="{Binding SPEDITIONSNAME}" Foreground="Black"/>
+            </StatusBarItem>
             <StatusBarItem>
                 <Label Content="{Binding TELEMETRY_VERSION}" Foreground="Black"/>
             </StatusBarItem>

@@ -26,6 +26,7 @@ namespace TrucksLOG.Spieldaten
         private int patreon_level;
         private string onlineuser;
         private string tmp_versionen;
+        private string speditionsname;
 
         // Truck Daten
         private string lkw_hersteller;
@@ -150,6 +151,20 @@ namespace TrucksLOG.Spieldaten
         private int gesamt_km_sa;
         private string punktekonto;
         // -----------------------------------------------------------------------------------
+
+        public string SPEDITIONSNAME
+        {
+            get { return speditionsname; }
+            set
+            {
+                if (speditionsname != value)
+                {
+                    speditionsname = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public string PUNKTEKONTO
         {
             get { return punktekonto; }

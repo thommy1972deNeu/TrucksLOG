@@ -28,6 +28,7 @@ namespace TrucksLOG.Klassen
         public static string c_online = server + "c_online.php";
         public static string tmp_versionen = server + "tmp_version.php";
         public static string user_zu_schnell = server + "zu_schnell.php";
+        public static string SpeditionsCheck = server + "speditions_check.php";
         public static string delete_tour = server + "del_tour.php";
         public static string punktekonto = server + "punktekonto.php";
         public static string bann_check = server + "bann_check.php";
