@@ -56,7 +56,7 @@ namespace TrucksLOG
 
             OnlineCheck();
 
-            if (ServerCheck("https://truckslog.de") == false)
+            if (ServerCheck("https://truckslog.org") == false)
             {
                 MessageBox.Show("Der Server ist leider Offline\n Das Programm wird jetzt beendet!", "Fehler bei Verbindung zum Server", MessageBoxButton.OK, MessageBoxImage.Error);
                /// Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
