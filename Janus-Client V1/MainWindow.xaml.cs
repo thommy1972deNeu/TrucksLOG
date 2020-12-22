@@ -22,6 +22,7 @@ using Microsoft.Win32;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Net;
+using System.IO;
 
 namespace TrucksLOG
 {
@@ -62,6 +63,9 @@ namespace TrucksLOG
                /// Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
                 Application.Current.Shutdown();
             }
+
+
+
 
             //Logging.Make_Log_File();
 
@@ -471,7 +475,7 @@ namespace TrucksLOG
                 post_param.Add("TIMESTAMP", unixTimestamp);
                 string response = API.HTTPSRequestPost(API.tmp_versionen, post_param);
                 Truck_Daten.TMP_VERSIONEN = response;
-                ZEIGE_TMP.Content += "\n" + Truck_Daten.TMP_VERSIONEN;
+                //ZEIGE_TMP.Content += "\n" + Truck_Daten.TMP_VERSIONEN;
             }
             catch
             {
@@ -924,7 +928,8 @@ namespace TrucksLOG
                         }
                     }
 
-
+                    // FROSTY
+                    Truck_Daten.FROSTY = FROSTY_CHECK();
                     
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
@@ -1149,11 +1154,7 @@ namespace TrucksLOG
                // Logging.WriteClientLog("Fehler beim Laden der Voreinstellungen " + ex.Message);
             }
 
-            /*
-                ZEIGE_TMP.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD"))) ? false : true;
-                ZEIGE_ETS2.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD"))) ? false : true;
-                ZEIGE_ATS.IsEnabled = (string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD"))) ? false : true;
-            */
+
             try
             {
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
@@ -1172,32 +1173,38 @@ namespace TrucksLOG
 
             if (Truck_Daten.PATREON_LEVEL == 0)
             {
-                REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!");
-                anti_ak_text.Text = "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!";
-                anti_ak_text.MaxLength = 0;
-                laenge_antiafk_text.Content = "Keine Änderung möglich";
+                anti_ak_text.Text = "TrucksLOG.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.MaxLength = 150;
+                laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 1)
             {
-                anti_ak_text.Text = "TrucksLOG wünscht eine gute Fahrt!";
-                anti_ak_text.MaxLength = 50;
-                laenge_antiafk_text.Content = "Max. 50 Zeichen";
+                anti_ak_text.Text = "TrucksLOG.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.MaxLength = 150;
+                laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 2)
             {
-                anti_ak_text.Text = "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!";
-                anti_ak_text.MaxLength = 100;
-                laenge_antiafk_text.Content = "Max. 100 Zeichen";
+                anti_ak_text.Text = "TrucksLOG.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.MaxLength = 150;
+                laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 3)
             {
-                anti_ak_text.Text = "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.Text = "TrucksLOG.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
                 anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
 
+            // LADE FROSTY CHECK
+
+
+
             anti_afk.SelectedValue = "Aus";
             anti_afk_timer.Stop();
+
+
+
 
         }
 
@@ -1480,6 +1487,7 @@ namespace TrucksLOG
 
             set_online();
             lade_Punktekonto();
+            FROSTY_CHECK();
         }
 
         private async void OnlineCheck()
@@ -1506,6 +1514,25 @@ namespace TrucksLOG
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
             return API.HTTPSRequestPost(API.updates, post_param);
         }
+
+
+        public static bool FROSTY_CHECK()
+        {
+            int frosty = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_8.scs") ? 1 : 0;
+            int frosty_heavy_winter = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_heavy_winter_8.scs") ? 1 : 0;
+            int frosty_physics = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_physics_8.scs") ? 1 : 0;
+            int frosty_wheels = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_wheels.scs") ? 1 : 0;
+
+            Dictionary<string, string> post_param = new Dictionary<string, string>();
+            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("FROSTY", frosty.ToString());
+            post_param.Add("FROSTY_HEAVY_WINTER",frosty_heavy_winter.ToString());
+            post_param.Add("FROSTY_PHYSICS", frosty_physics.ToString());
+            post_param.Add("FROSTY_WHEELS", frosty_wheels.ToString());
+            string response = API.HTTPSRequestPost(API.frosty, post_param);
+            if(frosty == 1) { return true;  } else { return false; }
+        }
+         
 
         private static string Ist_BETA_Tester()
         {

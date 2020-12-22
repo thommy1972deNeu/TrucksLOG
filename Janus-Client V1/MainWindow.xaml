@@ -38,6 +38,7 @@
         <BooleanToVisibilityConverter x:Key="warning_lights" />
         <BooleanToVisibilityConverter x:Key="trucksbook" />
         <BooleanToVisibilityConverter x:Key="spedv" />
+        <BooleanToVisibilityConverter x:Key="frosty" />
         
         <ContextMenu x:Key="contextMenu" MenuItem.Click="ContextMenu_Click">
             <MenuItem Header="Item 1"/>
@@ -472,7 +473,7 @@
 
 
             <!-- WAITING ZONE -->
-
+        <!--
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="1" Foreground="white" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontFamily="Microsoft YaHei UI Light" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Foreground="red" Panel.ZIndex="1002" IsIndeterminate="true" EllipseDiameter="15" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}">
@@ -491,7 +492,7 @@
             <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ets_starten_Click"  ToolTip="ETS2 im Singel-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ats_starten_Click"  ToolTip="ATS im Single-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-
+-->
             <!-- WAITING ZONE ENDE-->
 
             <Label Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="4" x:Name="SPEED_LBL" Content="{Binding SPEED}" Opacity="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="80" FontFamily="Oswald" FontWeight="Bold"/>
@@ -515,6 +516,9 @@
             <Image Grid.Row="3" Grid.Column="14" Source="{iconPacks:MaterialImage Kind=HazardLights}" Margin="3" Visibility="{Binding WARNLICHT, Converter={StaticResource warning_lights}}" ToolTip="Warnleuchten AN"/>
             <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="45,28,45,32" Foreground="Black" Height="10" Width="10"/>
 
+            
+            <!-- FROSTY -->
+            <Image Grid.Row="3" Grid.Column="17" Source="{iconPacks:RPGAwesomeImage Kind=FrostEmblem}" Margin="3" Visibility="{Binding FROSTY, Converter={StaticResource frosty}}" ToolTip="Winter-Mod aktiv"/>
             <!-- TANKANZEIGE -->
             <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Center" Width="250" HorizontalAlignment="Left" Height="80" Margin="0,33,0,14">
                 <mah:MetroProgressBar Height="80" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
