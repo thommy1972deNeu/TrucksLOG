@@ -1523,8 +1523,10 @@ namespace TrucksLOG
             int frosty_physics = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_physics_8.scs") ? 1 : 0;
             int frosty_wheels = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_wheels.scs") ? 1 : 0;
 
+
             Dictionary<string, string> post_param = new Dictionary<string, string>();
             post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            post_param.Add("CLIENT_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             post_param.Add("FROSTY", frosty.ToString());
             post_param.Add("FROSTY_HEAVY_WINTER",frosty_heavy_winter.ToString());
             post_param.Add("FROSTY_PHYSICS", frosty_physics.ToString());
