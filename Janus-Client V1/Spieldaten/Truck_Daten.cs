@@ -27,7 +27,6 @@ namespace TrucksLOG.Spieldaten
         private string onlineuser;
         private string tmp_versionen;
         private string speditionsname;
-        private bool frosty;
 
         // Truck Daten
         private string lkw_hersteller;
@@ -152,18 +151,7 @@ namespace TrucksLOG.Spieldaten
         private int gesamt_km_sa;
         private string punktekonto;
         // -----------------------------------------------------------------------------------
-        public bool FROSTY
-        {
-            get { return frosty; }
-            set
-            {
-                if (frosty != value)
-                {
-                    frosty = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
+      
 
         public string SPEDITIONSNAME
         {

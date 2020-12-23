@@ -56,13 +56,15 @@ namespace TrucksLOG
             InitializeComponent();
 
             OnlineCheck();
-
+            Setze_Client_Version();
+            /*
             if (ServerCheck("https://truckslog.org") == false)
             {
                 MessageBox.Show("Der Server ist leider Offline\n Das Programm wird jetzt beendet!", "Fehler bei Verbindung zum Server", MessageBoxButton.OK, MessageBoxImage.Error);
                /// Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
                 Application.Current.Shutdown();
             }
+            */
 
 
 
@@ -82,10 +84,13 @@ namespace TrucksLOG
             timer.Start();
             // DISCORD ENDE
 
-            credit_text.Content = "Ein Dank geht an meine Tester:" + Environment.NewLine;
+            credit_text.Content = "Ein Dank geht an mein Team:" + Environment.NewLine;
             credit_text.Content += " - Quasselboy Patti [COO]" + Environment.NewLine;
+            credit_text.Content += " - Andras [CMO]" + Environment.NewLine;
+            credit_text.Content += " - TOBI_𝟙Ƽ⊘५ [Support-Leiter]" + Environment.NewLine;
             credit_text.Content += " - Daniel1983 [Main-Support][Beta-Tester]" + Environment.NewLine;
-            credit_text.Content += " - TOBI_𝟙Ƽ⊘५ [Main-Support][Beta-Tester]" + Environment.NewLine;
+            credit_text.Content += " - Wargamer/Raphi [Main-Support][Beta-Tester]" + Environment.NewLine;
+            credit_text.Content += " - Sascha [Main-Support]" + Environment.NewLine;
             credit_text.Content += " - Bandit|Basti [Beta-Tester]" + Environment.NewLine;
             credit_text.Content += "Einen Super-Dank an Quasselboy / Patti der mich" + Environment.NewLine + "seit Anbeginn der PJ-Zeit unterstützt." + Environment.NewLine;
             credit_text.Content += "Und natürlich auch an" + Environment.NewLine;
@@ -269,7 +274,7 @@ namespace TrucksLOG
                             BringMainWindowToFront("amtrucks");
                         }
                         sim.Keyboard.KeyPress(VirtualKeyCode.VK_Y);
-                        sim.Keyboard.TextEntry("PJ-BOT:");
+                        sim.Keyboard.TextEntry("TL-BOT:");
                         sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
                         sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
                         //Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
@@ -335,26 +340,24 @@ namespace TrucksLOG
         private void setzt_antiAFK()
         {
             if (Truck_Daten.PATREON_LEVEL == 0)
-            {
-                REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!");
-                anti_ak_text.Text = "TrucksLOG wünscht allen Truckern eine angenehme und sichere Fahrt!";
+            {;
                 anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 1)
             {
                 anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 50 Zeichen";
+                laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 2)
             {
                 anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 100 Zeichen";
+                laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
             else if (Truck_Daten.PATREON_LEVEL == 3)
             {
-                anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 150 Zeichen";
+                anti_ak_text.MaxLength = 250;
+                laenge_antiafk_text.Content = "Max. 250 Zeichen";
             }
         }
         private void Useronline_Tick(object sender, EventArgs e)
@@ -431,6 +434,17 @@ namespace TrucksLOG
      
 
         }
+
+
+        private void Setze_Client_Version()
+        {
+                Dictionary<string, string> post_param = new Dictionary<string, string>();
+                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                post_param.Add("CLIENT_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+                string response = API.HTTPSRequestPost(API.client_version, post_param);
+        }
+
 
         private void lade_Patreon()
         {
@@ -928,8 +942,6 @@ namespace TrucksLOG
                         }
                     }
 
-                    // FROSTY
-                    Truck_Daten.FROSTY = FROSTY_CHECK();
                     
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
@@ -1196,16 +1208,8 @@ namespace TrucksLOG
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
             }
 
-            // LADE FROSTY CHECK
-
-
-
             anti_afk.SelectedValue = "Aus";
             anti_afk_timer.Stop();
-
-
-
-
         }
 
 
@@ -1484,10 +1488,8 @@ namespace TrucksLOG
                     AutoUpdater.Start(UpdateString);
                 }
             }
-
             set_online();
             lade_Punktekonto();
-            FROSTY_CHECK();
         }
 
         private async void OnlineCheck()
@@ -1515,26 +1517,6 @@ namespace TrucksLOG
             return API.HTTPSRequestPost(API.updates, post_param);
         }
 
-
-        public static bool FROSTY_CHECK()
-        {
-            int frosty = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_8.scs") ? 1 : 0;
-            int frosty_heavy_winter = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_heavy_winter_8.scs") ? 1 : 0;
-            int frosty_physics = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_physics_8.scs") ? 1 : 0;
-            int frosty_wheels = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\ETS2MP\mod\frosty_wheels.scs") ? 1 : 0;
-
-
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("CLIENT_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            post_param.Add("FROSTY", frosty.ToString());
-            post_param.Add("FROSTY_HEAVY_WINTER",frosty_heavy_winter.ToString());
-            post_param.Add("FROSTY_PHYSICS", frosty_physics.ToString());
-            post_param.Add("FROSTY_WHEELS", frosty_wheels.ToString());
-            string response = API.HTTPSRequestPost(API.frosty, post_param);
-            if(frosty == 1) { return true;  } else { return false; }
-        }
-         
 
         private static string Ist_BETA_Tester()
         {
