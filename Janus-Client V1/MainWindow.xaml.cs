@@ -22,7 +22,6 @@ using Microsoft.Win32;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Net;
-using System.IO;
 
 namespace TrucksLOG
 {
@@ -32,8 +31,8 @@ namespace TrucksLOG
         public DiscordRpcClient client;
         private static RichPresence jobRPC;
         private const string DiscordAppID = "730374187025170472";
-        private const string DefaultDiscordLargeImageKey = "pj_512";
-        private string UpdateString = "http://client.truckslog.org/version.xml";
+        //private const string DefaultDiscordLargeImageKey = "pj_512";
+        private readonly string UpdateString = "http://client.truckslog.org/version.xml";
 
         public string CLIENT_VERSION = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         private readonly MSG msg = new MSG();
@@ -41,12 +40,12 @@ namespace TrucksLOG
         public SCSSdkTelemetry Telemetry;
         public int refueling;
         public string tour_id_tanken;
-        InputSimulator sim = new InputSimulator();
+        readonly InputSimulator sim = new InputSimulator();
 
-        private DispatcherTimer job_update_timer = new DispatcherTimer();
-        private DispatcherTimer anti_afk_timer = new DispatcherTimer();
-        private DispatcherTimer useronline_timer = new DispatcherTimer();
-        private DispatcherTimer zu_schnell = new DispatcherTimer();
+        private readonly DispatcherTimer job_update_timer = new DispatcherTimer();
+        private readonly DispatcherTimer anti_afk_timer = new DispatcherTimer();
+        private readonly DispatcherTimer useronline_timer = new DispatcherTimer();
+        private readonly DispatcherTimer zu_schnell = new DispatcherTimer();
 
         public bool InvokeRequired { get; private set; }
         public static Window ActivatedWindow { get; set; }
@@ -72,7 +71,7 @@ namespace TrucksLOG
             //Logging.Make_Log_File();
 
             Lade_Voreinstellungen();
-            lade_GameVersionen();
+            Lade_GameVersionen();
             SpeditionsCheck();
 
 
@@ -101,7 +100,7 @@ namespace TrucksLOG
             useronline_timer.Start();
 
             zu_schnell.Interval = TimeSpan.FromSeconds(1);
-            zu_schnell.Tick += zu_schnell_tick;
+            zu_schnell.Tick += Zu_schnell_tick;
 
         
             // JOB UPDATE TIMER
@@ -158,8 +157,10 @@ namespace TrucksLOG
 
         public static async void Bann_Check()
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+            };
             string response = API.HTTPSRequestPost(API.bann_check, post_param);
             string[] ausgabe = response.Split(':');
 
@@ -221,10 +222,12 @@ namespace TrucksLOG
             return false;
         }
 
+        /*
         private bool CheckIfAProcessIsRunning(string processname)
         {
             return Process.GetProcessesByName(processname).Length > 0;
         }
+        */
 
 
 
@@ -257,7 +260,7 @@ namespace TrucksLOG
             }
         }
 
-        private void anti_afk_timer_Tick(object sender, EventArgs e)
+        private void Anti_afk_timer_Tick(object sender, EventArgs e)
         {
             try
             {
@@ -294,13 +297,15 @@ namespace TrucksLOG
 
         }
 
-        private void zu_schnell_tick(object sender, EventArgs e)
+        private void Zu_schnell_tick(object sender, EventArgs e)
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                post_param.Add("SPEED", Truck_Daten.SPEED.ToString());
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                    { "SPEED", Truck_Daten.SPEED.ToString() }
+                };
                 string response = API.HTTPSRequestPost(API.user_zu_schnell, post_param);
             }
             catch
@@ -316,8 +321,10 @@ namespace TrucksLOG
             try
             {
                 var metroWindow = (Application.Current.MainWindow as MetroWindow);
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+                };
                 string response = API.HTTPSRequestPost(API.SpeditionsCheck, post_param);
 
                 if(response == "Ohne")
@@ -337,7 +344,7 @@ namespace TrucksLOG
         }
 
 
-        private void setzt_antiAFK()
+        private void Setzt_antiAFK()
         {
             if (Truck_Daten.PATREON_LEVEL == 0)
             {;
@@ -364,14 +371,16 @@ namespace TrucksLOG
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("SECRET", "fZhdgte4fdgDDgfet567ufghf");
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "SECRET", "fZhdgte4fdgDDgfet567ufghf" }
+                };
                 string response_online = API.HTTPSRequestPost(API.useronline_url, post_param);
                 Truck_Daten.ONLINEUSER = "Fahrer: " + response_online;
                
-                lade_fahrer();
-                lade_Punktekonto();
-                set_online();
+                Lade_fahrer();
+                Lade_Punktekonto();
+                Set_online();
 
             } catch {
                 //Logging.WriteClientLog("[ERROR] Fehler beim Useronline-Tick !");
@@ -379,17 +388,19 @@ namespace TrucksLOG
         }
 
 
-        private void lade_fahrer()
+        private void Lade_fahrer()
         {
-            Dictionary<string, string> post_param2 = new Dictionary<string, string>();
-            post_param2.Add("VERSION", CLIENT_VERSION);
+            Dictionary<string, string> post_param2 = new Dictionary<string, string>
+            {
+                { "VERSION", CLIENT_VERSION }
+            };
             string response = API.HTTPSRequestPost(API.fahreronline_url, post_param2);
             string respons_br = response.Replace("<br/>", "\n");
             fahrer_text.Text = respons_br.ToString();
         }
 
 
-        private void timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
             {
             string restkilometer;
             try
@@ -397,8 +408,8 @@ namespace TrucksLOG
                 ETS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2"));
                 ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
 
-                lade_Patreon();
-                setzt_antiAFK();
+                Lade_Patreon();
+                Setzt_antiAFK();
 
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
                 if(Truck_Daten.SPIEL == "Ets2")
@@ -438,20 +449,22 @@ namespace TrucksLOG
 
         private void Setze_Client_Version()
         {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                post_param.Add("CLIENT_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-
-                string response = API.HTTPSRequestPost(API.client_version, post_param);
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            { { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+              { "CLIENT_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString() }
+            };
+            API.HTTPSRequestPost(API.client_version, post_param);
         }
 
 
-        private void lade_Patreon()
+        private void Lade_Patreon()
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+                };
                 string response = API.HTTPSRequestPost(API.patreon_state, post_param);
                 Truck_Daten.PATREON_LEVEL = Convert.ToInt32(response);
 
@@ -462,12 +475,14 @@ namespace TrucksLOG
             }
         }
 
-        private void lade_Punktekonto()
+        private void Lade_Punktekonto()
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+                };
                 string response = API.HTTPSRequestPost(API.punktekonto, post_param);
                 Truck_Daten.PUNKTEKONTO = "Punkte: " + response;
                 
@@ -479,14 +494,16 @@ namespace TrucksLOG
         }
 
 
-        private void lade_GameVersionen()
+        private void Lade_GameVersionen()
         {
             try
             {
                 string unixTimestamp = Convert.ToString((int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
 
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("TIMESTAMP", unixTimestamp);
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "TIMESTAMP", unixTimestamp }
+                };
                 string response = API.HTTPSRequestPost(API.tmp_versionen, post_param);
                 Truck_Daten.TMP_VERSIONEN = response;
                 //ZEIGE_TMP.Content += "\n" + Truck_Daten.TMP_VERSIONEN;
@@ -584,7 +601,7 @@ namespace TrucksLOG
 
                 SoundPlayer.Sound_Tour_Gestartet();
 
-                job_update_timer.Tick += timer_Tick;
+                job_update_timer.Tick += Timer_Tick;
                 job_update_timer.Start();
                 //Logging.WriteClientLog("[INFO] Tour gestartet: " + response);
             }
@@ -598,8 +615,10 @@ namespace TrucksLOG
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+                };
 
                 if (Truck_Daten.SPIEL == "Ets2")
                 {
@@ -639,8 +658,10 @@ namespace TrucksLOG
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+                };
 
                 if (Truck_Daten.SPIEL == "Ets2")
                 {
@@ -669,7 +690,7 @@ namespace TrucksLOG
 
                 job_update_timer.Stop();
                 //Logging.WriteClientLog("[INFO] Tour Abgeliefert: " + response);
-            } catch(Exception ex)
+            } catch
             {
                // Logging.WriteClientLog("[ERROR] Fehler beim Abgeben der Tour ! - " + ex.Message);
             }
@@ -680,8 +701,10 @@ namespace TrucksLOG
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+                };
 
                 if (Truck_Daten.SPIEL == "Ets2")
                 {
@@ -708,9 +731,11 @@ namespace TrucksLOG
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                if(Truck_Daten.SPIEL == "Ets2")
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+                };
+                if (Truck_Daten.SPIEL == "Ets2")
                 {
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
                 } else {
@@ -733,11 +758,13 @@ namespace TrucksLOG
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                post_param.Add("SOURCE_NAME", Truck_Daten.FERRY_SOURCE_NAME);
-                post_param.Add("TARGET_NAME", Truck_Daten.FERRY_TARGET_NAME);
-                post_param.Add("PAY_AMOUNT", Truck_Daten.FERRY_PAY_AMOUNT.ToString());
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                    { "SOURCE_NAME", Truck_Daten.FERRY_SOURCE_NAME },
+                    { "TARGET_NAME", Truck_Daten.FERRY_TARGET_NAME },
+                    { "PAY_AMOUNT", Truck_Daten.FERRY_PAY_AMOUNT.ToString() }
+                };
 
                 string response = API.HTTPSRequestPost(API.transport, post_param);
                 //Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
@@ -752,11 +779,13 @@ namespace TrucksLOG
         {
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                post_param.Add("SOURCE_NAME", Truck_Daten.TRAIN_SOURCE_NAME.ToString());
-                post_param.Add("TARGET_NAME", Truck_Daten.TRAIN_TARGET_NAME.ToString());
-                post_param.Add("PAY_AMOUNT", Truck_Daten.TRAIN_PAY_AMOUNT.ToString());
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                    { "SOURCE_NAME", Truck_Daten.TRAIN_SOURCE_NAME.ToString() },
+                    { "TARGET_NAME", Truck_Daten.TRAIN_TARGET_NAME.ToString() },
+                    { "PAY_AMOUNT", Truck_Daten.TRAIN_PAY_AMOUNT.ToString() }
+                };
 
                 string response = API.HTTPSRequestPost(API.transport, post_param);
                 //Logging.WriteClientLog("[INFO] TRANSPORT - TRAIN - EVENT: " + response);
@@ -796,13 +825,15 @@ namespace TrucksLOG
                     }
                 }
 
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                post_param.Add("TOUR_ID", tour_id_tanken);
-                post_param.Add("LITER", Truck_Daten.LITER_GETANKT.ToString());
-                post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
-                post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
-                post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                    { "TOUR_ID", tour_id_tanken },
+                    { "LITER", Truck_Daten.LITER_GETANKT.ToString() },
+                    { "POS_X", Truck_Daten.POS_X.ToString() },
+                    { "POS_Y", Truck_Daten.POS_Y.ToString() },
+                    { "POS_Z", Truck_Daten.POS_Z.ToString() }
+                };
 
                 string response = API.HTTPSRequestPost(API.tanken, post_param);
                 //Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
@@ -1004,7 +1035,7 @@ namespace TrucksLOG
 
 
                     // DISCORD
-                    Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_HERSTELLER_ID, Truck_Daten.LKW_SCHADEN);
+                    Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_SCHADEN);
 
                     // GESCHWINDIGKEITS_LOGGEN
                     if(Truck_Daten.SPIEL == "Ats" && Truck_Daten.SPEED >= 75)
@@ -1034,27 +1065,24 @@ namespace TrucksLOG
 
 
 
-        private void Update_Discord(string HERSTELLER, string MODELL, string FRACHT, int GEWICHT, string STARTORT, string ZIELORT, string BRAND_ID, double SCHADEN)
+        private void Update_Discord(string HERSTELLER, string MODELL, string FRACHT, int GEWICHT, string STARTORT, string ZIELORT, double SCHADEN)
         {
-            string truckdaten;
-            string tourdaten;
             string DiscordLargeImageKey = "tl_6";
 
             if (string.IsNullOrEmpty(HERSTELLER))
             {
-                truckdaten = "---";
-                
-            } else
+            }
+            else
             {
-                truckdaten = HERSTELLER + " " + MODELL + "(" + SCHADEN + " %)";
+                _ = HERSTELLER + " " + MODELL + "(" + SCHADEN + " %)";
                
             }
             if(string.IsNullOrEmpty(FRACHT))
             {
-                tourdaten = "Keine Tour...";
-            } else
+            }
+            else
             {
-                tourdaten = GEWICHT + " T " + FRACHT + " von " + STARTORT + " nach " + ZIELORT;
+                _ = GEWICHT + " T " + FRACHT + " von " + STARTORT + " nach " + ZIELORT;
             }
 
             jobRPC = new RichPresence()
@@ -1169,8 +1197,10 @@ namespace TrucksLOG
 
             try
             {
-                Dictionary<string, string> post_param = new Dictionary<string, string>();
-                post_param.Add("VERSION", CLIENT_VERSION);
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                {
+                    { "VERSION", CLIENT_VERSION }
+                };
                 string response = API.HTTPSRequestPost(API.updatetext_uri, post_param);
                 string response2 = response.Replace("<br/>", "");
                 string response3 = response2.Replace("<hr/>", "");
@@ -1181,7 +1211,7 @@ namespace TrucksLOG
                 //Logging.WriteClientLog("[ERROR] Fehler beim Anzeigen der Update News " + ex.Message);
             }
 
-            lade_Patreon();
+            Lade_Patreon();
 
             if (Truck_Daten.PATREON_LEVEL == 0)
             {
@@ -1316,13 +1346,13 @@ namespace TrucksLOG
             Process.Start(Config.LogRoot);
         }
 
-        private void spende_paypal(object sender, RoutedEventArgs e)
+        private void Spende_paypal(object sender, RoutedEventArgs e)
         {
             //Logging.WriteClientLog("[INFO] Spende_PayPal wurde angeklickt!");
             Process.Start("https://paypal.me/ErIstWiederDa/2,00");
         }
 
-        private void patreon_link(object sender, RoutedEventArgs e)
+        private void Patreon_link(object sender, RoutedEventArgs e)
         {
             //Logging.WriteClientLog("[INFO] Patreon Link wurde angeklickt!");
             Process.Start("https://www.patreon.com/TrucksLOG");
@@ -1333,8 +1363,10 @@ namespace TrucksLOG
             REG.Schreiben("Config", "Background", (string)(Background_WEchsler.SelectedValue));
             try
             {
-                ImageBrush myBrush = new ImageBrush();
-                myBrush.ImageSource = new BitmapImage(new Uri(BaseUriHelper.GetBaseUri(this), "Images/" + (string)Background_WEchsler.SelectedValue));
+                ImageBrush myBrush = new ImageBrush
+                {
+                    ImageSource = new BitmapImage(new Uri(BaseUriHelper.GetBaseUri(this), "Images/" + (string)Background_WEchsler.SelectedValue))
+                };
                 this.Hauptfenster.Background = myBrush;
             }
             catch
@@ -1349,10 +1381,12 @@ namespace TrucksLOG
 
         private void Andras_Click(object sender, RoutedEventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("LINK", "Andras.tv");
-            post_param.Add("USER", REG.Lesen("Config", "CLIENT_KEY"));
-            string response = API.HTTPSRequestPost(API.link_click, post_param);
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "LINK", "Andras.tv" },
+                { "USER", REG.Lesen("Config", "CLIENT_KEY") }
+            };
+            API.HTTPSRequestPost(API.link_click, post_param);
            // Logging.WriteClientLog("[INFO] Andras.TV wurde angeklickt!");
             Process.Start("https://www.twitch.tv/andras_tv");
         }
@@ -1361,16 +1395,20 @@ namespace TrucksLOG
 
         private void OPEN_BG_FILE(object sender, RoutedEventArgs e)
         {
-            var bild = new Microsoft.Win32.OpenFileDialog();
-            bild.Filter = "Alle Bilder|*.jpg;*.png;|Alle Dateien|*.*";
-            bild.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures);
+            var bild = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "Alle Bilder|*.jpg;*.png;|Alle Dateien|*.*",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)
+            };
             var result_bild = bild.ShowDialog();
             if (result_bild == false) return;
 
             REG.Schreiben("Config", "Background", bild.FileName);
 
-            ImageBrush myBrush = new ImageBrush();
-            myBrush.ImageSource = new BitmapImage(new Uri(bild.FileName));
+            ImageBrush myBrush = new ImageBrush
+            {
+                ImageSource = new BitmapImage(new Uri(bild.FileName))
+            };
             this.Hauptfenster.Background = myBrush;
         }
 
@@ -1393,13 +1431,13 @@ namespace TrucksLOG
           
         }
 
-        private void settings_Click(object sender, RoutedEventArgs e)
+        private void Settings_Click(object sender, RoutedEventArgs e)
         {
             Pfad_Angeben pf2 = new Pfad_Angeben();
             pf2.ShowDialog();
         }
 
-        private void tmp_starten_Click(object sender, RoutedEventArgs e)
+        private void TMP_starten_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -1419,7 +1457,7 @@ namespace TrucksLOG
             }
         }
 
-        private void ats_starten_Click(object sender, RoutedEventArgs e)
+        private void Ats_starten_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -1438,7 +1476,7 @@ namespace TrucksLOG
            
         }
 
-        private void ets_starten_Click(object sender, RoutedEventArgs e)
+        private void ETS_starten_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -1458,7 +1496,7 @@ namespace TrucksLOG
             }
         }
 
-        private void spielpfade_aendern(object sender, RoutedEventArgs e)
+        private void Spielpfade_aendern(object sender, RoutedEventArgs e)
         {
             Pfad_Angeben pf3 = new Pfad_Angeben();
             pf3.ShowDialog();
@@ -1488,8 +1526,8 @@ namespace TrucksLOG
                     AutoUpdater.Start(UpdateString);
                 }
             }
-            set_online();
-            lade_Punktekonto();
+            Set_online();
+            Lade_Punktekonto();
         }
 
         private async void OnlineCheck()
@@ -1499,8 +1537,10 @@ namespace TrucksLOG
 
             var metroWindow = (Application.Current.MainWindow as MetroWindow);
 
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+            };
             string response = API.HTTPSRequestPost(API.onlinecheck, post_param);
             if (Convert.ToInt32(response) >= 1)
             {
@@ -1512,37 +1552,43 @@ namespace TrucksLOG
 
         private static string Updates_FUER()
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+            };
             return API.HTTPSRequestPost(API.updates, post_param);
         }
 
 
         private static string Ist_BETA_Tester()
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+            };
             return API.HTTPSRequestPost(API.beta_tester, post_param);
         }
 
 
-        private void set_online()
+        private void Set_online()
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("STATUS", "ONLINE");
-            post_param.Add("GAME", Truck_Daten.SPIEL);
-            post_param.Add("POS_X", Truck_Daten.POS_X.ToString());
-            post_param.Add("POS_Y", Truck_Daten.POS_Y.ToString());
-            post_param.Add("POS_Z", Truck_Daten.POS_Z.ToString());
-            string response = API.HTTPSRequestPost(API.c_online, post_param);
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                { "STATUS", "ONLINE" },
+                { "GAME", Truck_Daten.SPIEL },
+                { "POS_X", Truck_Daten.POS_X.ToString() },
+                { "POS_Y", Truck_Daten.POS_Y.ToString() },
+                { "POS_Z", Truck_Daten.POS_Z.ToString() }
+            };
+            API.HTTPSRequestPost(API.c_online, post_param);
         }
 
         private void AntiAFK_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if ((string)anti_afk.SelectedValue == "An")
             {
-                anti_afk_timer.Tick += anti_afk_timer_Tick;
+                anti_afk_timer.Tick += Anti_afk_timer_Tick;
                 if(Truck_Daten.SDK_AKTIVE == false)
                 {
                     anti_afk_timer.Start(); 
@@ -1562,7 +1608,7 @@ namespace TrucksLOG
             }
         }
 
-        private void anti_afk_text_save_Click(object sender, RoutedEventArgs e)
+        private void Anti_afk_text_save_Click(object sender, RoutedEventArgs e)
         {
             if(Truck_Daten.PATREON_LEVEL >= 0)
             {
@@ -1576,10 +1622,12 @@ namespace TrucksLOG
 
         private void Hauptfenster_Closed(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("STATUS", "OFFLINE");
-            string response = API.HTTPSRequestPost(API.c_online, post_param);
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                { "STATUS", "OFFLINE" }
+            };
+            API.HTTPSRequestPost(API.c_online, post_param);
         }
 
         private void Oeffne_Andras_TV(object sender, RoutedEventArgs e)
@@ -1620,7 +1668,7 @@ namespace TrucksLOG
                 return true;
         }
 
-        private void bg_opacity_ValueChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void BG_opacity_ValueChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             try
             {
@@ -1640,19 +1688,23 @@ namespace TrucksLOG
 
         private void Hauptfenster_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            post_param.Add("STATUS", "OFFLINE");
-            string response = API.HTTPSRequestPost(API.c_online, post_param);
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                { "STATUS", "OFFLINE" }
+            };
+            API.HTTPSRequestPost(API.c_online, post_param);
         }
 
-        private void ets_tour_delete(object sender, RoutedEventArgs e)
+        private void ETS_tour_delete(object sender, RoutedEventArgs e)
         {
 
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            string response = API.HTTPSRequestPost(API.delete_tour, post_param);
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2") },
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+            };
+            API.HTTPSRequestPost(API.delete_tour, post_param);
 
                 REG.Schreiben("Config", "TOUR_ID_ETS2", "");
             ETS_TOUR_delete.IsEnabled = false;
@@ -1661,12 +1713,14 @@ namespace TrucksLOG
             
         }
 
-        private void ats_tour_delete(object sender, RoutedEventArgs e)
+        private void Ats_tour_delete(object sender, RoutedEventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>();
-            post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
-            post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-            string response = API.HTTPSRequestPost(API.delete_tour, post_param);
+            Dictionary<string, string> post_param = new Dictionary<string, string>
+            {
+                { "TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS") },
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
+            };
+            API.HTTPSRequestPost(API.delete_tour, post_param);
     
                 REG.Schreiben("Config", "TOUR_ID_ATS", "");
             ATS_TOUR_delete.IsEnabled = false;
@@ -1679,12 +1733,12 @@ namespace TrucksLOG
                 AutoUpdater.Start(UpdateString);
         }
 
-        private void spedv_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Spedv_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
         {
             MessageBox.Show("SpedV läuft bei dir mit unserem Client zusammen.\n\nDies ist im Normalfall kein Problem. Sollte es dennoch zu Problemen mit der Tour-Annahme oder Abgabe kommen, versuche bitte zuerst unseren Client ohne SpedV laufen zu lassen.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void trucksbook_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Trucksbook_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
         {
             MessageBox.Show("Der TrucksBook Client läuft bei dir mit unserem Client zusammen.\n\nIn der Vergangenheit kam es dadurch zu Problemen mit der Annahme oder Abgabe der Touren. Sollte es zu solchen Problemen kommen, versuche bitte zuerst unseren Client ohne TrucksBook laufen zu lassen.\nFalls dies nicht Funktioniert, kontaktiere uns bitte über Discord.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
         }

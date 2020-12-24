@@ -11,7 +11,7 @@ namespace TrucksLOG.Spieldaten
         private string dll_version;
         private string client_version;
         private bool sdk_active;
-        private bool sdk_active2;
+        private readonly bool sdk_active2;
         private string fahrinfo_1;
         private string fahrinfo_2;
         private string spiel;
