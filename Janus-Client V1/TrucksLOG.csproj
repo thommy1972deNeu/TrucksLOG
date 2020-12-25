@@ -532,10 +532,8 @@
     <Content Include="Resources\BETA_CLIENT.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\scs-telemetry24-12-20.dll" />
     <Content Include="Resources\scs-telemetry.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\scs-telemetry_ALT.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Truck_Left_Green_26321.ico">

@@ -22,6 +22,7 @@ using Microsoft.Win32;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Net;
+using System.IO;
 
 namespace TrucksLOG
 {
@@ -53,6 +54,7 @@ namespace TrucksLOG
         public MainWindow()
         {
             InitializeComponent();
+
 
             OnlineCheck();
             Setze_Client_Version();
@@ -1741,6 +1743,42 @@ namespace TrucksLOG
         private void Trucksbook_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
         {
             MessageBox.Show("Der TrucksBook Client läuft bei dir mit unserem Client zusammen.\n\nIn der Vergangenheit kam es dadurch zu Problemen mit der Annahme oder Abgabe der Touren. Sollte es zu solchen Problemen kommen, versuche bitte zuerst unseren Client ohne TrucksBook laufen zu lassen.\nFalls dies nicht Funktioniert, kontaktiere uns bitte über Discord.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private async void kopiere_telemetry(object sender, RoutedEventArgs e)
+        {
+            LeftFlyOut.IsOpen = false;
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
+
+            string pfad_ats = REG.Lesen("Pfade", "ATS_PFAD");
+            string pfad_ets = REG.Lesen("Pfade", "ETS2_PFAD");
+
+            string ordner_ets = pfad_ets.Substring(0, pfad_ets.Length - 15);
+            string ordner_ats = pfad_ats.Substring(0, pfad_ats.Length - 12);
+
+            if (Directory.Exists(ordner_ets + "\\plugins"))
+            {
+                File.Copy(@"Resources\scs-telemetry.dll", ordner_ets + @"\plugins\scs-telemetry.dll", true);
+            }
+            else
+            {
+                Directory.CreateDirectory(ordner_ets + "\\plugins");
+                File.Copy("Resources\\scs-telemetry.dll", ordner_ets + "\\plugins\\scs-telemetry.dll", true);
+            }
+
+            if (Directory.Exists(ordner_ats + "\\plugins"))
+            {
+                File.Copy("Resources\\scs-telemetry.dll", ordner_ats + "\\plugins\\scs-telemetry.dll", true);
+            }
+            else
+            {
+                Directory.CreateDirectory(ordner_ats + "\\plugins");
+                File.Copy("Resources\\scs-telemetry.dll", ordner_ats + "\\plugins\\scs-telemetry.dll", true);
+            }
+
+            await metroWindow.ShowMessageAsync("Kopiert !", "Die DLL Dateien wurden ins Spielverzeichnis kopiert !");
+            
+
         }
     }
 }

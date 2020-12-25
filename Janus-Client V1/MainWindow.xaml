@@ -4,7 +4,7 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" xmlns:i="clr-namespace:System.Windows.Interop;assembly=PresentationCore"
                  mc:Ignorable="d"
                  SaveWindowPosition="True"
                  FontFamily="Oswald"
@@ -38,8 +38,7 @@
         <BooleanToVisibilityConverter x:Key="warning_lights" />
         <BooleanToVisibilityConverter x:Key="trucksbook" />
         <BooleanToVisibilityConverter x:Key="spedv" />
-        <BooleanToVisibilityConverter x:Key="frosty" />
-        
+
         <ContextMenu x:Key="contextMenu" MenuItem.Click="ContextMenu_Click">
             <MenuItem Header="Item 1"/>
         </ContextMenu>
@@ -244,6 +243,10 @@
                         <Separator/>
                         <Label Content="ATS-Tour löschen" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Button x:Name="ATS_TOUR_delete" Click="Ats_tour_delete" Content="ATS Tour löschen" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
+                        
+                        <Separator/>
+                        <Label Content="Telemetry kopieren" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
+                        <Button x:Name="Telemetry_copy" Click="kopiere_telemetry" Content="Telemetry kopieren" HorizontalAlignment="Center" Width="230" Height="30" Background="blue" Foreground="White"/>
 
 
                     </StackPanel>
@@ -429,6 +432,8 @@
         </StatusBar>
 
         <Grid x:Name="GRID_FAHRT">
+           
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="13"/>
                 <RowDefinition Height="127"/>
@@ -473,7 +478,7 @@
 
 
             <!-- WAITING ZONE -->
-        
+            
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="1" Foreground="white" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontFamily="Microsoft YaHei UI Light" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Foreground="red" Panel.ZIndex="1002" IsIndeterminate="true" EllipseDiameter="15" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}">
@@ -484,7 +489,15 @@
                     </LinearGradientBrush>
                 </mah:MetroProgressBar.Background>
             </mah:MetroProgressBar>
-            
+           
+
+            <Image x:Name="imgelt">
+                <Image.Source>
+                    <i:D3DImage x:Name="d3dimg" />
+                </Image.Source>
+            </Image>
+
+
             <Image Source="Images/wirdzu.png" Grid.Row="7" Grid.Column="7" Grid.RowSpan="20" Grid.ColumnSpan="20" Width="300" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
       
             <Button x:Name="ZEIGE_TMP" Height="80" FontSize="18" Content="Truckers-MP starten" Grid.Row="8" Grid.Column="1" Margin="0,-30,0,0" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="TMP_starten_Click"  ToolTip="TruckersMP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
@@ -517,9 +530,7 @@
             <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="45,28,45,32" Foreground="Black" Height="10" Width="10"/>
 
             
-            <!-- FROSTY -->
-            <Image Grid.Row="3" Grid.Column="17" Source="{iconPacks:RPGAwesomeImage Kind=FrostEmblem}" Margin="3" Visibility="{Binding FROSTY, Converter={StaticResource frosty}}" ToolTip="Winter-Mod aktiv"/>
-            <!-- TANKANZEIGE -->
+           <!-- TANKANZEIGE -->
             <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Center" Width="250" HorizontalAlignment="Left" Height="80" Margin="0,33,0,14">
                 <mah:MetroProgressBar Height="80" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
                     <mah:MetroProgressBar.Foreground>
