@@ -1215,30 +1215,10 @@ namespace TrucksLOG
 
             Lade_Patreon();
 
-            if (Truck_Daten.PATREON_LEVEL == 0)
-            {
-                anti_ak_text.Text = "TrucksLOG.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
+                anti_ak_text.Text = REG.Lesen("Config", "ANTI_AFK_TEXT");
                 anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
-            }
-            else if (Truck_Daten.PATREON_LEVEL == 1)
-            {
-                anti_ak_text.Text = "TrucksLOG.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
-                anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 150 Zeichen";
-            }
-            else if (Truck_Daten.PATREON_LEVEL == 2)
-            {
-                anti_ak_text.Text = "TrucksLOG.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
-                anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 150 Zeichen";
-            }
-            else if (Truck_Daten.PATREON_LEVEL == 3)
-            {
-                anti_ak_text.Text = "TrucksLOG.de wünscht allen Truckern eine angenehme und sichere Fahrt!";
-                anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 150 Zeichen";
-            }
+          
 
             anti_afk.SelectedValue = "Aus";
             anti_afk_timer.Stop();
@@ -1745,7 +1725,7 @@ namespace TrucksLOG
             MessageBox.Show("Der TrucksBook Client läuft bei dir mit unserem Client zusammen.\n\nIn der Vergangenheit kam es dadurch zu Problemen mit der Annahme oder Abgabe der Touren. Sollte es zu solchen Problemen kommen, versuche bitte zuerst unseren Client ohne TrucksBook laufen zu lassen.\nFalls dies nicht Funktioniert, kontaktiere uns bitte über Discord.\n\nVielen Dank dass du unser Tool benutzt!\nThommy", "Dual-Apps erkannt", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private async void kopiere_telemetry(object sender, RoutedEventArgs e)
+        private async void Kopiere_telemetry(object sender, RoutedEventArgs e)
         {
             LeftFlyOut.IsOpen = false;
             var metroWindow = (Application.Current.MainWindow as MetroWindow);

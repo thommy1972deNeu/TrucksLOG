@@ -246,7 +246,7 @@
                         
                         <Separator/>
                         <Label Content="Telemetry kopieren" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Button x:Name="Telemetry_copy" Click="kopiere_telemetry" Content="Telemetry kopieren" HorizontalAlignment="Center" Width="230" Height="30" Background="blue" Foreground="White"/>
+                        <Button x:Name="Telemetry_copy" Click="Kopiere_telemetry" Content="Telemetry kopieren" HorizontalAlignment="Center" Width="230" Height="30" Background="blue" Foreground="White"/>
 
 
                     </StackPanel>

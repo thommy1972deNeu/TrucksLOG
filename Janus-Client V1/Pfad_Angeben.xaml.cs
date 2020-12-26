@@ -42,7 +42,7 @@ namespace TrucksLOG
 
         }
 
-        private void tmp_suchen_btn_Click(object sender, RoutedEventArgs e)
+        private void Tmp_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog tmp = new OpenFileDialog
             {
@@ -54,7 +54,7 @@ namespace TrucksLOG
             pfad_tmp.Text = tmp.FileName;
         }
 
-        private void ets_suchen_btn_Click(object sender, RoutedEventArgs e)
+        private void Ets_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ets = new OpenFileDialog
             {
@@ -86,11 +86,13 @@ namespace TrucksLOG
         }
 
 
-        private void ats_suchen_btn_Click(object sender, RoutedEventArgs e)
+        private void Ats_suchen_btn_Click(object sender, RoutedEventArgs e)
         {
-            var ats = new Microsoft.Win32.OpenFileDialog();
-            ats.Filter = "American Truck Simulator (.exe)|amtrucks.exe|All Files (*.*)|*.*";
-            ats.InitialDirectory = initial_ATS;
+            var ats = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "American Truck Simulator (.exe)|amtrucks.exe|All Files (*.*)|*.*",
+                InitialDirectory = initial_ATS
+            };
             var result_ats = ats.ShowDialog();
             if (result_ats == false) return;
 
@@ -118,12 +120,12 @@ namespace TrucksLOG
         }
 
 
-        private void abbrechen_click(object sender, RoutedEventArgs e)
+        private void Abbrechen_click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }
 
-        private void pfad_tmp_Loaded(object sender, RoutedEventArgs e)
+        private void Pfad_tmp_Loaded(object sender, RoutedEventArgs e)
         {
             pfad_ats.Text = REG.Lesen("Pfade", "ATS_PFAD");
             pfad_ets.Text = REG.Lesen("Pfade", "ETS2_PFAD");
@@ -154,7 +156,7 @@ namespace TrucksLOG
             else { initial_TMP = @"C:\"; }
         }
 
-        private void ok_click(object sender, RoutedEventArgs e)
+        private void Ok_click(object sender, RoutedEventArgs e)
         {
             if (client_key.Text == "")
             {
@@ -172,10 +174,12 @@ namespace TrucksLOG
                     REG.Schreiben("Pfade", "ETS2_PFAD", pfad_ets.Text);
                     REG.Schreiben("Pfade", "ATS_PFAD", pfad_ats.Text);
                     REG.Schreiben("Pfade", "TMP_PFAD", pfad_tmp.Text);
-                    
 
-                    Dictionary<string, string> post_param4 = new Dictionary<string, string>();
-                    post_param4.Add("CLIENT_KEY", client_key.Text);
+
+                    Dictionary<string, string> post_param4 = new Dictionary<string, string>
+                    {
+                        { "CLIENT_KEY", client_key.Text }
+                    };
                     string response4 = API.HTTPSRequestPost(API.key_check, post_param4);
                     if (response4 == "NOK")
                     {
@@ -194,12 +198,12 @@ namespace TrucksLOG
 
 
 
-        private void where_img_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Where_img_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             MessageBox.Show("Du findest deinen Client-Key" + Environment.NewLine + "auf unserer Webseite " + Environment.NewLine + "https://projekt-janus.de" + Environment.NewLine + "in deinem Profil.", "Hilfe...", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void cancel_click(object sender, RoutedEventArgs e)
+        private void Cancel_click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

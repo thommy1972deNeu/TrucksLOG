@@ -16,7 +16,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,60,0,0">
                 <Image x:Name="ats_logo" Source="ATS_Logo.jpg" Width="65" Height="59" Margin="0,0,10,0" OpacityMask="White"/>
                 <TextBox x:Name="pfad_ats" Width="400" Height="30" Margin="0,0,10,0" VerticalContentAlignment="Center"/>
-                <Button x:Name="ats_suchen_btn" Content="Suchen" Width="100" Height="30" Click="ats_suchen_btn_Click"/>
+                <Button x:Name="ats_suchen_btn" Content="Suchen" Width="100" Height="30" Click="Ats_suchen_btn_Click"/>
 
 
             </StackPanel>
@@ -25,15 +25,15 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                 <Image x:Name="ets_logo" Source="ets2_logo_.png" Width="65" Margin="0,0,10,0" />
                 <TextBox x:Name="pfad_ets" Width="400" Height="30" Margin="0,0,10,0" VerticalContentAlignment="Center" />
-                <Button x:Name="ets_suchen_btn" Content="Suchen" Width="100" Height="30" Click="ets_suchen_btn_Click"/>
+                <Button x:Name="ets_suchen_btn" Content="Suchen" Width="100" Height="30" Click="Ets_suchen_btn_Click"/>
 
 
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                 <Image x:Name="tmp_logo" Source="szjBrQbB_400x400.png"  Width="65" Margin="0,0,10,0"/>
-                <TextBox x:Name="pfad_tmp" Width="400" Height="30" Margin="0,0,10,0" Loaded="pfad_tmp_Loaded" VerticalContentAlignment="Center"/>
-                <Button x:Name="tmp_suchen" Content="Suchen" Width="100" Height="30" Click="tmp_suchen_btn_Click" />
+                <TextBox x:Name="pfad_tmp" Width="400" Height="30" Margin="0,0,10,0" Loaded="Pfad_tmp_Loaded" VerticalContentAlignment="Center"/>
+                <Button x:Name="tmp_suchen" Content="Suchen" Width="100" Height="30" Click="Tmp_suchen_btn_Click" />
 
             </StackPanel>
             
@@ -44,13 +44,13 @@
 
             <StackPanel Orientation="Horizontal" Margin="0,-10,0,0" HorizontalAlignment="Center">
                 <Label Content="Gib deinen Client-Key ein !" HorizontalAlignment="Center" FontSize="18"/>
-                <Image x:Name="where_img" Source="Images/where.png"  Width="35" Margin="0,0,10,0" ToolTip="Für Hilfe hier klicken..." MouseDown="where_img_MouseDown"/>
+                <Image x:Name="where_img" Source="Images/where.png"  Width="35" Margin="0,0,10,0" ToolTip="Für Hilfe hier klicken..." MouseDown="Where_img_MouseDown"/>
             </StackPanel>
             
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50">
 
-                <Button x:Name="absende" Content="Absenden" Width="100" Height="30" Click="ok_click" Margin="0,0,100,0" Foreground="Black" >
+                <Button x:Name="absende" Content="Absenden" Width="100" Height="30" Click="Ok_click" Margin="0,0,100,0" Foreground="Black" >
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="White" Offset="0.006"/>
@@ -60,7 +60,7 @@
                 </Button>
 
 
-                <Button x:Name="close" Content="Abbrechen" Width="100" Height="30" Click="cancel_click" Margin="0,0,100,0" Foreground="Black" >
+                <Button x:Name="close" Content="Abbrechen" Width="100" Height="30" Click="Cancel_click" Margin="0,0,100,0" Foreground="Black" >
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="White" Offset="0.006"/>
@@ -70,7 +70,7 @@
                 </Button>
 
 
-                <Button x:Name="abbrechen" Content=" Client Beenden" Width="100" Height="30" Click="abbrechen_click" Margin="0,0,0,0" >
+                <Button x:Name="abbrechen" Content=" Client Beenden" Width="100" Height="30" Click="Abbrechen_click" Margin="0,0,0,0" >
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF765050" Offset="0"/>
