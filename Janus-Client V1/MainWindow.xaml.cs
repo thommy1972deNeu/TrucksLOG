@@ -1178,7 +1178,7 @@ namespace TrucksLOG
                     Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
                 }
 
-                autorun.IsChecked = REG.Lesen("Config", "Autorun") == "An" ? true : false;
+                autorun.IsChecked = REG.Lesen("Config", "Autorun") == "An";
 
                 // Pfade Auslesen Beginn
                 try
