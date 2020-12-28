@@ -508,22 +508,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Images\patti_1.jpg" />
-    <Resource Include="Images\pj_1.jpg" />
-    <Resource Include="Images\pj_2.jpg" />
-    <Resource Include="Images\pj_3.jpg" />
-    <Resource Include="Images\pj_4.jpg" />
-    <Resource Include="Images\pj_6.jpg" />
-    <Resource Include="Images\pj_7.jpg" />
-    <Resource Include="Images\pj_8.jpg" />
-    <Resource Include="Images\pj_5.jpg" />
-    <Content Include="Images\PJ_ICON.ico" />
-    <Resource Include="Images\werb_03.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Images\werb4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\wirdzu.png">
+    <Resource Include="Images\TL_300.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Content Include="Images\TL_ICON_2.ico">

@@ -43,6 +43,25 @@ namespace TrucksLOG
         public string tour_id_tanken;
         readonly InputSimulator sim = new InputSimulator();
 
+        // DLC_ETS
+        public string DLC_GOING = "0";
+        public string DLC_SCANDINAVIA = "0";
+        public string DLC_FRANCE = "0";
+        public string DLC_ITALIA = "0";
+        public string DLC_BALTIC = "0";
+        public string DLC_BLACK = "0";
+        public string DLC_IBERIA = "0";
+
+        // DLC ATS
+        public string DLC_ARIZONA = "0";
+        public string DLC_MEXICO = "0";
+        public string DLC_OREGON = "0";
+        public string DLC_WASHINGTON = "0";
+        public string DLC_IDAHO = "0";
+        public string DLC_UTAH = "0";
+        public string DLC_COLORADO = "0";
+        public string DLC_WYOMING = "0";
+
         private readonly DispatcherTimer job_update_timer = new DispatcherTimer();
         private readonly DispatcherTimer anti_afk_timer = new DispatcherTimer();
         private readonly DispatcherTimer useronline_timer = new DispatcherTimer();
@@ -394,7 +413,8 @@ namespace TrucksLOG
         {
             Dictionary<string, string> post_param2 = new Dictionary<string, string>
             {
-                { "VERSION", CLIENT_VERSION }
+                { "VERSION", CLIENT_VERSION },
+                { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
             };
             string response = API.HTTPSRequestPost(API.fahreronline_url, post_param2);
             string respons_br = response.Replace("<br/>", "\n");
@@ -1158,6 +1178,7 @@ namespace TrucksLOG
                     Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
                 }
 
+                autorun.IsChecked = REG.Lesen("Config", "Autorun") == "An" ? true : false;
 
                 // Pfade Auslesen Beginn
                 try
@@ -1188,13 +1209,7 @@ namespace TrucksLOG
 
                 ETS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2"));
                 ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
-
-               // Logging.WriteClientLog("Voreinstellungen geladen !");
-            }
-            catch
-            {
-               // Logging.WriteClientLog("Fehler beim Laden der Voreinstellungen " + ex.Message);
-            }
+            } catch {}
 
 
             try
@@ -1222,6 +1237,50 @@ namespace TrucksLOG
 
             anti_afk.SelectedValue = "Aus";
             anti_afk_timer.Stop();
+
+
+            // DLC ERKENNUNG
+           string ordner_ets = REG.Lesen("Pfade", "ETS2_PFAD").Substring(0, REG.Lesen("Pfade", "ETS2_PFAD").Length - 27);
+
+            DLC_GOING = File.Exists(ordner_ets + @"\dlc_east.scs") ? "1" : "0";
+            DLC_SCANDINAVIA = File.Exists(ordner_ets + @"\dlc_north.scs") ? "1" : "0";
+            DLC_FRANCE = File.Exists(ordner_ets + @"\dlc_fr.scs") ? "1" : "0";
+            DLC_ITALIA = File.Exists(ordner_ets + @"\dlc_it.scs") ? "1" : "0";
+            DLC_BALTIC = File.Exists(ordner_ets + @"\dlc_balt.scs") ? "1" : "0";
+            DLC_BLACK = File.Exists(ordner_ets + @"\dlc_balkan_e.scs") ? "1" : "0";
+            DLC_IBERIA = File.Exists(ordner_ets + @"\dlc_iberia.scs") ? "1" : "0";
+
+            string ordner_ats = REG.Lesen("Pfade", "ATS_PFAD").Substring(0, REG.Lesen("Pfade", "ATS_PFAD").Length - 24);
+
+            DLC_ARIZONA = File.Exists(ordner_ats + @"\dlc_arizona.scs") ? "1" : "0";
+            DLC_MEXICO = File.Exists(ordner_ats + @"\dlc_nm.scs") ? "1" : "0";
+            DLC_OREGON = File.Exists(ordner_ats + @"\dlc_or.scs") ? "1" : "0";
+            DLC_WASHINGTON = File.Exists(ordner_ats + @"\dlc_wa.scs") ? "1" : "0";
+            DLC_IDAHO = File.Exists(ordner_ats + @"\dlc_id.scs") ? "1" : "0";
+            DLC_UTAH = File.Exists(ordner_ats + @"\dlc_ut.scs") ? "1" : "0";
+            DLC_COLORADO = File.Exists(ordner_ats + @"\dlc_co.scs") ? "1" : "0";
+            DLC_WYOMING = File.Exists(ordner_ats + @"\dlc_wy.scs") ? "1" : "0";
+
+            Dictionary<string, string> post_param_dlc = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config","CLIENT_KEY") },
+                    { "DLC_GOING", DLC_GOING },
+                    { "DLC_SCANDINAVIA", DLC_SCANDINAVIA },
+                    { "DLC_FRANCE", DLC_FRANCE },
+                    { "DLC_ITALIA", DLC_ITALIA },
+                    { "DLC_BALTIC", DLC_BALTIC },
+                    { "DLC_BLACK", DLC_BLACK },
+                    { "DLC_IBERIA", DLC_IBERIA },
+                    { "DLC_ARIZONA", DLC_ARIZONA },
+                    { "DLC_MEXICO", DLC_MEXICO },
+                    { "DLC_OREGON", DLC_OREGON },
+                    { "DLC_WASHINGTON", DLC_WASHINGTON },
+                    { "DLC_IDAHO", DLC_IDAHO },
+                    { "DLC_UTAH", DLC_UTAH },
+                    { "DLC_COLORADO", DLC_COLORADO },
+                    { "DLC_WYOMING", DLC_WYOMING }
+                };
+            API.HTTPSRequestPost(API.dlc_update, post_param_dlc);
         }
 
 
@@ -1274,7 +1333,7 @@ namespace TrucksLOG
             {
                 ThemeManager.Current.ChangeTheme(this, (string)(Farbschema.SelectedValue));
                 REG.Schreiben("Config", "Farbschema", (string)(Farbschema.SelectedValue));
-                LeftFlyOut.Visibility = Visibility.Hidden;
+                //LeftFlyOut.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
             {
@@ -1759,6 +1818,50 @@ namespace TrucksLOG
             await metroWindow.ShowMessageAsync("Kopiert !", "Die DLL Dateien wurden ins Spielverzeichnis kopiert !");
             
 
+        }
+
+        private async void AutoStart_AN(object sender, RoutedEventArgs e)
+        {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
+            try
+            {
+                if (REG.Lesen("Config", "Autorun") == "Aus")
+                {
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+                    Assembly curAssembly = Assembly.GetExecutingAssembly();
+                    key.SetValue(curAssembly.GetName().Name, curAssembly.Location);
+
+                    REG.Schreiben("Config", "Autorun", "An");
+                    await metroWindow.ShowMessageAsync("Autostart Ein", "Der Client wird jetzt beim Systemstart ausgeführt.");
+                }
+            }
+            catch { }
+        }
+
+        private async void Autostart_AUS(object sender, RoutedEventArgs e)
+        {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
+            try
+            {
+                if (REG.Lesen("Config", "Autorun") == "An")
+                {
+                    string explorerKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+                    using (RegistryKey explorerKey = Registry.CurrentUser.OpenSubKey(explorerKeyPath, writable: true))
+                    {
+                        if (explorerKey != null)
+                        {
+                            Assembly curAssembly = Assembly.GetExecutingAssembly();
+                            //key.SetValue(curAssembly.GetName().Name, curAssembly.Location);
+
+                            explorerKey.DeleteValue(curAssembly.GetName().Name);
+
+                            REG.Schreiben("Config", "Autorun", "Aus");
+                            await metroWindow.ShowMessageAsync("Autostart Aus", "Der Client wird beim Starten nicht mehr ausgeführt.");
+                        }
+                    }
+                }
+            }
+            catch { }
         }
     }
 }

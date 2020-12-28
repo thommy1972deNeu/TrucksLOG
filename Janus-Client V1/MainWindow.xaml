@@ -50,7 +50,7 @@
 
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl>
-            <mah:Flyout x:Name="LeftFlyOut" Width="270">
+            <mah:Flyout x:Name="LeftFlyOut" Width="800">
 
                 <ScrollViewer Name="scrlMain"
                     CanContentScroll="True"
@@ -59,149 +59,174 @@
                     VerticalAlignment="Stretch">
                     <StackPanel Orientation="Vertical">
 
-                        <Image x:Name="beta_tester_icon" Width="150" Source="Resources\BETA_CLIENT.jpg"/>
-
-                        <Label Content="Farbschema wählen:" HorizontalAlignment="Center"/>
-                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged" Margin="0,0,0,20">
-                            <ComboBoxItem Tag="Dark.Red">Dunkel Rot</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Green">Dunkel Grün</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Blue">Dunkel Blau</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Purple">Dunkel PurPur</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Orange">Dunkel Orange</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Lime">Dunkel Limette</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Emerald">Dunkel Emerald</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Teal">Dunkel Teal</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Cyan">Dunkel Cyan</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Cobalt">Dunkel Cobald</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Indigo">Dunkel Indigo</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Violet">Dunkel Violett</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Pink">Dunkel Pink</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Magenta">Dunkel Magenta</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Crimson">Dunkel Crimson</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Amber">Dunkel Amber</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Yellow">Dunkel Gelb</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Brown">Dunkel Braun</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Olive">Dunkel Olive</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Steel">Dunkel Stahl</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Mauve">Dunkel Mauve</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Taupe">Dunkel Taupe</ComboBoxItem>
-                            <ComboBoxItem Tag="Dark.Sienna">Dunkel Wüste</ComboBoxItem>
-
-                            <ComboBoxItem Tag="Light.Red">Hell Rot</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Green">Hell Grün</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Blue">Hell Blau</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Purple">Hell PurPur</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Orange">Hell Orange</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Lime">Hell Limette</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Emerald">Hell Emerald</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Teal">Hell Teal</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Cyan">Hell Cyan</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Cobalt">Hell Cobald</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Indigo">Hell Indigo</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Violet">Hell Violett</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Pink">Hell Pink</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Magenta">Hell Magenta</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Crimson">Hell Crimson</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Amber">Hell Amber</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Yellow">Hell Gelb</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Brown">Hell Braun</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Olive">Hell Olive</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Steel">Hell Stahl</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Mauve">Hell Mauve</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Taupe">Hell Taupe</ComboBoxItem>
-                            <ComboBoxItem Tag="Light.Sienna">Hell Wüste</ComboBoxItem>
-                        </ComboBox>
-
-
-                        <Label Content="System-Sounds:" HorizontalAlignment="Center"/>
-                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Systemsounds" SelectedValuePath="Tag" SelectionChanged="Systemsounds_SelectionChanged" Margin="0,0,0,20">
-                            <ComboBoxItem Tag="An">An</ComboBoxItem>
-                            <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
-                        </ComboBox>
+                        <Image x:Name="beta_tester_icon" Width="150" Source="Resources\BETA_CLIENT.jpg" Margin="10,0,10,0"/>
 
                         <Separator/>
-                        <Label Content="Anti-AFK (Multiplayer):" HorizontalAlignment="Center"/>
-                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="anti_afk" SelectedValuePath="Tag" SelectionChanged="AntiAFK_SelectionChanged" Margin="0,0,0,20">
-                            <ComboBoxItem Tag="An">An</ComboBoxItem>
-                            <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
-                        </ComboBox>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,0" Width="800" Background="Transparent" >
+
+                            <Label Content="Farbschema wählen:" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,10,0,10"/>
+                            <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="5" x:Name="Farbschema" SelectedValuePath="Tag" SelectionChanged="Farbschema_SelectionChanged" VerticalAlignment="Center">
+                                <ComboBoxItem Tag="Dark.Red">Dunkel Rot</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Green">Dunkel Grün</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Blue">Dunkel Blau</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Purple">Dunkel PurPur</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Orange">Dunkel Orange</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Lime">Dunkel Limette</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Emerald">Dunkel Emerald</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Teal">Dunkel Teal</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Cyan">Dunkel Cyan</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Cobalt">Dunkel Cobald</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Indigo">Dunkel Indigo</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Violet">Dunkel Violett</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Pink">Dunkel Pink</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Magenta">Dunkel Magenta</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Crimson">Dunkel Crimson</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Amber">Dunkel Amber</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Yellow">Dunkel Gelb</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Brown">Dunkel Braun</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Olive">Dunkel Olive</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Steel">Dunkel Stahl</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Mauve">Dunkel Mauve</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Taupe">Dunkel Taupe</ComboBoxItem>
+                                <ComboBoxItem Tag="Dark.Sienna">Dunkel Wüste</ComboBoxItem>
+
+                                <ComboBoxItem Tag="Light.Red">Hell Rot</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Green">Hell Grün</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Blue">Hell Blau</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Purple">Hell PurPur</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Orange">Hell Orange</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Lime">Hell Limette</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Emerald">Hell Emerald</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Teal">Hell Teal</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Cyan">Hell Cyan</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Cobalt">Hell Cobald</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Indigo">Hell Indigo</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Violet">Hell Violett</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Pink">Hell Pink</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Magenta">Hell Magenta</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Crimson">Hell Crimson</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Amber">Hell Amber</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Yellow">Hell Gelb</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Brown">Hell Braun</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Olive">Hell Olive</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Steel">Hell Stahl</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Mauve">Hell Mauve</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Taupe">Hell Taupe</ComboBoxItem>
+                                <ComboBoxItem Tag="Light.Sienna">Hell Wüste</ComboBoxItem>
+                            </ComboBox>
 
 
-                        <TextBox x:Name="anti_ak_text" Padding="5" Margin="0,0,0,0" Height="50" Width="250" TextWrapping="Wrap"/>
-                        <Label x:Name="laenge_antiafk_text" FontSize="10" HorizontalAlignment="Center"/>
+                            <Label Content="System-Sounds:" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,10,0,10"/>
+                            <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="5" x:Name="Systemsounds" SelectedValuePath="Tag" SelectionChanged="Systemsounds_SelectionChanged" VerticalAlignment="Center">
+                                <ComboBoxItem Tag="An">An</ComboBoxItem>
+                                <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
+                            </ComboBox>
 
-                        <Slider x:Name="antiafk_zeit" Width="200" Minimum="2" Maximum="4" TickFrequency="1" IsSnapToTickEnabled="True" TickPlacement="Both"/>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Label Content="{Binding ElementName=antiafk_zeit,Path=Value}" />
-                            <Label Content=" Min."/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="30,0,0,0">
+                                <CheckBox x:Name="autorun" Checked="AutoStart_AN" Unchecked="Autostart_AUS">Autostart</CheckBox>
+                            </StackPanel>
+
                         </StackPanel>
 
-                        <Button x:Name="anti_afk_text_save" Width="150" Height="40" Click="Anti_afk_text_save_Click" Content="Anti-AFK speichern" Margin="0,0,0,10" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
                         <Separator/>
 
-                        <Label Content="Hintergrund" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Label Content="Hintergrundbild:" HorizontalAlignment="Center" FontSize="14"/>
-                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" Margin="0,0,0,20">
-                            <ComboBoxItem Tag="div_1.jpg">Divers 1</ComboBoxItem>
-                            <ComboBoxItem Tag="div_2.jpg">Divers 2</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_1.jpg">LKW 1</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_2.jpg">LKW 2</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_3.jpg">LKW 3</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_4.jpg">LKW 4</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_5.jpg">LKW 5</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_6.jpg">LKW 6</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_7.jpg">LKW 7</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_8.jpg">LKW 8</ComboBoxItem>
-                            <ComboBoxItem Tag="lkw_9.jpg">LKW 9</ComboBoxItem>
-                            <ComboBoxItem Tag="woman_1.jpg">Frau 1</ComboBoxItem>
-                            <ComboBoxItem Tag="woman_2.jpg">Frau 2</ComboBoxItem>
-                            <ComboBoxItem Tag="woman_3.jpg">Frau 3</ComboBoxItem>
-                            <ComboBoxItem Tag="woman_4.jpg">Frau 4</ComboBoxItem>
-                            <ComboBoxItem Tag="woman_5.jpg">Frau 5</ComboBoxItem>
-                            <ComboBoxItem Tag="woman_6.jpg">Frau 6</ComboBoxItem>
-                            <ComboBoxItem Tag="woman_7.jpg">Frau 7</ComboBoxItem>
-                            <ComboBoxItem Tag="patti_1.jpg">Patti 1</ComboBoxItem>
-                        </ComboBox>
-                        <Label Content="oder:" HorizontalAlignment="Center" Margin="0,-20" FontSize="14"/>
-                        <Button x:Name="eigene_bg_bild" Click="OPEN_BG_FILE" Content="Eigenes Hintergrundbild" Margin="0,10,0,20" Width="150" Height="40" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,10,0" Background="Transparent" Width="800">
 
-                        <Label HorizontalAlignment="Center" Content="Background-Transparenz:"/>
-                        <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="10" x:Name="bg_opacity" SelectedValuePath="Tag" SelectionChanged="BG_opacity_ValueChanged" Margin="0,0,0,20">
-                            <ComboBoxItem Tag="1.0">100 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.9">90 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.8">80 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.7">70 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.6">60 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.5">50 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.4">40 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.3">30 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.2">20 %</ComboBoxItem>
-                            <ComboBoxItem Tag="0.1">10 %</ComboBoxItem>
-                        </ComboBox>
+                            <Label Content="Anti-AFK (Multiplayer):" HorizontalAlignment="Center" Padding="10" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                            <ComboBox Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="5" Margin="10" x:Name="anti_afk" SelectedValuePath="Tag" SelectionChanged="AntiAFK_SelectionChanged">
+                                <ComboBoxItem Tag="An">An</ComboBoxItem>
+                                <ComboBoxItem Tag="Aus">Aus</ComboBoxItem>
+                            </ComboBox>
 
+                            <Slider x:Name="antiafk_zeit" Width="200" Minimum="2" Maximum="4" TickFrequency="1" IsSnapToTickEnabled="True" TickPlacement="Both" Margin="75,10,0,0"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,8,0,0">
+                                <Label Content="{Binding ElementName=antiafk_zeit,Path=Value}" FontSize="16" />
+                                <Label Content=" Min." FontSize="16"/>
+                            </StackPanel>
 
-                        <Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
-
-                        <Separator Margin="0,20,0,20"/>
-
-
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="ETS2-Pfad:" Margin="0,0,20,0"/>
-                            <Label x:Name="ets2_content"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="ATS-Pfad:" Margin="0,0,20,0"/>
-                            <Label x:Name="ats_content"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="TMP-Pfad:" Margin="0,0,20,0"/>
-                            <Label x:Name="tmp_content"/>
                         </StackPanel>
 
-                        <Button Content="Spielpfade ändern..." Click="Spielpfade_aendern" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10,0,10,0" Background="Transparent" Width="800">
+                            <TextBox x:Name="anti_ak_text" Padding="5" Margin="0,10,0,0" Height="50" Width="500" TextWrapping="Wrap"/>
+                            <Label x:Name="laenge_antiafk_text" FontSize="10" HorizontalAlignment="Center"/>
+
+                            <Button x:Name="anti_afk_text_save" Width="150" Height="40" Click="Anti_afk_text_save_Click" Content="Anti-AFK speichern" Margin="0,0,0,10" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
+
+                        </StackPanel>
+
+                        <Separator/>
 
 
-                        <Separator Margin="0,20,0,20"/>
+
+
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Background="Transparent" Margin="10,0,10,10" Width="800" VerticalAlignment="Center">
+
+                            <Label Content="Hintergrund:" HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Center" Margin="80,10,0,0"/>
+                            <ComboBox Width="150" HorizontalContentAlignment="Center" Padding="5" x:Name="Background_WEchsler" SelectedValuePath="Tag" SelectionChanged="Background_SelectionChanged" VerticalAlignment="Center" Margin="10,10,0,0">
+                                <ComboBoxItem Tag="div_1.jpg">Divers 1</ComboBoxItem>
+                                <ComboBoxItem Tag="div_2.jpg">Divers 2</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_1.jpg">LKW 1</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_2.jpg">LKW 2</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_3.jpg">LKW 3</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_4.jpg">LKW 4</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_5.jpg">LKW 5</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_6.jpg">LKW 6</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_7.jpg">LKW 7</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_8.jpg">LKW 8</ComboBoxItem>
+                                <ComboBoxItem Tag="lkw_9.jpg">LKW 9</ComboBoxItem>
+                                <ComboBoxItem Tag="woman_1.jpg">Frau 1</ComboBoxItem>
+                                <ComboBoxItem Tag="woman_2.jpg">Frau 2</ComboBoxItem>
+                                <ComboBoxItem Tag="woman_3.jpg">Frau 3</ComboBoxItem>
+                                <ComboBoxItem Tag="woman_4.jpg">Frau 4</ComboBoxItem>
+                                <ComboBoxItem Tag="woman_5.jpg">Frau 5</ComboBoxItem>
+                                <ComboBoxItem Tag="woman_6.jpg">Frau 6</ComboBoxItem>
+                                <ComboBoxItem Tag="woman_7.jpg">Frau 7</ComboBoxItem>
+                                <ComboBoxItem Tag="patti_1.jpg">Patti 1</ComboBoxItem>
+                            </ComboBox>
+
+
+                            <Button x:Name="eigene_bg_bild" Click="OPEN_BG_FILE" Content="Eigenes Hintergrundbild" Margin="20,10,0,0" Width="150" Height="30" Padding="5" Background="{DynamicResource MahApps.Brushes.AccentBase}"/>
+
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="Transparenz:" Margin="10,0,0,0"/>
+                            <ComboBox Width="80" HorizontalContentAlignment="Center" Padding="5" x:Name="bg_opacity" SelectedValuePath="Tag" SelectionChanged="BG_opacity_ValueChanged" VerticalAlignment="Center" Margin="5,10,0,0">
+                                <ComboBoxItem Tag="1.0">100 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.9">90 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.8">80 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.7">70 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.6">60 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.5">50 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.4">40 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.3">30 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.2">20 %</ComboBoxItem>
+                                <ComboBoxItem Tag="0.1">10 %</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!--<Button Content="LOG-Ordner öffnen" Click="LOG_ORDNER_OEFFNEN" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}"/>-->
+                        <Separator/>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="ETS2-Pfad:" Margin="10,10,10,0"/>
+                                <Label x:Name="ets2_content"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="ATS-Pfad:" Margin="10,10,10,0"/>
+                                <Label x:Name="ats_content"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="TMP-Pfad:" Margin="10,10,10,0"/>
+                                <Label x:Name="tmp_content"/>
+                            </StackPanel>
+
+                            <Button Content="Spielpfade ändern..." Click="Spielpfade_aendern" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}" Margin="10,10,0,0"/>
+                        </StackPanel>
+
+                        <Separator/>
+
                         <Label Content="Werbepartner:" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Button Width="230" Height="70" Background="{DynamicResource MahApps.Brushes.Accent}" Click="Oeffne_Andras_TV" Margin="0,0,0,10">
                             <StackPanel Orientation="Horizontal">
@@ -211,50 +236,46 @@
 
 
                         <Separator/>
-                        <Label Content="Spenden:" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Button Width="230" Height="70" Background="{DynamicResource MahApps.Brushes.Accent}" Click="Spende_einen_Kaffee">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Height="50" HorizontalAlignment="Left" Source="{iconPacks:BoxIconsImage Kind=LogosPaypal}"/>
-                                <TextBlock Width="160" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0">Spende uns einen Kaffee</TextBlock>
-                            </StackPanel>
-                        </Button>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10">
+                            <Button Width="230" Height="50" Background="{DynamicResource MahApps.Brushes.Accent}" Click="Spende_einen_Kaffee">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Height="30" HorizontalAlignment="Left" Source="{iconPacks:BoxIconsImage Kind=LogosPaypal}"/>
+                                    <TextBlock Width="160" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0">Spende uns einen Kaffee</TextBlock>
+                                </StackPanel>
+                            </Button>
 
-                        <Button Width="230" Height="70" Background="{DynamicResource MahApps.Brushes.Accent}" Click="Patreon_link" Margin="0,10,0,0">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Height="50" HorizontalAlignment="Left" Source="{iconPacks:BoxIconsImage Kind=LogosPatreon}"/>
-                                <TextBlock Width="160" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap">Werde Unterstützer des Projekts</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        
+                            <Button Width="230" Height="50" Background="{DynamicResource MahApps.Brushes.Accent}" Click="Patreon_link" Margin="50,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Height="30" HorizontalAlignment="Left" Source="{iconPacks:BoxIconsImage Kind=LogosPatreon}"/>
+                                    <TextBlock Width="160" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap">Werde Unterstützer des Projekts</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                         <!-- DEAKTIVIERT 04.11.2020
                         <Separator/>
                         <Label Content="Suche Client Updates" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Button x:Name="Client_Updates" Click="Client_Update_Manuell" Content="Suche manuell nach Updates" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
                         -->
-                        
-                        <Separator/>
-                        <Label Content="Client-Reset" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Button x:Name="Werksteinstellungen" Click="Werksteinstellungen_Click" Content="Client RESET!" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
 
                         <Separator/>
-                        <Label Content="ETS-Tour löschen" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Button x:Name="ETS_TOUR_delete" Click="ETS_tour_delete" Content="ETS Tour löschen" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
-                       
-                        <Separator/>
-                        <Label Content="ATS-Tour löschen" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Button x:Name="ATS_TOUR_delete" Click="Ats_tour_delete" Content="ATS Tour löschen" HorizontalAlignment="Center" Width="230" Height="30" Background="Red" Foreground="White"/>
-                        
-                        <Separator/>
-                        <Label Content="Telemetry kopieren" FontSize="24" HorizontalAlignment="Center" Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Button x:Name="Telemetry_copy" Click="Kopiere_telemetry" Content="Telemetry kopieren" HorizontalAlignment="Center" Width="230" Height="30" Background="blue" Foreground="White"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
+
+                            <Button x:Name="Werksteinstellungen" Click="Werksteinstellungen_Click" Content="Client RESET !" HorizontalAlignment="Center" Width="230" Height="30" Background="DarkRed" Foreground="{DynamicResource MahApps.Brushes.Badged.Foreground}" Margin="0,5,50,5"/>
+                            <Button x:Name="Telemetry_copy" Click="Kopiere_telemetry" Content="Telemetry kopieren" HorizontalAlignment="Center" Width="230" Height="30" Background="Green" Foreground="{DynamicResource MahApps.Brushes.Badged.Foreground}" Margin="0,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button x:Name="ATS_TOUR_delete" Click="Ats_tour_delete" Content="ATS Tour löschen" HorizontalAlignment="Center" Width="230" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}" Foreground="{DynamicResource MahApps.Brushes.Badged.Foreground}" Margin="0,5,50,5"/>
+                            <Button x:Name="ETS_TOUR_delete" Click="ETS_tour_delete" Content="ETS Tour löschen" HorizontalAlignment="Center" Width="230" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}" Foreground="{DynamicResource MahApps.Brushes.Badged.Foreground}" Margin="0"/>
+                        </StackPanel>
 
                     </StackPanel>
                 </ScrollViewer>
             </mah:Flyout>
 
             <mah:Flyout x:Name="RightFlyOut" Width="600" Position="Right" Foreground="White">
-           
+
                 <StackPanel Orientation="Vertical">
                     <Label FontSize="20" x:Name="credit_text" Margin="30,0,0,0"/>
                     <Button Width="300" Click="Andras_Click">
@@ -377,8 +398,8 @@
 
 
             <ToggleButton Content="{Binding ONLINEUSER}" ToolTip="{Binding ONLINEUSER}" IsChecked="{Binding ElementName=Fahrer_FlyOut, Path=IsOpen}" Foreground="Beige" FontSize="16" Margin="0,12,0,0" Cursor="Hand">
-              
-                    
+
+
             </ToggleButton>
 
             <ToggleButton Content="Layers" ToolTip="Zeige Client-Updates" IsChecked="{Binding ElementName=UpdatesFlyOut, Path=IsOpen}" Cursor="Hand">
@@ -432,7 +453,7 @@
         </StatusBar>
 
         <Grid x:Name="GRID_FAHRT">
-           
+
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="13"/>
@@ -478,10 +499,10 @@
 
 
             <!-- WAITING ZONE -->
-            
+
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-            <Label Content="Warte auf ETS / ATS" Grid.Row="1" Foreground="white" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontFamily="Microsoft YaHei UI Light" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-            <mah:MetroProgressBar Height="100" Foreground="red" Panel.ZIndex="1002" IsIndeterminate="true" EllipseDiameter="15" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}">
+            <Label Content="Warte auf ETS / ATS" Grid.Row="0" Foreground="white" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontFamily="Microsoft YaHei UI Light" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <mah:MetroProgressBar Height="100" Foreground="Orange" Panel.ZIndex="1002" IsIndeterminate="true" EllipseDiameter="15" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}">
                 <mah:MetroProgressBar.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0"/>
@@ -489,7 +510,7 @@
                     </LinearGradientBrush>
                 </mah:MetroProgressBar.Background>
             </mah:MetroProgressBar>
-           
+
 
             <Image x:Name="imgelt">
                 <Image.Source>
@@ -498,13 +519,34 @@
             </Image>
 
 
-            <Image Source="Images/wirdzu.png" Grid.Row="7" Grid.Column="7" Grid.RowSpan="20" Grid.ColumnSpan="20" Width="300" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-      
-            <Button x:Name="ZEIGE_TMP" Height="80" FontSize="18" Content="Truckers-MP starten" Grid.Row="8" Grid.Column="1" Margin="0,-30,0,0" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="TMP_starten_Click"  ToolTip="TruckersMP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-            
-            <Button x:Name="ZEIGE_ETS2" Height="50" FontSize="24" Content="ETS2 Single starten" Grid.Row="10" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="ETS_starten_Click"  ToolTip="ETS2 im Singel-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-            <Button x:Name="ZEIGE_ATS" Height="50" FontSize="24" Content="ATS Single starten" Grid.Row="12" Grid.Column="1" Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.Accent3}" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Blue" BorderThickness="1" Click="Ats_starten_Click"  ToolTip="ATS im Single-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-            <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="14" Grid.Column="6" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="Settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,0,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+            <Image Source="Images/TL_300.png" Grid.Row="0" Grid.Column="0" Grid.RowSpan="20" Grid.ColumnSpan="20" Width="300" Panel.ZIndex="1005" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
+
+            <Button x:Name="ZEIGE_TMP" Height="50" Width="250" FontSize="18" Content="Truckers-MP starten" Grid.Row="12" Grid.Column="0" Margin="20,0,0,0" Grid.RowSpan="2" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" BorderBrush="Black" BorderThickness="1" Click="TMP_starten_Click"  ToolTip="TruckersMP starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}" Foreground="Black">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFE9AA16" Offset="0.002"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button x:Name="ZEIGE_ETS2" Height="50" Width="250" FontSize="18" Content="ETS2 Single starten" Grid.Row="12" Grid.Column="7" Grid.RowSpan="2" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" Foreground="Black" BorderBrush="Black" BorderThickness="1" Click="ETS_starten_Click"  ToolTip="ETS2 im Singel-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFE9AA16" Offset="0.002"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button x:Name="ZEIGE_ATS" Height="50" Width="250" FontSize="18" Content="ATS Single starten" Grid.Row="12" Grid.Column="14" Grid.RowSpan="2" HorizontalContentAlignment="Center" Grid.ColumnSpan="6" Foreground="Black" BorderBrush="Black" BorderThickness="1" Click="Ats_starten_Click"  ToolTip="ATS im Single-Player starten" Panel.ZIndex="1006" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFE9AA16" Offset="0.002"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+
+            <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="15" Grid.Column="20" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="Settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-20,-90,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
 
             <!-- WAITING ZONE ENDE-->
 
@@ -529,8 +571,8 @@
             <Image Grid.Row="3" Grid.Column="14" Source="{iconPacks:MaterialImage Kind=HazardLights}" Margin="3" Visibility="{Binding WARNLICHT, Converter={StaticResource warning_lights}}" ToolTip="Warnleuchten AN"/>
             <Label Content="{Binding GANG}" Grid.Row="3" Grid.Column="14" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="45" Margin="45,28,45,32" Foreground="Black" Height="10" Width="10"/>
 
-            
-           <!-- TANKANZEIGE -->
+
+            <!-- TANKANZEIGE -->
             <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="5" VerticalAlignment="Center" Width="250" HorizontalAlignment="Left" Height="80" Margin="0,33,0,14">
                 <mah:MetroProgressBar Height="80" Minimum="1" Maximum="{Binding FUEL_MAX}" Value="{Binding FUEL_GERADE}" BorderBrush="Black" BorderThickness="1">
                     <mah:MetroProgressBar.Foreground>
