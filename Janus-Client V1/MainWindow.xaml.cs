@@ -23,6 +23,7 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Net;
 using System.IO;
+using System.ComponentModel;
 
 namespace TrucksLOG
 {
@@ -86,9 +87,6 @@ namespace TrucksLOG
             }
             */
 
-
-
-
             //Logging.Make_Log_File();
 
             Lade_Voreinstellungen();
@@ -151,7 +149,7 @@ namespace TrucksLOG
                 TelemetryInstaller.check_ATS();
             } catch { }
 
-            System.Windows.Forms.NotifyIcon notifyIcon = new System.Windows.Forms.NotifyIcon();
+    
 
             Telemetry = new SCSSdkTelemetry();
             Telemetry.Data += Telemetry_Data;
@@ -1167,6 +1165,8 @@ namespace TrucksLOG
                     REG.Schreiben("Config", "Farbschema", "Dark.Blue");
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Autorun")))
+                    REG.Schreiben("Config", "Autorun", "Aus");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Background")))
                 {
@@ -1453,11 +1453,7 @@ namespace TrucksLOG
             this.Hauptfenster.Background = myBrush;
         }
 
-        private void Minimize_Window(object sender, RoutedEventArgs e)
-        {
-            Hauptfenster.WindowState = WindowState.Minimized;
-        
-        }
+
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
@@ -1862,6 +1858,73 @@ namespace TrucksLOG
                 }
             }
             catch { }
+        }
+
+        private void Minimize_Window(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            ShowStandardBalloon("TrucksLOG Minimiert", "Der Client ist jetzt in der Taskleiste");
+        }
+
+        private void Client_Zeigen_Event(object sender, RoutedEventArgs e)
+        {
+
+            //Hauptfenster.WindowState = WindowState.Normal;
+            //Hauptfenster.Show();
+            this.Show();
+            this.Focus();
+            
+        }
+
+        private void Client_Schliessen_Event(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void ShowStandardBalloon(string ballon_titel, string ballon_text)
+        {
+            TaskBar_ICON.ShowBalloonTip(ballon_titel, ballon_text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+            TaskBar_ICON.HideBalloonTip();
+        }
+
+        private void Open_Webseite_Trucklog(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://truckslog.de");
+        }
+
+        private void Hyperlink_Startseite(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://truckslog.de");
+        }
+
+        private void Hyperlink_Abrechnung(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://truckslog.de?s=fahrer/fahrer_fahrtenbuch");
+        }
+
+        private void Hyperlink_Spedition(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://truckslog.de?s=speditionen/alle_speditionen");
+        }
+
+        private void Hyperlink_Regeln(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://truckslog.de?s=regeln");
+        }
+
+        private void Hyperlink_Patreon(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://www.patreon.com/bePatron?u=29913020");
+        }
+
+        private void Hyperlink_AST(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://truckslog.de/?s=speditionen/spedi_info&id=151");
+        }
+
+        private void Hyperlink_Partner_Werden(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://truckslog.de/?s=info/partner");
         }
     }
 }

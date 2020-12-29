@@ -474,6 +474,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\TL_300.ico" />
     <Resource Include="TL_ICON_2.ico" />
     <Resource Include="tln.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -520,6 +521,22 @@
     <Resource Include="Images\test2.gif">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Images\add_2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\delete64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Images\hyperlink.png" />
+    <Content Include="Images\handshake.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\maximize.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\TL_300.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\TL_ICON_2.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
