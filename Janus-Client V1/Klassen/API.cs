@@ -36,7 +36,8 @@ namespace TrucksLOG.Klassen
         public static string fahreronline_url = server + "fahrer_online.php";
         public static string onlinecheck = server + "onlinecheck.php";
         public static string client_version = server + "client_version.php";
-        public static string dlc_update = server + "DLC_Update.php";
+        public static string dlc_update_ets = server + "DLC_Update_ETS.php";
+        public static string dlc_update_ats = server + "DLC_Update_ATS.php";
         public static string updatetext_uri = "http://client.truckslog.org/changelog.html";
         
 

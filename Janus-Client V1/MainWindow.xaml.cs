@@ -29,7 +29,6 @@ namespace TrucksLOG
 {
     public partial class MainWindow
     {
-       
         public DiscordRpcClient client;
         private static RichPresence jobRPC;
         private const string DiscordAppID = "730374187025170472";
@@ -77,20 +76,9 @@ namespace TrucksLOG
 
 
             OnlineCheck();
+            Logging.Make_Log_File();
             Setze_Client_Version();
-            /*
-            if (ServerCheck("https://truckslog.org") == false)
-            {
-                MessageBox.Show("Der Server ist leider Offline\n Das Programm wird jetzt beendet!", "Fehler bei Verbindung zum Server", MessageBoxButton.OK, MessageBoxImage.Error);
-               /// Logging.WriteClientLog("[ERROR] - Verbindung zum Server unterbrochen -> Programm exit();");
-                Application.Current.Shutdown();
-            }
-            */
-
-            //Logging.Make_Log_File();
-
             Lade_Voreinstellungen();
-            Lade_GameVersionen();
             SpeditionsCheck();
 
 
@@ -100,6 +88,8 @@ namespace TrucksLOG
             var timer = new System.Timers.Timer(150);
             timer.Elapsed += (sender, args) => { client.Invoke(); };
             timer.Start();
+
+            Logging.WriteClientLog("Discord RPC Start");
             // DISCORD ENDE
 
             credit_text.Content = "Ein Dank geht an mein Team:" + Environment.NewLine;
@@ -118,15 +108,19 @@ namespace TrucksLOG
             useronline_timer.Tick += Useronline_Tick;
             useronline_timer.Start();
 
+            Logging.WriteClientLog("User Online Timer gestartet !");
+
             zu_schnell.Interval = TimeSpan.FromSeconds(1);
             zu_schnell.Tick += Zu_schnell_tick;
+            Logging.WriteClientLog("Zu Schnell Tick initialisiert !");
 
-        
             // JOB UPDATE TIMER
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
+            Logging.WriteClientLog("Job Update Timer gesetzt !");
 
             // ANTI_AFK TIMER
             anti_afk_timer.Interval = TimeSpan.FromMinutes(Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER")));
+            Logging.WriteClientLog("Anti-AFK Timer ausgelesen Main -> Z132 !");
 
             if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")))
             {
@@ -146,15 +140,19 @@ namespace TrucksLOG
             }
             try {
                 TelemetryInstaller.check_ETS();
+                Logging.WriteClientLog("Telemetry Install Check ETS Main -> Z151 -> OK");
+
                 TelemetryInstaller.check_ATS();
+                Logging.WriteClientLog("Telemetry Install Check ATS Main -> Z154 -> OK");
             } catch { }
 
     
 
             Telemetry = new SCSSdkTelemetry();
+            Logging.WriteClientLog("Telemetry gestartet !");
+
             Telemetry.Data += Telemetry_Data;
             Telemetry.JobStarted += TelemetryOnJobStarted;
-
             Telemetry.JobCancelled += TelemetryJobCancelled;
             Telemetry.JobDelivered += TelemetryJobDelivered;
             Telemetry.Fined += TelemetryFined;
@@ -165,13 +163,14 @@ namespace TrucksLOG
             Telemetry.RefuelEnd += TelemetryRefuelEnd;
             Telemetry.RefuelPayed += TelemetryRefuelPayed;
 
+            Logging.WriteClientLog("Telemetry Events geladen !");
+
             if (MainWindow.AlreadyRunning())
             {
+                Logging.WriteClientLog("Anwendung läuft bereits !");
                 Application.Current.Shutdown();
                 return;
             }
-
-           
         }
 
         public static async void Bann_Check()
@@ -183,8 +182,9 @@ namespace TrucksLOG
             string response = API.HTTPSRequestPost(API.bann_check, post_param);
             string[] ausgabe = response.Split(':');
 
-            
-                if (Convert.ToInt32(ausgabe[0]) == 0)
+            Logging.WriteClientLog("Bann Check absolviert !");
+
+            if (Convert.ToInt32(ausgabe[0]) == 0)
                 {
                     var metroWindow = (Application.Current.MainWindow as MetroWindow);
                     await metroWindow.ShowMessageAsync("Account Freischaltung", "Dein Account wurde noch nicht Freigeschaltet.\n\nBitte wende dich an unseren Discord-Support");
@@ -221,7 +221,6 @@ namespace TrucksLOG
             }
         }
 
-
         private static bool AlreadyRunning()
         {
             Process current = Process.GetCurrentProcess();
@@ -237,17 +236,8 @@ namespace TrucksLOG
                     }
                 }
             }
-
             return false;
         }
-
-        /*
-        private bool CheckIfAProcessIsRunning(string processname)
-        {
-            return Process.GetProcessesByName(processname).Length > 0;
-        }
-        */
-
 
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -266,6 +256,7 @@ namespace TrucksLOG
             Minimize = 6, ShowMinNoActivate = 7, ShowNoActivate = 8,
             Restore = 9, ShowDefault = 10, ForceMinimized = 11
         };
+
         public void BringMainWindowToFront(string processName)
         {
             Process bProcess = Process.GetProcessesByName(processName).FirstOrDefault();
@@ -296,23 +287,13 @@ namespace TrucksLOG
                             BringMainWindowToFront("amtrucks");
                         }
                         sim.Keyboard.KeyPress(VirtualKeyCode.VK_Y);
-                        sim.Keyboard.TextEntry("TL-BOT:");
+                        sim.Keyboard.TextEntry("TrucksLOG: ");
                         sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
                         sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
-                        //Logging.WriteClientLog("[INFO] Keys gesendet! Geschwindigkeit: " + Truck_Daten.SPEED);
                     }
-                    else
-                    {
-                        //Logging.WriteClientLog("[INFO] Keys nicht gesendet! Kein Spiel gestartet oder Geschwindigkeit: " + Truck_Daten.SPEED);
-                    }
-                } else
-                {
-                    //Logging.WriteClientLog("[INFO] ANT-AFK ist an, aber kein Spiel gestartet...");
-                }
-            } catch
-            {
-                //Logging.WriteClientLog("[ERROR] Fehler bei anti_afk_timer " + ex.Message);
-            }
+                    else {}
+                } else {}
+            } catch {}
 
         }
 
@@ -327,10 +308,7 @@ namespace TrucksLOG
                 };
                 string response = API.HTTPSRequestPost(API.user_zu_schnell, post_param);
             }
-            catch
-            {
-               // Logging.WriteClientLog("[ERROR] Fehler bei zu_schnell_tick " + ex.Message);
-            }
+            catch {}
 
         }
 
@@ -348,17 +326,15 @@ namespace TrucksLOG
 
                 if(response == "Ohne")
                 {
+                    Logging.WriteClientLog("Keiner Spedition zugehörig !");
+
                     await metroWindow.ShowMessageAsync("Keine Spedition !", "Du musst einer Spedition angehören um unser System nutzen zu können.\nDu findest alle Speditionen auf unserer Webseite TrucksLOG.de\n\nDas Programm wird jetzt beendet !");
-                    //Logging.WriteClientLog("[ERROR] -> Spielclient wurde mehrmals Ausgeführt");
                     Application.Current.Shutdown();
                 }
                 Truck_Daten.SPEDITIONSNAME = "Spedition: " + response;
-
+                Logging.WriteClientLog("Spedition OK: " + Truck_Daten.SPEDITIONSNAME);
             }
-            catch
-            {
-                // Logging.WriteClientLog("[ERROR] Fehler bei zu_schnell_tick " + ex.Message);
-            }
+            catch {}
 
         }
 
@@ -396,13 +372,15 @@ namespace TrucksLOG
                 };
                 string response_online = API.HTTPSRequestPost(API.useronline_url, post_param);
                 Truck_Daten.ONLINEUSER = "Fahrer: " + response_online;
-               
+
+                Logging.WriteClientLog("Fahreranzahl geladen");
+
                 Lade_fahrer();
                 Lade_Punktekonto();
                 Set_online();
 
             } catch {
-                //Logging.WriteClientLog("[ERROR] Fehler beim Useronline-Tick !");
+               
             }
         }
 
@@ -455,12 +433,7 @@ namespace TrucksLOG
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
 
-                //Logging.WriteClientLog("[UPDATE] Tour-Update: " + Truck_Daten.FRACHTSCHADEN.ToString() + ", Rest-KM: " + restkilometer);
-
-            } catch
-            {
-                //Logging.WriteClientLog("[ERROR] Fehler beim Tour-Update " + ex.Message);
-            }
+            } catch {}
 
      
 
@@ -474,6 +447,7 @@ namespace TrucksLOG
               { "CLIENT_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString() }
             };
             API.HTTPSRequestPost(API.client_version, post_param);
+            Logging.WriteClientLog("[CLIENT][VERSION] => " + Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
 
@@ -505,11 +479,12 @@ namespace TrucksLOG
                 };
                 string response = API.HTTPSRequestPost(API.punktekonto, post_param);
                 Truck_Daten.PUNKTEKONTO = "Punkte: " + response;
-                
+
+                Logging.WriteClientLog("Punktekonto geladen !");
             }
             catch
-            { 
-                //Logging.WriteClientLog("[ERROR] Fehler beim laden des Punktekontos !"); 
+            {
+                Logging.WriteClientLog("Fehler beim Laden des Punktekontos!");
             }
         }
 
@@ -526,7 +501,7 @@ namespace TrucksLOG
                 };
                 string response = API.HTTPSRequestPost(API.tmp_versionen, post_param);
                 Truck_Daten.TMP_VERSIONEN = response;
-                //ZEIGE_TMP.Content += "\n" + Truck_Daten.TMP_VERSIONEN;
+
             }
             catch
             {
@@ -1131,47 +1106,71 @@ namespace TrucksLOG
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
                     REG.Schreiben("Config", "BG_OPACITY", "1.0"); Truck_Daten.BG_OPACITY = "1.0"; bg_opacity.SelectedValue = "1.0";
                 Truck_Daten.BG_OPACITY = REG.Lesen("Config", "BG_OPACITY"); bg_opacity.SelectedValue = REG.Lesen("Config", "BG_OPACITY");
+               
+                Logging.WriteClientLog("BG Opacity OK");
 
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
+                Logging.WriteClientLog("Farbschema OK");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "FIRST_RUN")))
-                    REG.Schreiben("Config", "FIRST_RUN", "0");
+                        REG.Schreiben("Config", "FIRST_RUN", "0"); 
+                Logging.WriteClientLog("FirstRun geschrieben");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
-                    REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!");
+                    REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!"); 
+
+                Logging.WriteClientLog("ANTI AFK TEXT geschrieben");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
-                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
+                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4"); 
+
+                Logging.WriteClientLog("Anti AFK Timer gesetzt");
 
                 antiafk_zeit.Value = Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER"));
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ETS2")))
-                    REG.Schreiben("Config", "TOUR_ID_ETS2", "");
+                    REG.Schreiben("Config", "TOUR_ID_ETS2", ""); 
+
+                Logging.WriteClientLog("Tour ID ETS2 geleert");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ATS")))
                     REG.Schreiben("Config", "TOUR_ID_ATS", "");
 
-                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
-                    REG.Schreiben("Config", "CLIENT_KEY", "");
+                Logging.WriteClientLog("Tour ID ATS geleert");
 
-                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
-                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
+                    REG.Schreiben("Config", "CLIENT_KEY", ""); 
+
+                Logging.WriteClientLog("Client Key geschrieben");
+
+                //if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
+                    //REG.Schreiben("Config", "ANTI_AFK_TIMER", "4"); 
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Systemsounds")))
-                    REG.Schreiben("Config", "Systemsounds", "An");
+                    REG.Schreiben("Config", "Systemsounds", "An"); 
+                
+                Logging.WriteClientLog("System Sounds auf AN");
+
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Farbschema")))
-                    REG.Schreiben("Config", "Farbschema", "Dark.Blue");
+                    REG.Schreiben("Config", "Farbschema", "Dark.Blue"); 
+                
+               Logging.WriteClientLog("Farbschema auf Dark.Blue");
+
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Autorun")))
-                    REG.Schreiben("Config", "Autorun", "Aus");
+                    REG.Schreiben("Config", "Autorun", "Aus"); 
+
+                Logging.WriteClientLog("Autorun auf Aus");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Background")))
                 {
-                    Background_WEchsler.SelectedValue = "pj_7.jpg";
-                    REG.Schreiben("Config", "Background", "pj_7.jpg");
+                    Background_WEchsler.SelectedValue = "lkw_1.jpg";
+                    REG.Schreiben("Config", "Background", "lkw_1.jpg");
+                    Logging.WriteClientLog("Background auf LKW 1");
                 }
                 else
                 {
@@ -1188,24 +1187,19 @@ namespace TrucksLOG
                     tmp_content.Content = REG.Lesen("Pfade", "TMP_PFAD") != "" ? "OK" : "Fehlt";
            
                     status_bar_version.Content = "Client Version: " + CLIENT_VERSION;
-             
-                    
-                   // Logging.WriteClientLog("Pfade aus REG gelesen und in Seitenmenü angezeigt !");
+
+                    Logging.WriteClientLog("Status Bar Version gesetzt");
                 }
-                catch
-                {
-                    //Logging.WriteClientLog("Fehler beim laden der Pfade aus Registry" + ex.Message);
-                }
+                catch {}
                 // Pfade Auslesen Ende
 
                 try
                 {
                     this.DataContext = Truck_Daten;
+
+                    Logging.WriteClientLog("Data Context gesetzt");
                 }
-                catch
-                {
-                    //Logging.WriteClientLog("Fehler beim setzen des DataContext" + ex.Message);
-                }
+                catch {}
 
                 ETS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2"));
                 ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
@@ -1223,6 +1217,7 @@ namespace TrucksLOG
                 string response3 = response2.Replace("<hr/>", "");
                 update_text.Text = response3;
 
+                Logging.WriteClientLog("Client Version gesendet");
             } catch
             {
                 //Logging.WriteClientLog("[ERROR] Fehler beim Anzeigen der Update News " + ex.Message);
@@ -1233,44 +1228,54 @@ namespace TrucksLOG
                 anti_ak_text.Text = REG.Lesen("Config", "ANTI_AFK_TEXT");
                 anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
-          
+
+            Logging.WriteClientLog("AFK Text auf 150 Zeichen gesetzt");
 
             anti_afk.SelectedValue = "Aus";
             anti_afk_timer.Stop();
 
 
             // DLC ERKENNUNG
-           string ordner_ets = REG.Lesen("Pfade", "ETS2_PFAD").Substring(0, REG.Lesen("Pfade", "ETS2_PFAD").Length - 27);
+            Logging.WriteClientLog("Starte ETS2 DLC Erkennung...");
+            DLC_ETS_Erkennung();
+            Logging.WriteClientLog("Starte ATS DLC Erkennung...");
+            DLC_ATS_Erkennung();
+        }
 
-            DLC_GOING = File.Exists(ordner_ets + @"\dlc_east.scs") ? "1" : "0";
-            DLC_SCANDINAVIA = File.Exists(ordner_ets + @"\dlc_north.scs") ? "1" : "0";
-            DLC_FRANCE = File.Exists(ordner_ets + @"\dlc_fr.scs") ? "1" : "0";
-            DLC_ITALIA = File.Exists(ordner_ets + @"\dlc_it.scs") ? "1" : "0";
-            DLC_BALTIC = File.Exists(ordner_ets + @"\dlc_balt.scs") ? "1" : "0";
-            DLC_BLACK = File.Exists(ordner_ets + @"\dlc_balkan_e.scs") ? "1" : "0";
-            DLC_IBERIA = File.Exists(ordner_ets + @"\dlc_iberia.scs") ? "1" : "0";
+        private void DLC_ATS_Erkennung()
+        {
+            try {
 
             string ordner_ats = REG.Lesen("Pfade", "ATS_PFAD").Substring(0, REG.Lesen("Pfade", "ATS_PFAD").Length - 24);
+            Logging.WriteClientLog("ATS-Ordner für DLC Abfrage: " + ordner_ats);
 
             DLC_ARIZONA = File.Exists(ordner_ats + @"\dlc_arizona.scs") ? "1" : "0";
+            Logging.WriteClientLog("DLC ARIZ: " + DLC_ARIZONA);
+
             DLC_MEXICO = File.Exists(ordner_ats + @"\dlc_nm.scs") ? "1" : "0";
+            Logging.WriteClientLog("DLC MEX: " + DLC_MEXICO);
+
             DLC_OREGON = File.Exists(ordner_ats + @"\dlc_or.scs") ? "1" : "0";
+            Logging.WriteClientLog("DLC ORE: " + DLC_OREGON);
+
             DLC_WASHINGTON = File.Exists(ordner_ats + @"\dlc_wa.scs") ? "1" : "0";
+            Logging.WriteClientLog("DLC Wash: " + DLC_WASHINGTON);
+
             DLC_IDAHO = File.Exists(ordner_ats + @"\dlc_id.scs") ? "1" : "0";
+            Logging.WriteClientLog("DLC Idaho: " + DLC_IDAHO);
+
             DLC_UTAH = File.Exists(ordner_ats + @"\dlc_ut.scs") ? "1" : "0";
+            Logging.WriteClientLog("DLC Utah: " + DLC_UTAH);
+
             DLC_COLORADO = File.Exists(ordner_ats + @"\dlc_co.scs") ? "1" : "0";
+            Logging.WriteClientLog("DLC Colorado: " + DLC_COLORADO);
+
             DLC_WYOMING = File.Exists(ordner_ats + @"\dlc_wy.scs") ? "1" : "0";
+            Logging.WriteClientLog("DLC Wyoming: " + DLC_WYOMING);
 
             Dictionary<string, string> post_param_dlc = new Dictionary<string, string>
                 {
                     { "CLIENT_KEY", REG.Lesen("Config","CLIENT_KEY") },
-                    { "DLC_GOING", DLC_GOING },
-                    { "DLC_SCANDINAVIA", DLC_SCANDINAVIA },
-                    { "DLC_FRANCE", DLC_FRANCE },
-                    { "DLC_ITALIA", DLC_ITALIA },
-                    { "DLC_BALTIC", DLC_BALTIC },
-                    { "DLC_BLACK", DLC_BLACK },
-                    { "DLC_IBERIA", DLC_IBERIA },
                     { "DLC_ARIZONA", DLC_ARIZONA },
                     { "DLC_MEXICO", DLC_MEXICO },
                     { "DLC_OREGON", DLC_OREGON },
@@ -1280,7 +1285,60 @@ namespace TrucksLOG
                     { "DLC_COLORADO", DLC_COLORADO },
                     { "DLC_WYOMING", DLC_WYOMING }
                 };
-            API.HTTPSRequestPost(API.dlc_update, post_param_dlc);
+            API.HTTPSRequestPost(API.dlc_update_ats, post_param_dlc);
+            Logging.WriteClientLog("DLC ATS an Server gesendet !");
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("Fehler bei ATS DLC Erkennung ! -> " + ex.Message);
+            }
+        }
+
+
+        private void DLC_ETS_Erkennung()
+        {
+            try
+            {
+                string ordner_ets = REG.Lesen("Pfade", "ETS2_PFAD").Substring(0, REG.Lesen("Pfade", "ETS2_PFAD").Length - 27);
+                Logging.WriteClientLog("ETS2 Ordner für DLC Abfrage: " + ordner_ets);
+
+                DLC_GOING = File.Exists(ordner_ets + @"\dlc_east.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Going: " + DLC_GOING);
+
+                DLC_SCANDINAVIA = File.Exists(ordner_ets + @"\dlc_north.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Scan: " + DLC_SCANDINAVIA);
+
+                DLC_FRANCE = File.Exists(ordner_ets + @"\dlc_fr.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC FR: " + DLC_FRANCE);
+
+                DLC_ITALIA = File.Exists(ordner_ets + @"\dlc_it.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC ITA: " + DLC_ITALIA);
+
+                DLC_BALTIC = File.Exists(ordner_ets + @"\dlc_balt.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Baltic: " + DLC_BALTIC);
+
+                DLC_BLACK = File.Exists(ordner_ets + @"\dlc_balkan_e.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC BLACK: " + DLC_BLACK);
+
+                DLC_IBERIA = File.Exists(ordner_ets + @"\dlc_iberia.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Iberia: " + DLC_IBERIA);
+
+                Dictionary<string, string> post_param_dlc = new Dictionary<string, string>
+                {
+                    { "CLIENT_KEY", REG.Lesen("Config","CLIENT_KEY") },
+                    { "DLC_GOING", DLC_GOING },
+                    { "DLC_SCANDINAVIA", DLC_SCANDINAVIA },
+                    { "DLC_FRANCE", DLC_FRANCE },
+                    { "DLC_ITALIA", DLC_ITALIA },
+                    { "DLC_BALTIC", DLC_BALTIC },
+                    { "DLC_BLACK", DLC_BLACK },
+                    { "DLC_IBERIA", DLC_IBERIA }
+                };
+                API.HTTPSRequestPost(API.dlc_update_ets, post_param_dlc);
+                Logging.WriteClientLog("DLC ETS an Server gesendet !");
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("ETS DLC Update fehlgeschlagen ! -> " + ex.Message);
+            }
         }
 
 
@@ -1292,7 +1350,7 @@ namespace TrucksLOG
             }
             catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler Beta_Tester: " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler Beta_Tester: " + ex.Message);
                 msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1010). Bitte versuche es später erneut oder gib uns diesen Fehlercode in Discord." + ex.Message);
             }
         }
@@ -1310,7 +1368,7 @@ namespace TrucksLOG
             }
             catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler beim Spende_Kaffee: " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim Spende_Kaffee: " + ex.Message);
                 msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut..." + ex.Message);
             }
         }
@@ -1333,17 +1391,16 @@ namespace TrucksLOG
             {
                 ThemeManager.Current.ChangeTheme(this, (string)(Farbschema.SelectedValue));
                 REG.Schreiben("Config", "Farbschema", (string)(Farbschema.SelectedValue));
-                //LeftFlyOut.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
             {
-                msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1020). Bitte versuche es später erneut oder gib uns diesen Fehlercode in Discord." + ex.Message);
+                msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1020). Bitte versuche es später erneut oder gib uns diesen Fehlercode über Discord-Ticket." + ex.Message);
             }
         }
 
         private void Preis_eintragen_Click(object sender, RoutedEventArgs e)
         {
-           // Logging.WriteClientLog("Preis eintragen CLICK-EVENT");
+            Logging.WriteClientLog("Preis eintragen CLICK-EVENT");
         }
 
         private void Systemsounds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1351,10 +1408,12 @@ namespace TrucksLOG
             if ((string)Systemsounds.SelectedValue == "An")
             {
                 REG.Schreiben("Config", "Systemsounds", "An");
+                Logging.WriteClientLog("Systemsounds Angeschaltet");
             }
             if ((string)Systemsounds.SelectedValue == "Aus")
             {
                 REG.Schreiben("Config", "Systemsounds", "Aus");
+                Logging.WriteClientLog("Systemsounds Ausgeschaltet");
             }
         }
 
@@ -1395,7 +1454,7 @@ namespace TrucksLOG
 
         private void Patreon_link(object sender, RoutedEventArgs e)
         {
-            //Logging.WriteClientLog("[INFO] Patreon Link wurde angeklickt!");
+            Logging.WriteClientLog("[INFO] Patreon Link wurde angeklickt!");
             Process.Start("https://www.patreon.com/TrucksLOG");
         }
 
@@ -1410,9 +1469,9 @@ namespace TrucksLOG
                 };
                 this.Hauptfenster.Background = myBrush;
             }
-            catch
+            catch (Exception ex)
             {
-                //Logging.WriteClientLog("Designer: Konnte den Background " + (string)(Background_WEchsler.SelectedValue) + " nicht laden." + ex.Message + ex.StackTrace);
+                Logging.WriteClientLog("Designer: Konnte den Background " + (string)(Background_WEchsler.SelectedValue) + " nicht laden." + ex.Message + ex.StackTrace);
             }
         }
 
@@ -1428,7 +1487,7 @@ namespace TrucksLOG
                 { "USER", REG.Lesen("Config", "CLIENT_KEY") }
             };
             API.HTTPSRequestPost(API.link_click, post_param);
-           // Logging.WriteClientLog("[INFO] Andras.TV wurde angeklickt!");
+            Logging.WriteClientLog("[INFO] Andras.TV wurde angeklickt!");
             Process.Start("https://www.twitch.tv/andras_tv");
         }
 
@@ -1457,13 +1516,13 @@ namespace TrucksLOG
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-           // Logging.WriteClientLog("[INFO] Programm wurde beendet!");
+            Logging.WriteClientLog("[INFO] Programm wurde beendet!");
             try
             {
-                System.Windows.Application.Current.Shutdown();
-            } catch
+               Application.Current.Shutdown();
+            } catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler beim herunterfahren des Client: " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim herunterfahren des Client: " + ex.Message);
             }
           
         }
@@ -1485,7 +1544,7 @@ namespace TrucksLOG
                 else
                 {
                     msg.Schreiben("Fehler bei der Pfadangabe - TruckersMP", "Der Pfad zu TruckersMP wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                   // Logging.WriteClientLog("[ERROR] Fehler beim Starten von TMP. Kein Pfad angegeben");
+                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von TMP. Kein Pfad angegeben");
                 }
             }
             catch
@@ -1504,11 +1563,11 @@ namespace TrucksLOG
                 } else
                 {
                     msg.Schreiben("Fehler bei der Pfadangabe ATS", "Der Pfad zu ATS wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                   // Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer");
+                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer");
                 }
-            } catch
+            } catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer" + ex.Message + ex.StackTrace);
+                Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer" + ex.Message + ex.StackTrace);
             }
            
         }
@@ -1524,7 +1583,7 @@ namespace TrucksLOG
                 else
                 {
                     msg.Schreiben("Fehler bei der Pfadangabe - ETS2", "Der Pfad zu Euro Truck Simulator 2 wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                   // Logging.WriteClientLog("[ERROR] Fehler beim Starten von ETS2. Kein Pfad angegeben");
+                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von ETS2. Kein Pfad angegeben");
                 }
             }
             catch
@@ -1570,7 +1629,7 @@ namespace TrucksLOG
         private async void OnlineCheck()
         {
 
-            //Logging.WriteClientLog("Client ist das erste mal geöffnet worden...");
+            Logging.WriteClientLog("Client ist das erste mal geöffnet worden...");
 
             var metroWindow = (Application.Current.MainWindow as MetroWindow);
 
@@ -1585,6 +1644,7 @@ namespace TrucksLOG
                 //Logging.WriteClientLog("[ERROR] -> Spielclient wurde mehrmals Ausgeführt");
                 Application.Current.Shutdown();
             }
+            Logging.WriteClientLog("Onlinecheck OK");
         }
 
         private static string Updates_FUER()
@@ -1616,9 +1676,11 @@ namespace TrucksLOG
                 { "GAME", Truck_Daten.SPIEL },
                 { "POS_X", Truck_Daten.POS_X.ToString() },
                 { "POS_Y", Truck_Daten.POS_Y.ToString() },
-                { "POS_Z", Truck_Daten.POS_Z.ToString() }
+                { "POS_Z", Truck_Daten.POS_Z.ToString() },
+                { "SPEDITION", Truck_Daten.SPEDITIONSNAME }
             };
             API.HTTPSRequestPost(API.c_online, post_param);
+            Logging.WriteClientLog("Setze Online Status !");
         }
 
         private void AntiAFK_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1637,11 +1699,11 @@ namespace TrucksLOG
                 }
                
 
-               // Logging.WriteClientLog("[INFO] SendKeys gestartet...");
+                Logging.WriteClientLog("[INFO] SendKeys gestartet...");
             } else
             {
                 anti_afk_timer.Stop();
-               // Logging.WriteClientLog("[INFO] ANTI_AFK gestoppt");
+                Logging.WriteClientLog("[INFO] ANTI_AFK gestoppt");
             }
         }
 

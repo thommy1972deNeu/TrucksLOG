@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace TrucksLOG.Klassen
@@ -7,29 +8,33 @@ namespace TrucksLOG.Klassen
     {
         public static void Make_Log_File()
         {
-            
-
             if (!Directory.Exists(Config.LogRoot))
-                Directory.CreateDirectory(Config.LogRoot);
+                 Directory.CreateDirectory(Config.LogRoot);
 
             if (!File.Exists(Config.LogRoot + Config.ClientLogFileName))
             {
-                //File.Create(Config.LogRoot + Config.ClientLogFileName); File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, String.Empty);
+                try
+                {
+                    File.Create(Config.LogRoot + Config.ClientLogFileName);
+                    File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, string.Empty);
+                } catch { }
             }
             else
             {
-                // Dateien exisitieren -> erstmal Leeren
-               // File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, "<-------------------------   NEW START   ----------------------->");
+                try
+                {
+                    File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, "<-------------------------   NEW START   ----------------------->" + Environment.NewLine);
+                } catch { }
             }
 
         }
 
         public static void WriteClientLog(string text, [CallerLineNumber] int linenumber = 0, [CallerFilePath] string file = null)
         {
-                //File.AppendAllText(Config.LogRoot + Config.ClientLogFileName, "<" + DateTime.Now + "> " + text + ", Line Number: " + linenumber + ", File: " + file + Environment.NewLine);
+            try
+            {
+                File.AppendAllText(Config.LogRoot + Config.ClientLogFileName, "<" + DateTime.Now + "> " + text + ", Line Number: " + linenumber + ", File: " + file + Environment.NewLine);
+            } catch { }
         }
-
-
-
     }
 }

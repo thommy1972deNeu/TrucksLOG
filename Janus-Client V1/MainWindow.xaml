@@ -211,16 +211,16 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,10">
 
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="ETS2-Pfad:" Margin="10,10,10,0"/>
-                                <Label x:Name="ets2_content"/>
+                                <Label Content="ETS2-Pfad:" Margin="10,10,0,0"/>
+                                <Label x:Name="ets2_content" Margin="0,10,10,0"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="ATS-Pfad:" Margin="10,10,10,0"/>
-                                <Label x:Name="ats_content"/>
+                                <Label Content="ATS-Pfad:" Margin="10,10,0,0"/>
+                                <Label x:Name="ats_content" Margin="0,10,10,0"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="TMP-Pfad:" Margin="10,10,10,0"/>
-                                <Label x:Name="tmp_content"/>
+                                <Label Content="TMP-Pfad:" Margin="10,10,0,0"/>
+                                <Label x:Name="tmp_content" Margin="0,10,10,0"/>
                             </StackPanel>
 
                             <Button Content="Spielpfade ändern..." Click="Spielpfade_aendern" Width="150" Height="30" Background="{DynamicResource MahApps.Brushes.Accent}" Margin="10,10,0,0"/>
