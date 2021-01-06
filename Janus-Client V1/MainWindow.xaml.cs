@@ -24,6 +24,7 @@ using MahApps.Metro.Controls.Dialogs;
 using System.Net;
 using System.IO;
 using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace TrucksLOG
 {
@@ -43,6 +44,8 @@ namespace TrucksLOG
         public string tour_id_tanken;
         readonly InputSimulator sim = new InputSimulator();
 
+        
+
         // DLC_ETS
         public string DLC_GOING = "0";
         public string DLC_SCANDINAVIA = "0";
@@ -61,6 +64,7 @@ namespace TrucksLOG
         public string DLC_UTAH = "0";
         public string DLC_COLORADO = "0";
         public string DLC_WYOMING = "0";
+        
 
         private readonly DispatcherTimer job_update_timer = new DispatcherTimer();
         private readonly DispatcherTimer anti_afk_timer = new DispatcherTimer();
@@ -70,17 +74,17 @@ namespace TrucksLOG
         public bool InvokeRequired { get; private set; }
         public static Window ActivatedWindow { get; set; }
 
+        MediaPlayer r_player = new MediaPlayer();
+
         public MainWindow()
         {
             InitializeComponent();
-
 
             OnlineCheck();
             Logging.Make_Log_File();
             Setze_Client_Version();
             Lade_Voreinstellungen();
             SpeditionsCheck();
-
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -1033,7 +1037,7 @@ namespace TrucksLOG
                     Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_SCHADEN);
 
                     // GESCHWINDIGKEITS_LOGGEN
-                    if(Truck_Daten.SPIEL == "Ats" && Truck_Daten.SPEED >= 75)
+                    if (Truck_Daten.SPEED >= 100)
                     {
                         zu_schnell.Start();
                     }
@@ -1041,17 +1045,6 @@ namespace TrucksLOG
                     {
                         zu_schnell.Stop();
                     }
-
-                    if (Truck_Daten.SPIEL == "Ets2" && Truck_Daten.SPEED >= 101)
-                    {
-                        zu_schnell.Start();
-                    }
-                    else
-                    {
-                        zu_schnell.Stop();
-                    }
-
-
                 }
             }
             catch
@@ -1205,6 +1198,10 @@ namespace TrucksLOG
                 ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
             } catch {}
 
+            // VOLUME EINTRAGEN
+            if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Volume")))
+                REG.Schreiben("Config", "Volume", "0.5");
+            VolumeSlider.Value = Convert.ToDouble(REG.Lesen("Config", "Volume"));
 
             try
             {
@@ -1987,6 +1984,25 @@ namespace TrucksLOG
         private void Hyperlink_Partner_Werden(object sender, RoutedEventArgs e)
         {
             Process.Start("https://truckslog.de/?s=info/partner");
+        }
+
+        
+
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            REG.Schreiben("Config", "Volume", VolumeSlider.Value.ToString());
+        }
+
+        private void Radio_Stop(object sender, RoutedEventArgs e)
+        {
+            r_player.Stop();
+        }
+
+        private void Radio_Play_Firestar(object sender, RoutedEventArgs e)
+        {
+            r_player.Open(new Uri(@"http://stream01.stream-webradiotechnik.de:8750/listen1"));
+            r_player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
+            r_player.Play();
         }
     }
 }

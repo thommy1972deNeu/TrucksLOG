@@ -1,42 +1,62 @@
-﻿namespace TrucksLOG.Klassen
+﻿using System;
+using System.Windows.Media;
+
+namespace TrucksLOG.Klassen
 {
     public class SoundPlayer
     {
+       
+
         public static void Sound_Willkommen()
         {
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Willkommen_wav);
+            var player = new MediaPlayer();
+            player.Open(new Uri(@"Resources/Willkommen.wav", UriKind.RelativeOrAbsolute));
+            player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             player.Play();
         }
         public static void Sound_Tour_Gestartet()
         {
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Tour_Gestartet);
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri("Resources/Tour_Gestartet.wav"));
+            player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             player.Play();
         }
         public static void Sound_Tour_Abgebrochen()
         {
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Tour_Abgebrochen);
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri("Resources/Tour_Abgebrochen.wav"));
+            player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             player.Play();
         }
         public static void Sound_Tour_Beendet()
         {
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Tour_Beendet);
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri("Resources/Tour_Beendet.wav"));
+            player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             player.Play();
         }
 
         public static void Sound_Mautstation_Passiert()
         {
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Mautstation_Passiert);
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri("Resources/Mautstation_Passiert.wav"));
+            player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             player.Play();
         }
+
         public static void Sound_Strafe_Erhalten()
         {
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Strafe_Erhalten);
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri("Resources/Strafe_Erhalten.wav"));
+            player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             player.Play();
         }
 
         public static void Sound_Starting()
         {
-            System.Media.SoundPlayer player = new System.Media.SoundPlayer(Properties.Resources.Starting);
+            MediaPlayer player = new MediaPlayer();
+            player.Open(new Uri(@"Resources/Willkommen.wav.wav"));
+            player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             player.Play();
         }
 

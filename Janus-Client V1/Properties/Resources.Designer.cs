@@ -197,9 +197,9 @@ namespace TrucksLOG.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.IO.UnmanagedMemoryStream ähnlich wie System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream Willkommen_wav {
+        internal static System.IO.UnmanagedMemoryStream Willkommen {
             get {
-                return ResourceManager.GetStream("Willkommen_wav", resourceCulture);
+                return ResourceManager.GetStream("Willkommen", resourceCulture);
             }
         }
     }

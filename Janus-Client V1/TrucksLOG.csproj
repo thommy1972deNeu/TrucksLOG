@@ -339,6 +339,7 @@
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Janus-Client V1_TemporaryKey.pfx" />
@@ -365,11 +366,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Sonstiges\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Willkommen.wav.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Tour_Gestartet.wav">
@@ -471,6 +467,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Willkommen.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Resource Include="Resources\TL_300.ico" />
     <Resource Include="TL_ICON_2.ico" />
     <Resource Include="tln.png">
@@ -525,6 +524,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Images\hyperlink.png" />
+    <Resource Include="Images\fsr_logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Images\handshake.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

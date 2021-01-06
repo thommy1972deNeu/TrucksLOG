@@ -160,7 +160,7 @@
   <data name="Tour_Gestartet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tour_Gestartet.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="Willkommen_wav" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Willkommen.wav.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Willkommen" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Willkommen.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
