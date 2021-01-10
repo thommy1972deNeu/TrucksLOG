@@ -25,6 +25,10 @@ using System.Net;
 using System.IO;
 using System.ComponentModel;
 using System.Windows.Controls;
+using System.Collections;
+using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 namespace TrucksLOG
 {
@@ -44,7 +48,10 @@ namespace TrucksLOG
         public string tour_id_tanken;
         readonly InputSimulator sim = new InputSimulator();
 
-        
+        OpenFileDialog ofd = new OpenFileDialog();
+        SaveFileDialog sfd = new SaveFileDialog();
+        SaveFileDialog bfd = new SaveFileDialog();
+        OpenFileDialog afd = new OpenFileDialog();
 
         // DLC_ETS
         public string DLC_GOING = "0";
@@ -64,7 +71,11 @@ namespace TrucksLOG
         public string DLC_UTAH = "0";
         public string DLC_COLORADO = "0";
         public string DLC_WYOMING = "0";
-        
+
+        // DISPO
+        public int geldbetrag_alt;
+        public int geldbetrag_neu;
+
 
         private readonly DispatcherTimer job_update_timer = new DispatcherTimer();
         private readonly DispatcherTimer anti_afk_timer = new DispatcherTimer();
@@ -75,6 +86,8 @@ namespace TrucksLOG
         public static Window ActivatedWindow { get; set; }
 
         MediaPlayer r_player = new MediaPlayer();
+        private static string file_original;
+        private static byte[] file_orig_bytes;
 
         public MainWindow()
         {
@@ -85,6 +98,8 @@ namespace TrucksLOG
             Setze_Client_Version();
             Lade_Voreinstellungen();
             SpeditionsCheck();
+            Setzte_G_SAVE();
+            
 
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
@@ -136,6 +151,9 @@ namespace TrucksLOG
                 Bann_Check();
             }
 
+
+
+
             if (REG.Lesen("Pfade", "ETS2_PFAD") == "" && REG.Lesen("Pfade", "ATS_PFAD") == "")
             {
                 Pfad_Angeben pf = new Pfad_Angeben();
@@ -144,13 +162,13 @@ namespace TrucksLOG
             }
             try {
                 TelemetryInstaller.check_ETS();
-                Logging.WriteClientLog("Telemetry Install Check ETS Main -> Z151 -> OK");
+                Logging.WriteClientLog("Telemetry Install Check ETS Main -> OK");
 
                 TelemetryInstaller.check_ATS();
-                Logging.WriteClientLog("Telemetry Install Check ATS Main -> Z154 -> OK");
+                Logging.WriteClientLog("Telemetry Install Check ATS Main -> OK");
             } catch { }
 
-    
+
 
             Telemetry = new SCSSdkTelemetry();
             Logging.WriteClientLog("Telemetry gestartet !");
@@ -189,24 +207,24 @@ namespace TrucksLOG
             Logging.WriteClientLog("Bann Check absolviert !");
 
             if (Convert.ToInt32(ausgabe[0]) == 0)
-                {
-                    var metroWindow = (Application.Current.MainWindow as MetroWindow);
-                    await metroWindow.ShowMessageAsync("Account Freischaltung", "Dein Account wurde noch nicht Freigeschaltet.\n\nBitte wende dich an unseren Discord-Support");
-                    Application.Current.Shutdown();
-                }
-                if (Convert.ToInt32(ausgabe[0]) == 3)
-                {
-                    var metroWindow = (Application.Current.MainWindow as MetroWindow);
-                    await metroWindow.ShowMessageAsync("Account Gesperrt", "Dein Account wurde von =- " + ausgabe[1] + " -= temporär Gesperrt\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
-                    Application.Current.Shutdown();
-                }
-                if (Convert.ToInt32(ausgabe[0]) == 6)
-                {
-                    var metroWindow = (Application.Current.MainWindow as MetroWindow);
-                    await metroWindow.ShowMessageAsync("Account Gebannt", "Dein Account wurde von =- " + ausgabe[1] + " -= permanent Gebannt\n\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
-                    Application.Current.Shutdown();
-                }
-            
+            {
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                await metroWindow.ShowMessageAsync("Account Freischaltung", "Dein Account wurde noch nicht Freigeschaltet.\n\nBitte wende dich an unseren Discord-Support");
+                Application.Current.Shutdown();
+            }
+            if (Convert.ToInt32(ausgabe[0]) == 3)
+            {
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                await metroWindow.ShowMessageAsync("Account Gesperrt", "Dein Account wurde von =- " + ausgabe[1] + " -= temporär Gesperrt\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
+                Application.Current.Shutdown();
+            }
+            if (Convert.ToInt32(ausgabe[0]) == 6)
+            {
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+                await metroWindow.ShowMessageAsync("Account Gebannt", "Dein Account wurde von =- " + ausgabe[1] + " -= permanent Gebannt\n\nBegründung: " + ausgabe[2] + "\n\nFür weitere Fragen wende dich an unseren Discord-Support.\nDas Programm wird jetzt beendet.");
+                Application.Current.Shutdown();
+            }
+
         }
 
         public static bool ServerCheck(string host)
@@ -295,9 +313,9 @@ namespace TrucksLOG
                         sim.Keyboard.TextEntry(REG.Lesen("Config", "ANTI_AFK_TEXT"));
                         sim.Keyboard.KeyPress(VirtualKeyCode.RETURN);
                     }
-                    else {}
-                } else {}
-            } catch {}
+                    else { }
+                } else { }
+            } catch { }
 
         }
 
@@ -308,11 +326,12 @@ namespace TrucksLOG
                 Dictionary<string, string> post_param = new Dictionary<string, string>
                 {
                     { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                    { "GAME", Truck_Daten.SPIEL.ToString() },
                     { "SPEED", Truck_Daten.SPEED.ToString() }
                 };
                 string response = API.HTTPSRequestPost(API.user_zu_schnell, post_param);
             }
-            catch {}
+            catch { }
 
         }
 
@@ -328,7 +347,7 @@ namespace TrucksLOG
                 };
                 string response = API.HTTPSRequestPost(API.SpeditionsCheck, post_param);
 
-                if(response == "Ohne")
+                if (response == "Ohne")
                 {
                     Logging.WriteClientLog("Keiner Spedition zugehörig !");
 
@@ -338,7 +357,7 @@ namespace TrucksLOG
                 Truck_Daten.SPEDITIONSNAME = "Spedition: " + response;
                 Logging.WriteClientLog("Spedition OK: " + Truck_Daten.SPEDITIONSNAME);
             }
-            catch {}
+            catch { }
 
         }
 
@@ -384,7 +403,7 @@ namespace TrucksLOG
                 Set_online();
 
             } catch {
-               
+
             }
         }
 
@@ -403,7 +422,7 @@ namespace TrucksLOG
 
 
         private void Timer_Tick(object sender, EventArgs e)
-            {
+        {
             string restkilometer;
             try
             {
@@ -414,16 +433,16 @@ namespace TrucksLOG
                 Setzt_antiAFK();
 
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
-                if(Truck_Daten.SPIEL == "Ets2")
+                if (Truck_Daten.SPIEL == "Ets2")
                 {
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
                 } else
                 {
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
                 }
-                
+
                 post_param.Add("CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY"));
-                if(Truck_Daten.SPIEL == "Ets2")
+                if (Truck_Daten.SPIEL == "Ets2")
                 {
                     post_param.Add("REST_KM", Truck_Daten.REST_KM_SA.ToString());
                     restkilometer = Truck_Daten.REST_KM_SA.ToString();
@@ -437,9 +456,9 @@ namespace TrucksLOG
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
 
-            } catch {}
+            } catch { }
 
-     
+
 
         }
 
@@ -543,7 +562,7 @@ namespace TrucksLOG
                     }
                     catch
                     {
-                       // Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ETS2 mit GENERATE STRING(): " + ex.Message);
+                        // Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ETS2 mit GENERATE STRING(): " + ex.Message);
                     }
                 }
             } else
@@ -556,7 +575,7 @@ namespace TrucksLOG
                     }
                     catch
                     {
-                      //  Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ATS mit GENERATE STRING(): " + ex.Message);
+                        //  Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ATS mit GENERATE STRING(): " + ex.Message);
                     }
                 }
             }
@@ -565,7 +584,7 @@ namespace TrucksLOG
             try
             {
                 Dictionary<string, string> post_param = new Dictionary<string, string>();
-                if(Truck_Daten.SPIEL == "Ets2")
+                if (Truck_Daten.SPIEL == "Ets2")
                 {
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ETS2"));
                 } else
@@ -632,7 +651,7 @@ namespace TrucksLOG
                 string response = API.HTTPSRequestPost(API.job_cancel, post_param);
                 Console.WriteLine(response);
 
-                if(Truck_Daten.SPIEL == "Ets2")
+                if (Truck_Daten.SPIEL == "Ets2")
                 {
                     REG.Schreiben("Config", "TOUR_ID_ETS2", "");
                 } else
@@ -678,12 +697,12 @@ namespace TrucksLOG
                 post_param.Add("AUTOLOADING", Truck_Daten.AUTOLOADING.ToString());
                 string response = API.HTTPSRequestPost(API.job_finish, post_param);
 
-                    if (Truck_Daten.SPIEL == "Ets2") {
-                        REG.Schreiben("Config", "TOUR_ID_ETS2", "");
-                        } else
-                        {
-                            REG.Schreiben("Config", "TOUR_ID_ATS", "");
-                    }
+                if (Truck_Daten.SPIEL == "Ets2") {
+                    REG.Schreiben("Config", "TOUR_ID_ETS2", "");
+                } else
+                {
+                    REG.Schreiben("Config", "TOUR_ID_ATS", "");
+                }
 
                 SoundPlayer.Sound_Tour_Beendet();
 
@@ -691,7 +710,7 @@ namespace TrucksLOG
                 //Logging.WriteClientLog("[INFO] Tour Abgeliefert: " + response);
             } catch
             {
-               // Logging.WriteClientLog("[ERROR] Fehler beim Abgeben der Tour ! - " + ex.Message);
+                // Logging.WriteClientLog("[ERROR] Fehler beim Abgeben der Tour ! - " + ex.Message);
             }
 
         }
@@ -745,7 +764,7 @@ namespace TrucksLOG
                 Console.WriteLine(response);
 
                 if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
-                //Logging.WriteClientLog("[INFO] Maut durchfahren: " + response);
+                Logging.WriteClientLog("[INFO] Maut durchfahren: " + response);
             } catch
             {
                 //Logging.WriteClientLog("[ERROR] Fehler beim Mautdurchfahrt " + ex.Message);
@@ -838,9 +857,9 @@ namespace TrucksLOG
                 //Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
             } catch
             {
-               // Logging.WriteClientLog("[ERROR] Fehler bei RefuelPayed " + ex.Message);
+                // Logging.WriteClientLog("[ERROR] Fehler bei RefuelPayed " + ex.Message);
             }
-           
+
         }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
@@ -879,11 +898,11 @@ namespace TrucksLOG
                     Truck_Daten.LADUNG_ID = data.JobValues.CargoValues.Id;
 
 
-                    if(Truck_Daten.SPIEL == "Ats")
+                    if (Truck_Daten.SPIEL == "Ats")
                     {
                         Truck_Daten.GEWICHT = (data.JobValues.CargoValues.Mass * 2.205 / 1000).ToString();
                         Truck_Daten.GEWICHT2 = (int)(data.JobValues.CargoValues.Mass * 2.205 / 1000);
-                       
+
 
                         Truck_Daten.GESAMT_KM = (float)(data.JobValues.PlannedDistanceKm / 1.609);
                         Truck_Daten.REST_KM = (float)data.JobValues.PlannedDistanceKm / 1609;
@@ -905,15 +924,15 @@ namespace TrucksLOG
 
 
                     //MessageBox.Show(Truck_Daten.REST_KM_SA.ToString());
-                   
-           
+
+
                     //Truck_Daten.GESAMT_KM_SA = (int)data.JobValues.PlannedDistanceKm;
 
                     Truck_Daten.EINKOMMEN = (int)data.JobValues.Income;
                     Truck_Daten.FRACHTMARKT = data.JobValues.Market.ToString();
                     Truck_Daten.CARGO_LOADED = data.JobValues.CargoLoaded;
                     Truck_Daten.GEF_STRECKE = (int)data.GamePlay.JobDelivered.DistanceKm;
-                    
+
                     // LKW DATEN
                     Truck_Daten.LKW_MODELL = data.TruckValues.ConstantsValues.Name;
                     Truck_Daten.LKW_HERSTELLER = data.TruckValues.ConstantsValues.Brand;
@@ -929,7 +948,7 @@ namespace TrucksLOG
                     Truck_Daten.BLINKER_LINKS = data.TruckValues.CurrentValues.LightsValues.BlinkerLeftOn;
                     Truck_Daten.BLINKER_RECHTS = data.TruckValues.CurrentValues.LightsValues.BlinkerRightOn;
                     Truck_Daten.GEAR = data.TruckValues.CurrentValues.MotorValues.GearValues.Selected;
-              
+
                     // LICHTER
                     Truck_Daten.STANDLICHT = data.TruckValues.CurrentValues.LightsValues.Parking;
                     Truck_Daten.LICHT_LOW = data.TruckValues.CurrentValues.LightsValues.BeamLow;
@@ -956,7 +975,7 @@ namespace TrucksLOG
                     Truck_Daten.REMAININGTIME = TimeSpan.FromSeconds(data.JobValues.RemainingDeliveryTime.Value);
                     Truck_Daten.RESTZEIT_INT = data.JobValues.RemainingDeliveryTime.Value; // FÜR FAHRTENABRECHNUNG POSITIVE UND NEGATIVE SEKUNDEN
 
-                    if(Truck_Daten.FRACHTMARKT == "external_contracts")
+                    if (Truck_Daten.FRACHTMARKT == "external_contracts")
                     {
                         Truck_Daten.RESTZEIT_INT = 0;
                         Truck_Daten.FAHRINFO_2 = "World of Trucks-Auftrag";
@@ -972,7 +991,7 @@ namespace TrucksLOG
                         }
                     }
 
-                    
+
                     // POSITION
                     Truck_Daten.POS_X = data.TruckValues.Positioning.Cabin.X;
                     Truck_Daten.POS_Y = data.TruckValues.Positioning.Cabin.Y;
@@ -990,14 +1009,14 @@ namespace TrucksLOG
                     float schaden4 = data.TruckValues.CurrentValues.DamageValues.Engine * 100;
                     float schaden5 = data.TruckValues.CurrentValues.DamageValues.Transmission * 100;
                     float schaden_total = schaden1 + schaden2 + schaden3 + schaden4 + schaden5;
-                    Truck_Daten.LKW_SCHADEN = Math.Round((double)Enumerable.Max( new[] { schaden1, schaden2, schaden3, schaden4, schaden5 } ), 2);
+                    Truck_Daten.LKW_SCHADEN = Math.Round((double)Enumerable.Max(new[] { schaden1, schaden2, schaden3, schaden4, schaden5 }), 2);
 
 
                     // SCHADENSBERECHNUNG TRAILER
                     float tschaden1 = data.TrailerValues[0].DamageValues.Wheels * 100;
                     float tschaden2 = data.TrailerValues[0].DamageValues.Chassis * 100;
                     float tschaden3 = data.TrailerValues[0].DamageValues.Cargo * 100;
-                    Truck_Daten.TRAILER_SCHADEN = Math.Round((double)Enumerable.Max(new[] { tschaden1, tschaden2, tschaden3 }),2);
+                    Truck_Daten.TRAILER_SCHADEN = Math.Round((double)Enumerable.Max(new[] { tschaden1, tschaden2, tschaden3 }), 2);
 
                     // DELIVERED
                     Truck_Daten.FRACHTSCHADEN_ABGABE = data.GamePlay.JobDelivered.CargoDamage;
@@ -1008,7 +1027,7 @@ namespace TrucksLOG
                     // TANKEN
 
                     Truck_Daten.LITER_GETANKT = data.GamePlay.RefuelEvent.Amount;
-                    if(Truck_Daten.SPIEL == "Ets2")
+                    if (Truck_Daten.SPIEL == "Ets2")
                     {
                         Truck_Daten.FUEL_MAX = (int)data.TruckValues.ConstantsValues.CapacityValues.Fuel;
                         Truck_Daten.FUEL_GERADE = (int)data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount;
@@ -1019,8 +1038,8 @@ namespace TrucksLOG
                         Truck_Daten.FUEL_MAX = (int)(data.TruckValues.ConstantsValues.CapacityValues.Fuel / 3.785);
                         Truck_Daten.FUEL_GERADE = (int)(data.TruckValues.CurrentValues.DashboardValues.FuelValue.Amount / 3.785);
                     }
-                
-                    
+
+
 
                     // Transport FERRY
                     Truck_Daten.FERRY_SOURCE_NAME = data.GamePlay.FerryEvent.SourceName;
@@ -1037,14 +1056,8 @@ namespace TrucksLOG
                     Update_Discord(Truck_Daten.LKW_HERSTELLER, Truck_Daten.LKW_MODELL, Truck_Daten.LADUNG_NAME, Truck_Daten.GEWICHT2, Truck_Daten.STARTORT, Truck_Daten.ZIELORT, Truck_Daten.LKW_SCHADEN);
 
                     // GESCHWINDIGKEITS_LOGGEN
-                    if (Truck_Daten.SPEED >= 100)
-                    {
-                        zu_schnell.Start();
-                    }
-                    else
-                    {
-                        zu_schnell.Stop();
-                    }
+                    if (Truck_Daten.SPEED > 100) { zu_schnell.Start(); } else { zu_schnell.Stop(); }
+
                 }
             }
             catch
@@ -1056,17 +1069,30 @@ namespace TrucksLOG
         private void Update_Discord(string HERSTELLER, string MODELL, string FRACHT, int GEWICHT, string STARTORT, string ZIELORT, double SCHADEN)
         {
             string DiscordLargeImageKey = "tl_6";
+            string gew;
+
+
+            if (Truck_Daten.SPIEL == "Ets2")
+            {
+                gew = " T";
+            }
+            else
+            {
+                gew = " lb";
+            }
 
             if (string.IsNullOrEmpty(HERSTELLER))
             {
+                _ = "-";
             }
             else
             {
                 _ = HERSTELLER + " " + MODELL + "(" + SCHADEN + " %)";
-               
+
             }
-            if(string.IsNullOrEmpty(FRACHT))
+            if (string.IsNullOrEmpty(FRACHT))
             {
+                _ = " - ";
             }
             else
             {
@@ -1075,8 +1101,7 @@ namespace TrucksLOG
 
             jobRPC = new RichPresence()
             {
-               
-                Details = "Ladung: " + FRACHT + "(" + GEWICHT + "t)",
+                Details = "Ladung: " + FRACHT + "(" + GEWICHT + " " + gew + ")",
                 State = STARTORT + "->" + ZIELORT,
 
                 Assets = new Assets()
@@ -1087,19 +1112,27 @@ namespace TrucksLOG
                     SmallImageText = "v" + CLIENT_VERSION
                 }
             };
-         
+
             client.SetPresence(jobRPC);
         }
 
         private void Lade_Voreinstellungen()
         {
+
+
             try
             {
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Pfade", "Autosave_Path")))
+                {
+                    Lade_Game_SII.Content = "Kein Pfad";
+                    Lade_Game_SII.IsEnabled = false;
+                }
+
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
                     REG.Schreiben("Config", "BG_OPACITY", "1.0"); Truck_Daten.BG_OPACITY = "1.0"; bg_opacity.SelectedValue = "1.0";
                 Truck_Daten.BG_OPACITY = REG.Lesen("Config", "BG_OPACITY"); bg_opacity.SelectedValue = REG.Lesen("Config", "BG_OPACITY");
-               
+
                 Logging.WriteClientLog("BG Opacity OK");
 
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
@@ -1107,23 +1140,28 @@ namespace TrucksLOG
                 Logging.WriteClientLog("Farbschema OK");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "FIRST_RUN")))
-                        REG.Schreiben("Config", "FIRST_RUN", "0"); 
+                    REG.Schreiben("Config", "FIRST_RUN", "0");
                 Logging.WriteClientLog("FirstRun geschrieben");
 
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Pfade", "Autosave_Path")))
+                    REG.Schreiben("Pfade", "Autosave_Path", "");
+                Logging.WriteClientLog("AutoSave Path geschrieben");
+
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
-                    REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!"); 
+                    REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!");
 
                 Logging.WriteClientLog("ANTI AFK TEXT geschrieben");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
-                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4"); 
+                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
 
                 Logging.WriteClientLog("Anti AFK Timer gesetzt");
 
                 antiafk_zeit.Value = Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER"));
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ETS2")))
-                    REG.Schreiben("Config", "TOUR_ID_ETS2", ""); 
+                    REG.Schreiben("Config", "TOUR_ID_ETS2", "");
 
                 Logging.WriteClientLog("Tour ID ETS2 geleert");
 
@@ -1133,29 +1171,29 @@ namespace TrucksLOG
                 Logging.WriteClientLog("Tour ID ATS geleert");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
-                    REG.Schreiben("Config", "CLIENT_KEY", ""); 
+                    REG.Schreiben("Config", "CLIENT_KEY", "");
 
                 Logging.WriteClientLog("Client Key geschrieben");
 
-                //if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
-                    //REG.Schreiben("Config", "ANTI_AFK_TIMER", "4"); 
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
+                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Systemsounds")))
-                    REG.Schreiben("Config", "Systemsounds", "An"); 
-                
+                    REG.Schreiben("Config", "Systemsounds", "An");
+
                 Logging.WriteClientLog("System Sounds auf AN");
 
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Farbschema")))
-                    REG.Schreiben("Config", "Farbschema", "Dark.Blue"); 
-                
-               Logging.WriteClientLog("Farbschema auf Dark.Blue");
+                    REG.Schreiben("Config", "Farbschema", "Dark.Blue");
+
+                Logging.WriteClientLog("Farbschema auf Dark.Blue");
 
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Autorun")))
-                    REG.Schreiben("Config", "Autorun", "Aus"); 
+                    REG.Schreiben("Config", "Autorun", "Aus");
 
                 Logging.WriteClientLog("Autorun auf Aus");
 
@@ -1178,12 +1216,12 @@ namespace TrucksLOG
                     ets2_content.Content = REG.Lesen("Pfade", "ETS2_PFAD") != "" ? "OK" : "Fehlt";
                     ats_content.Content = REG.Lesen("Pfade", "ATS_PFAD") != "" ? "OK" : "Fehlt";
                     tmp_content.Content = REG.Lesen("Pfade", "TMP_PFAD") != "" ? "OK" : "Fehlt";
-           
+
                     status_bar_version.Content = "Client Version: " + CLIENT_VERSION;
 
                     Logging.WriteClientLog("Status Bar Version gesetzt");
                 }
-                catch {}
+                catch { }
                 // Pfade Auslesen Ende
 
                 try
@@ -1192,16 +1230,27 @@ namespace TrucksLOG
 
                     Logging.WriteClientLog("Data Context gesetzt");
                 }
-                catch {}
+                catch { }
 
                 ETS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2"));
                 ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
-            } catch {}
 
-            // VOLUME EINTRAGEN
-            if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Volume")))
-                REG.Schreiben("Config", "Volume", "0.5");
-            VolumeSlider.Value = Convert.ToDouble(REG.Lesen("Config", "Volume"));
+
+
+                // VOLUME EINTRAGEN
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Sound_Volume")))
+                    REG.Schreiben("Config", "Sound_Volume", "0,5");
+                VolumeSlider.Value = Convert.ToDouble(REG.Lesen("Config", "Sound_Volume"));
+
+
+                // Musik Volume setzen
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Musik_Volume")))
+                    REG.Schreiben("Config", "Musik_Volume", "0,5");
+                MusikSlider.Value = Convert.ToDouble(REG.Lesen("Config", "MusikVolume"));
+
+            } catch { }
+
+
 
             try
             {
@@ -1222,9 +1271,9 @@ namespace TrucksLOG
 
             Lade_Patreon();
 
-                anti_ak_text.Text = REG.Lesen("Config", "ANTI_AFK_TEXT");
-                anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 150 Zeichen";
+            anti_ak_text.Text = REG.Lesen("Config", "ANTI_AFK_TEXT");
+            anti_ak_text.MaxLength = 150;
+            laenge_antiafk_text.Content = "Max. 150 Zeichen";
 
             Logging.WriteClientLog("AFK Text auf 150 Zeichen gesetzt");
 
@@ -1243,34 +1292,34 @@ namespace TrucksLOG
         {
             try {
 
-            string ordner_ats = REG.Lesen("Pfade", "ATS_PFAD").Substring(0, REG.Lesen("Pfade", "ATS_PFAD").Length - 24);
-            Logging.WriteClientLog("ATS-Ordner für DLC Abfrage: " + ordner_ats);
+                string ordner_ats = REG.Lesen("Pfade", "ATS_PFAD").Substring(0, REG.Lesen("Pfade", "ATS_PFAD").Length - 24);
+                Logging.WriteClientLog("ATS-Ordner für DLC Abfrage: " + ordner_ats);
 
-            DLC_ARIZONA = File.Exists(ordner_ats + @"\dlc_arizona.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC ARIZ: " + DLC_ARIZONA);
+                DLC_ARIZONA = File.Exists(ordner_ats + @"\dlc_arizona.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC ARIZ: " + DLC_ARIZONA);
 
-            DLC_MEXICO = File.Exists(ordner_ats + @"\dlc_nm.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC MEX: " + DLC_MEXICO);
+                DLC_MEXICO = File.Exists(ordner_ats + @"\dlc_nm.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC MEX: " + DLC_MEXICO);
 
-            DLC_OREGON = File.Exists(ordner_ats + @"\dlc_or.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC ORE: " + DLC_OREGON);
+                DLC_OREGON = File.Exists(ordner_ats + @"\dlc_or.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC ORE: " + DLC_OREGON);
 
-            DLC_WASHINGTON = File.Exists(ordner_ats + @"\dlc_wa.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Wash: " + DLC_WASHINGTON);
+                DLC_WASHINGTON = File.Exists(ordner_ats + @"\dlc_wa.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Wash: " + DLC_WASHINGTON);
 
-            DLC_IDAHO = File.Exists(ordner_ats + @"\dlc_id.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Idaho: " + DLC_IDAHO);
+                DLC_IDAHO = File.Exists(ordner_ats + @"\dlc_id.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Idaho: " + DLC_IDAHO);
 
-            DLC_UTAH = File.Exists(ordner_ats + @"\dlc_ut.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Utah: " + DLC_UTAH);
+                DLC_UTAH = File.Exists(ordner_ats + @"\dlc_ut.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Utah: " + DLC_UTAH);
 
-            DLC_COLORADO = File.Exists(ordner_ats + @"\dlc_co.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Colorado: " + DLC_COLORADO);
+                DLC_COLORADO = File.Exists(ordner_ats + @"\dlc_co.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Colorado: " + DLC_COLORADO);
 
-            DLC_WYOMING = File.Exists(ordner_ats + @"\dlc_wy.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Wyoming: " + DLC_WYOMING);
+                DLC_WYOMING = File.Exists(ordner_ats + @"\dlc_wy.scs") ? "1" : "0";
+                Logging.WriteClientLog("DLC Wyoming: " + DLC_WYOMING);
 
-            Dictionary<string, string> post_param_dlc = new Dictionary<string, string>
+                Dictionary<string, string> post_param_dlc = new Dictionary<string, string>
                 {
                     { "CLIENT_KEY", REG.Lesen("Config","CLIENT_KEY") },
                     { "DLC_ARIZONA", DLC_ARIZONA },
@@ -1282,13 +1331,15 @@ namespace TrucksLOG
                     { "DLC_COLORADO", DLC_COLORADO },
                     { "DLC_WYOMING", DLC_WYOMING }
                 };
-            API.HTTPSRequestPost(API.dlc_update_ats, post_param_dlc);
-            Logging.WriteClientLog("DLC ATS an Server gesendet !");
+                API.HTTPSRequestPost(API.dlc_update_ats, post_param_dlc);
+                Logging.WriteClientLog("DLC ATS an Server gesendet !");
             } catch (Exception ex)
             {
                 Logging.WriteClientLog("Fehler bei ATS DLC Erkennung ! -> " + ex.Message);
             }
         }
+
+
 
 
         private void DLC_ETS_Erkennung()
@@ -1988,11 +2039,6 @@ namespace TrucksLOG
 
         
 
-        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            REG.Schreiben("Config", "Volume", VolumeSlider.Value.ToString());
-        }
-
         private void Radio_Stop(object sender, RoutedEventArgs e)
         {
             r_player.Stop();
@@ -2001,8 +2047,135 @@ namespace TrucksLOG
         private void Radio_Play_Firestar(object sender, RoutedEventArgs e)
         {
             r_player.Open(new Uri(@"http://stream01.stream-webradiotechnik.de:8750/listen1"));
-            r_player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             r_player.Play();
+            r_player.Volume = MusikSlider.Value;
+        }
+
+        private void Lade_GAMESSII(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.Filter = "SII Dateien (*.sii)|*.sii";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Euro Truck Simulator 2\profiles\";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                Money_Alt_TXT.Text = openFileDialog.FileName;
+            }
+        }
+
+        private void Loading(object sender, RoutedEventArgs e)
+        {
+            string path = REG.Lesen("Pfade", "Autosave_Path");
+
+            string[] content = File.ReadAllLines(path);
+      
+            foreach (string s in content)
+            {
+                if (s.Contains("money_account:"))
+                {
+                    string[] arr = s.Split(':');
+                    Money_Alt_TXT.Text = arr[1].Trim();
+                    geldbetrag_alt = Convert.ToInt32(arr[1]);
+                    Setze_Money.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        private void LadeGAMESII(object sender, EventArgs e)
+        {
+
+            //SaveEditorAsALibrary.Input.path = @"C:\users\rapha\desktop\mmmmm.sii";
+           // Tour_Checks.Input.path = GameSII_Pfad.Text;
+            //Tour_Checks.Input.readSavegame();
+  
+
+            //string path = @"C:\users\rapha\desktop\money_change.txt";
+
+            string[] content = File.ReadAllLines(Tour_Checks.Input.path);
+            Console.WriteLine("content_script: ");
+            foreach (string s in content)
+            {
+                Console.WriteLine(s);
+            }
+        }
+
+
+        private void Setzte_G_SAVE()
+        {
+            const string quote = "\"";
+
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Euro Truck Simulator 2\config.cfg";
+            string neu = @"uset g_save_format " + quote + "2" + quote;
+            
+
+            StreamReader reader = new StreamReader(path);
+            string content = reader.ReadToEnd();
+            reader.Close();
+
+            content = Regex.Replace(content, "uset g_save_format " + quote + "0" + quote, neu);
+
+            StreamWriter writer = new StreamWriter(path);
+            writer.Write(content);
+            writer.Close();
+
+            Logging.WriteClientLog("[G_SAVE] -> g_save Format auf 2 gesetzt.");
+        }
+
+
+
+        private async void Save_MoneyAsync(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                int geldbetrag_neu = Convert.ToInt32(Money_Alt_TXT.Text);
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+
+                string path = REG.Lesen("Pfade", "Autosave_Path");
+
+                StreamReader reader = new StreamReader(path);
+                string content = reader.ReadToEnd();
+                reader.Close();
+
+                content = Regex.Replace(content, "money_account: " + geldbetrag_alt, "money_account: " + geldbetrag_neu);
+
+                StreamWriter writer = new StreamWriter(path);
+                writer.Write(content);
+                writer.Close();
+
+                await metroWindow.ShowMessageAsync("Geldbetrag", "Der alte " + geldbetrag_alt + " Betrag wurde auf " + geldbetrag_neu + " im Spiel gespeichert.");
+
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+        }
+
+        private void MusikSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            REG.Schreiben("Config", "MusikVolume", MusikSlider.Value.ToString());
+            r_player.Volume = MusikSlider.Value;
+        }
+
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            REG.Schreiben("Config", "Sound_Volume", VolumeSlider.Value.ToString());
+        }
+
+        private void Radio_Play_FFH1(object sender, RoutedEventArgs e)
+        {
+            r_player.Open(new Uri(@"http://streams.ffh.de/radioffh/mp3/hqlivestream.m3u"));
+            r_player.Play();
+            r_player.Volume = MusikSlider.Value;
+        }
+
+        private void Radio_Play_BR1(object sender, RoutedEventArgs e)
+        {
+            r_player.Open(new Uri(@"http://stream.berliner-rundfunk.de/brf/mp3-128/internetradio"));
+            r_player.Play();
+            r_player.Volume = MusikSlider.Value;
         }
     }
 }

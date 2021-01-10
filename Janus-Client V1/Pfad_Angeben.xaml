@@ -11,7 +11,7 @@
     <Grid>
         <Label Content="Bitte gib deine Spielpfade an:" FontFamily="Oswald" FontSize="26" Foreground="White" Height="50" VerticalContentAlignment="Center" Width="350" Margin="226,10,224,446"/>
 
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Margin="0,0,0,-43">
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,60,0,0">
                 <Image x:Name="ats_logo" Source="ATS_Logo.jpg" Width="65" Height="59" Margin="0,0,10,0" OpacityMask="White"/>
@@ -26,8 +26,6 @@
                 <Image x:Name="ets_logo" Source="ets2_logo_.png" Width="65" Margin="0,0,10,0" />
                 <TextBox x:Name="pfad_ets" Width="400" Height="30" Margin="0,0,10,0" VerticalContentAlignment="Center" />
                 <Button x:Name="ets_suchen_btn" Content="Suchen" Width="100" Height="30" Click="Ets_suchen_btn_Click"/>
-
-
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
@@ -36,19 +34,34 @@
                 <Button x:Name="tmp_suchen" Content="Suchen" Width="100" Height="30" Click="Tmp_suchen_btn_Click" />
 
             </StackPanel>
-            
+
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="107,10,107,0" Width="586">
+                <Image x:Name="ets_logo2" Source="Images/key_image.png" Width="65" Margin="0,0,10,0" />
+
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="404">
+                    <TextBox x:Name="pfad_autosave" Width="400" Height="30" HorizontalAlignment="Left" />
+
+                    <Label Content="Gib deinen Autosave-Ordner an" HorizontalAlignment="Center" FontSize="18"/>
+                </StackPanel>
+                <Button x:Name="autosave_suchen_btn" Content="Suchen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Click="Autosave_suchen_btn_Click"/>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                 <Image x:Name="key_icon" Source="Images/key_image.png"  Width="65" Margin="0,0,10,0" ToolTip="Gib den Client-Key ein"/>
                 <TextBox x:Name="client_key" Width="500" Height="30" Margin="0,0,10,0" VerticalContentAlignment="Center"/>
+
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0,-10,0,0" HorizontalAlignment="Center">
                 <Label Content="Gib deinen Client-Key ein !" HorizontalAlignment="Center" FontSize="18"/>
                 <Image x:Name="where_img" Source="Images/where.png"  Width="35" Margin="0,0,10,0" ToolTip="Für Hilfe hier klicken..." MouseDown="Where_img_MouseDown"/>
             </StackPanel>
-            
-            
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,50">
+
+
+
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
 
                 <Button x:Name="absende" Content="Absenden" Width="100" Height="30" Click="Ok_click" Margin="0,0,100,0" Foreground="Black" >
                     <Button.Background>
