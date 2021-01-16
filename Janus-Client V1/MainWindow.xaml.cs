@@ -1133,47 +1133,31 @@ namespace TrucksLOG
                     REG.Schreiben("Config", "BG_OPACITY", "1.0"); Truck_Daten.BG_OPACITY = "1.0"; bg_opacity.SelectedValue = "1.0";
                 Truck_Daten.BG_OPACITY = REG.Lesen("Config", "BG_OPACITY"); bg_opacity.SelectedValue = REG.Lesen("Config", "BG_OPACITY");
 
-                Logging.WriteClientLog("BG Opacity OK");
-
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
-                Logging.WriteClientLog("Farbschema OK");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "FIRST_RUN")))
                     REG.Schreiben("Config", "FIRST_RUN", "0");
-                Logging.WriteClientLog("FirstRun geschrieben");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Pfade", "Autosave_Path")))
                     REG.Schreiben("Pfade", "Autosave_Path", "");
-                Logging.WriteClientLog("AutoSave Path geschrieben");
-
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
                     REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!");
 
-                Logging.WriteClientLog("ANTI AFK TEXT geschrieben");
-
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
-
-                Logging.WriteClientLog("Anti AFK Timer gesetzt");
 
                 antiafk_zeit.Value = Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER"));
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ETS2")))
                     REG.Schreiben("Config", "TOUR_ID_ETS2", "");
 
-                Logging.WriteClientLog("Tour ID ETS2 geleert");
-
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ATS")))
                     REG.Schreiben("Config", "TOUR_ID_ATS", "");
 
-                Logging.WriteClientLog("Tour ID ATS geleert");
-
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
                     REG.Schreiben("Config", "CLIENT_KEY", "");
-
-                Logging.WriteClientLog("Client Key geschrieben");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
@@ -1181,14 +1165,10 @@ namespace TrucksLOG
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Systemsounds")))
                     REG.Schreiben("Config", "Systemsounds", "An");
 
-                Logging.WriteClientLog("System Sounds auf AN");
-
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Farbschema")))
                     REG.Schreiben("Config", "Farbschema", "Dark.Blue");
-
-                Logging.WriteClientLog("Farbschema auf Dark.Blue");
 
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 

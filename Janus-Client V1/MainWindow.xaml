@@ -608,7 +608,7 @@
 
 
                     <!-- WAITING ZONE -->
-                    
+                    <!--
             <Rectangle x:Name="Waiting_Rect" Fill="{DynamicResource MahApps.Brushes.AccentBase}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="20" Panel.ZIndex="1000" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <Label Content="Warte auf ETS / ATS" Grid.Row="0" Foreground="white" Height="100" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="20" FontFamily="Microsoft YaHei UI Light" FontSize="72" Panel.ZIndex="1001" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
             <mah:MetroProgressBar Height="100" Foreground="Orange" Panel.ZIndex="1002" IsIndeterminate="true" EllipseDiameter="15" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="20" Grid.RowSpan="2" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}">
@@ -655,7 +655,7 @@
             </Button>
 
             <Button x:Name="SETTING_PATH" Width="30" Height="30" Content="{iconPacks:Unicons Kind=Cog}" Grid.Row="15" Grid.Column="20" Grid.ColumnSpan="1" Grid.RowSpan="2" Background="Transparent" HorizontalContentAlignment="Center" BorderBrush="Blue" BorderThickness="0" Click="Settings_Click"  ToolTip="Einstellungen" Panel.ZIndex="1006" Margin="0,-95,-90,0" Visibility="{Binding SDK_AKTIVE, Converter={StaticResource SDK_Aktiv}}"/>
-
+-->
                     <!-- WAITING ZONE ENDE -->
 
 
