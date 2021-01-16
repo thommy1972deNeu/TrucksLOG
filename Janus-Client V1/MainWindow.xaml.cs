@@ -1145,19 +1145,29 @@ namespace TrucksLOG
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
                     REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!");
 
+                Logging.WriteClientLog("ANTI AFK TEXT geschrieben");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
+
+                Logging.WriteClientLog("Anti AFK Timer gesetzt");
 
                 antiafk_zeit.Value = Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER"));
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ETS2")))
                     REG.Schreiben("Config", "TOUR_ID_ETS2", "");
 
+                Logging.WriteClientLog("Tour ID ETS2 geleert");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ATS")))
                     REG.Schreiben("Config", "TOUR_ID_ATS", "");
 
+                Logging.WriteClientLog("Tour ID ATS geleert");
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
                     REG.Schreiben("Config", "CLIENT_KEY", "");
+
+                Logging.WriteClientLog("Client Key geschrieben");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
@@ -1165,10 +1175,14 @@ namespace TrucksLOG
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Systemsounds")))
                     REG.Schreiben("Config", "Systemsounds", "An");
 
+                Logging.WriteClientLog("System Sounds auf AN");
+
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Farbschema")))
                     REG.Schreiben("Config", "Farbschema", "Dark.Blue");
+
+                Logging.WriteClientLog("Farbschema auf Dark.Blue");
 
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
@@ -1185,7 +1199,20 @@ namespace TrucksLOG
                 }
                 else
                 {
-                    Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
+                    if (REG.Lesen("Config", "Background").Contains(@":\"))
+                    {
+                        Background_WEchsler.SelectedValue = "";
+
+                        ImageBrush myBrush = new ImageBrush
+                        {
+                            ImageSource = new BitmapImage(new Uri(BaseUriHelper.GetBaseUri(this), REG.Lesen("Config", "Background")))
+                        };
+                        this.Hauptfenster.Background = myBrush;
+                    }
+                    else
+                    {
+                        Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
+                    }
                 }
 
                 autorun.IsChecked = REG.Lesen("Config", "Autorun") == "An";
