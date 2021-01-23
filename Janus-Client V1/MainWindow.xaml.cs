@@ -30,6 +30,7 @@ namespace TrucksLOG
 {
     public partial class MainWindow
     {
+        public static int debug = 0;
         public DiscordRpcClient client;
         private static RichPresence jobRPC;
         private const string DiscordAppID = "730374187025170472";
@@ -86,14 +87,15 @@ namespace TrucksLOG
             Lade_Voreinstellungen();
             SpeditionsCheck();
 
+
             // DISCORD
             client = new DiscordRpcClient(DiscordAppID);
             client.Initialize();
             var timer = new System.Timers.Timer(150);
             timer.Elapsed += (sender, args) => { client.Invoke(); };
             timer.Start();
-
-            Logging.WriteClientLog("Discord RPC Start");
+            if(debug == 1)
+                Logging.WriteClientLog("Discord RPC Start");
             // DISCORD ENDE
 
             credit_text.Content = "Ein Dank geht an mein Team:" + Environment.NewLine;
@@ -112,19 +114,24 @@ namespace TrucksLOG
             useronline_timer.Tick += Useronline_Tick;
             useronline_timer.Start();
 
-            Logging.WriteClientLog("User Online Timer gestartet !");
+            if(debug == 1)
+                Logging.WriteClientLog("User Online Timer gestartet !");
 
             zu_schnell.Interval = TimeSpan.FromSeconds(1);
             zu_schnell.Tick += Zu_schnell_tick;
-            Logging.WriteClientLog("Zu Schnell Tick initialisiert !");
+            if(debug == 1)
+                Logging.WriteClientLog("Zu Schnell Tick initialisiert !");
 
             // JOB UPDATE TIMER
             job_update_timer.Interval = TimeSpan.FromSeconds(5);
-            Logging.WriteClientLog("Job Update Timer gesetzt !");
+            if(debug == 1)
+                Logging.WriteClientLog("Job Update Timer gesetzt !");
 
             // ANTI_AFK TIMER
             anti_afk_timer.Interval = TimeSpan.FromMinutes(Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER")));
-            Logging.WriteClientLog("Anti-AFK Timer ausgelesen Main -> Z132 !");
+            
+            if(debug == 1)
+                Logging.WriteClientLog("Anti-AFK Timer ausgelesen Main");
 
             if (string.IsNullOrEmpty(REG.Lesen("Config", "CLIENT_KEY")))
             {
@@ -144,16 +151,24 @@ namespace TrucksLOG
             }
             try {
                 TelemetryInstaller.check_ETS();
-                Logging.WriteClientLog("Telemetry Install Check ETS Main -> Z151 -> OK");
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("Telemetry Install Check ETS Main -> OK");
 
                 TelemetryInstaller.check_ATS();
-                Logging.WriteClientLog("Telemetry Install Check ATS Main -> Z154 -> OK");
-            } catch { }
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("Telemetry Install Check ATS Main -> OK");
+            } catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Telemetry Installieren" + ex.Message + ex.StackTrace);
+            }
 
     
 
             Telemetry = new SCSSdkTelemetry();
-            Logging.WriteClientLog("Telemetry gestartet !");
+            if(debug == 1)
+                Logging.WriteClientLog("Telemetry gestartet !");
 
             Telemetry.Data += Telemetry_Data;
             Telemetry.JobStarted += TelemetryOnJobStarted;
@@ -167,11 +182,14 @@ namespace TrucksLOG
             Telemetry.RefuelEnd += TelemetryRefuelEnd;
             Telemetry.RefuelPayed += TelemetryRefuelPayed;
 
+            if(debug == 1)
             Logging.WriteClientLog("Telemetry Events geladen !");
 
             if (MainWindow.AlreadyRunning())
             {
-                Logging.WriteClientLog("Anwendung läuft bereits !");
+                if(debug == 1)
+                    Logging.WriteClientLog("Anwendung läuft bereits !");
+
                 Application.Current.Shutdown();
                 return;
             }
@@ -186,7 +204,8 @@ namespace TrucksLOG
             string response = API.HTTPSRequestPost(API.bann_check, post_param);
             string[] ausgabe = response.Split(':');
 
-            Logging.WriteClientLog("Bann Check absolviert !");
+            if(debug == 1)
+                Logging.WriteClientLog("Bann Check absolviert !");
 
             if (Convert.ToInt32(ausgabe[0]) == 0)
                 {
@@ -217,10 +236,15 @@ namespace TrucksLOG
                 request.Method = "HEAD";
                 request.Timeout = 5000;
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                if (debug == 1)
+                    Logging.WriteClientLog("[INFO] ServerCheck Response " + response);
+
                 return response.StatusCode == HttpStatusCode.OK;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logging.WriteClientLog("[ERROR] Fehler bei ServerCheck: " + ex.Message + ex.StackTrace);
                 return false;
             }
         }
@@ -297,7 +321,10 @@ namespace TrucksLOG
                     }
                     else {}
                 } else {}
-            } catch {}
+            } catch (Exception ex) 
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei Anti_AFK_Timer_Tick: " + ex.Message + ex.StackTrace);
+            }
 
         }
 
@@ -312,7 +339,9 @@ namespace TrucksLOG
                 };
                 string response = API.HTTPSRequestPost(API.user_zu_schnell, post_param);
             }
-            catch {}
+            catch (Exception ex) {
+                Logging.WriteClientLog("[ERROR] Fehler bei ZU_SCHNELL_TICK: " + ex.Message + ex.StackTrace);
+            }
 
         }
 
@@ -330,40 +359,35 @@ namespace TrucksLOG
 
                 if(response == "Ohne")
                 {
-                    Logging.WriteClientLog("Keiner Spedition zugehörig !");
+                    if(debug == 1)
+                        Logging.WriteClientLog("Keiner Spedition zugehörig !");
 
                     await metroWindow.ShowMessageAsync("Keine Spedition !", "Du musst einer Spedition angehören um unser System nutzen zu können.\nDu findest alle Speditionen auf unserer Webseite TrucksLOG.de\n\nDas Programm wird jetzt beendet !");
                     Application.Current.Shutdown();
                 }
                 Truck_Daten.SPEDITIONSNAME = "Spedition: " + response;
-                Logging.WriteClientLog("Spedition OK: " + Truck_Daten.SPEDITIONSNAME);
+                if(debug == 1)
+                    Logging.WriteClientLog("Spedition OK: " + Truck_Daten.SPEDITIONSNAME);
             }
-            catch {}
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei SpeditionCheck: " + ex.Message + ex.StackTrace);
+            }
 
         }
 
 
         private void Setzt_antiAFK()
         {
-            if (Truck_Daten.PATREON_LEVEL == 0)
-            {;
-                anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 150 Zeichen";
-            }
-            else if (Truck_Daten.PATREON_LEVEL == 1)
+            try
             {
                 anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
-            }
-            else if (Truck_Daten.PATREON_LEVEL == 2)
+                if (debug == 1)
+                    Logging.WriteClientLog("[INFO] Setze Anti_AFK auf 150 Zeichen gesetzt");
+            }catch(Exception ex)
             {
-                anti_ak_text.MaxLength = 150;
-                laenge_antiafk_text.Content = "Max. 150 Zeichen";
-            }
-            else if (Truck_Daten.PATREON_LEVEL == 3)
-            {
-                anti_ak_text.MaxLength = 250;
-                laenge_antiafk_text.Content = "Max. 250 Zeichen";
+                Logging.WriteClientLog("[ERROR] Fehler bei Setze_Anti_AFK TextLaenge: " + ex.Message + ex.StackTrace);
             }
         }
         private void Useronline_Tick(object sender, EventArgs e)
@@ -376,34 +400,42 @@ namespace TrucksLOG
                 };
                 string response_online = API.HTTPSRequestPost(API.useronline_url, post_param);
                 Truck_Daten.ONLINEUSER = "Fahrer: " + response_online;
-
-                Logging.WriteClientLog("Fahreranzahl geladen");
+                if(debug == 1)
+                    Logging.WriteClientLog("Fahreranzahl geladen");
 
                 Lade_fahrer();
                 Lade_Punktekonto();
                 Set_online();
 
-            } catch {
-               
+            } catch (Exception ex) {
+                Logging.WriteClientLog("[ERROR] Fehler bei SETZE_ANTI_AFK: " + ex.Message + ex.StackTrace);
             }
         }
 
 
         private void Lade_fahrer()
         {
-            Dictionary<string, string> post_param2 = new Dictionary<string, string>
+
+            try
+            {
+                Dictionary<string, string> post_param2 = new Dictionary<string, string>
             {
                 { "VERSION", CLIENT_VERSION },
                 { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
             };
-            string response = API.HTTPSRequestPost(API.fahreronline_url, post_param2);
-            string respons_br = response.Replace("<br/>", "\n");
-            fahrer_text.Text = respons_br.ToString();
+                string response = API.HTTPSRequestPost(API.fahreronline_url, post_param2);
+                string respons_br = response.Replace("<br/>", "\n");
+                fahrer_text.Text = respons_br.ToString();
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei Lade_Fahreranzahl: " + ex.Message + ex.StackTrace);
+            }
         }
 
 
         private void Timer_Tick(object sender, EventArgs e)
-            {
+        {
             string restkilometer;
             try
             {
@@ -437,21 +469,30 @@ namespace TrucksLOG
                 post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 string response = API.HTTPSRequestPost(API.job_update, post_param);
 
-            } catch {}
-
-     
-
+            } catch (Exception ex) 
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei Timer_Tick: " + ex.Message + ex.StackTrace);
+            }
         }
 
 
         private void Setze_Client_Version()
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>
-            { { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
-              { "CLIENT_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString() }
-            };
-            API.HTTPSRequestPost(API.client_version, post_param);
-            Logging.WriteClientLog("[CLIENT][VERSION] => " + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>
+                { { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
+                  { "CLIENT_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString() }
+                };
+                API.HTTPSRequestPost(API.client_version, post_param);
+
+                Logging.WriteClientLog("[CLIENT][VERSION] => " + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim setzen der Client_Version: " + ex.Message + ex.StackTrace);
+                throw;
+            }
         }
 
 
@@ -467,8 +508,9 @@ namespace TrucksLOG
                 Truck_Daten.PATREON_LEVEL = Convert.ToInt32(response);
 
             }
-            catch
+            catch (Exception ex)
             {
+                Logging.WriteClientLog("[ERROR] Fehler beim LADE_PATREON (PAT auf 0): " + ex.Message + ex.StackTrace);
                 Truck_Daten.PATREON_LEVEL = 0;
             }
         }
@@ -484,32 +526,12 @@ namespace TrucksLOG
                 string response = API.HTTPSRequestPost(API.punktekonto, post_param);
                 Truck_Daten.PUNKTEKONTO = "Punkte: " + response;
 
-                Logging.WriteClientLog("Punktekonto geladen !");
+                if(debug == 1)
+                    Logging.WriteClientLog("Punktekonto geladen !");
             }
-            catch
+            catch (Exception ex)
             {
-                Logging.WriteClientLog("Fehler beim Laden des Punktekontos!");
-            }
-        }
-
-
-        private void Lade_GameVersionen()
-        {
-            try
-            {
-                string unixTimestamp = Convert.ToString((int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
-
-                Dictionary<string, string> post_param = new Dictionary<string, string>
-                {
-                    { "TIMESTAMP", unixTimestamp }
-                };
-                string response = API.HTTPSRequestPost(API.tmp_versionen, post_param);
-                Truck_Daten.TMP_VERSIONEN = response;
-
-            }
-            catch
-            {
-                Truck_Daten.TMP_VERSIONEN = "Ladefehler...";
+                Logging.WriteClientLog("Fehler beim Laden des Punktekontos: " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -527,7 +549,6 @@ namespace TrucksLOG
                 Console.WriteLine("Wait for data took " + stopWatch.ElapsedMilliseconds + " ms");
                 if (String.IsNullOrWhiteSpace(Truck_Daten.STARTORT) && stopWatch.ElapsedMilliseconds < 5000)
                 {
-                    System.Windows.MessageBox.Show("Could not get required data. Job couldn't start.", "ERROR", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
             }
@@ -541,9 +562,9 @@ namespace TrucksLOG
                     {
                         REG.Schreiben("Config", "TOUR_ID_ETS2", GenerateString());
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                       // Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ETS2 mit GENERATE STRING(): " + ex.Message);
+                       Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ETS2 mit GENERATE STRING(): " + ex.Message + ex.StackTrace);
                     }
                 }
             } else
@@ -554,9 +575,9 @@ namespace TrucksLOG
                     {
                         REG.Schreiben("Config", "TOUR_ID_ATS", GenerateString());
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                      //  Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ATS mit GENERATE STRING(): " + ex.Message);
+                      Logging.WriteClientLog("[ERROR] Fehler beim Schreiben TOUR_ID_ATS mit GENERATE STRING(): " + ex.Message + ex.StackTrace);
                     }
                 }
             }
@@ -602,11 +623,13 @@ namespace TrucksLOG
 
                 job_update_timer.Tick += Timer_Tick;
                 job_update_timer.Start();
-                //Logging.WriteClientLog("[INFO] Tour gestartet: " + response);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] Tour gestartet: " + response);
             }
-            catch
+            catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler beim Starten der Tour: " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim Starten der Tour: " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -644,9 +667,9 @@ namespace TrucksLOG
                 job_update_timer.Stop();
 
                 //Logging.WriteClientLog("[INFO] Tour abgebrochen: " + response);
-            } catch
+            } catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler beim Tour abbrechen !" + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim Tour abbrechen !" + ex.Message + ex.StackTrace);
             }
 
         }
@@ -671,7 +694,7 @@ namespace TrucksLOG
                     post_param.Add("TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS"));
                 }
 
-                //post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
+                post_param.Add("FRACHTSCHADEN", Truck_Daten.FRACHTSCHADEN.ToString());
                 post_param.Add("STRECKE", Truck_Daten.ABGABE_GEF_STRECKE.ToString());
                 post_param.Add("EARNED_XP", Truck_Daten.EARNED_XP.ToString());
                 post_param.Add("AUTOPARKING", Truck_Daten.AUTOPARKING.ToString());
@@ -688,10 +711,11 @@ namespace TrucksLOG
                 SoundPlayer.Sound_Tour_Beendet();
 
                 job_update_timer.Stop();
-                //Logging.WriteClientLog("[INFO] Tour Abgeliefert: " + response);
-            } catch
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] Tour Abgeliefert: " + response);
+            } catch (Exception ex)
             {
-               // Logging.WriteClientLog("[ERROR] Fehler beim Abgeben der Tour ! - " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim Abgeben der Tour ! - " + ex.Message + ex.StackTrace);
             }
 
         }
@@ -718,10 +742,11 @@ namespace TrucksLOG
                 post_param.Add("GRUND", Truck_Daten.GRUND);
                 string response = API.HTTPSRequestPost(API.strafe, post_param);
                 if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Strafe_Erhalten();
-                //Logging.WriteClientLog("[INFO] Strafe erhalten: " + response);
-            } catch
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] Strafe erhalten: " + response);
+            } catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler bei Strafzuweisung" + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler bei Strafzuweisung" + ex.Message + ex.StackTrace);
             }
 
         }
@@ -745,10 +770,11 @@ namespace TrucksLOG
                 Console.WriteLine(response);
 
                 if (REG.Lesen("Config", "Systemsounds") == "An") SoundPlayer.Sound_Mautstation_Passiert();
-                //Logging.WriteClientLog("[INFO] Maut durchfahren: " + response);
-            } catch
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] Maut durchfahren: " + response);
+            } catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler beim Mautdurchfahrt " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim TelemetryTollgate: " + ex.Message + ex.StackTrace);
             }
 
         }
@@ -766,10 +792,11 @@ namespace TrucksLOG
                 };
 
                 string response = API.HTTPSRequestPost(API.transport, post_param);
-                //Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
-            } catch
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] TRANSPORT - FÄHRE - EVENT: " + response);
+            } catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler bei Transport (Schiff)" + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler bei Transport (Schiff)" + ex.Message + ex.StackTrace);
             }
 
         }
@@ -787,22 +814,26 @@ namespace TrucksLOG
                 };
 
                 string response = API.HTTPSRequestPost(API.transport, post_param);
-                //Logging.WriteClientLog("[INFO] TRANSPORT - TRAIN - EVENT: " + response);
-            } catch
+               
+                if(debug == 1)
+                Logging.WriteClientLog("[INFO] TRANSPORT - TRAIN - EVENT: " + response);
+            } catch (Exception ex)
             {
-                //Logging.WriteClientLog("[ERROR] Fehler bei Transport (Zug) " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler bei Transport (Zug) " + ex.Message + ex.StackTrace);
             }
 
         }
 
         private void TelemetryRefuel(object sender, EventArgs e)
         {
-            //Logging.WriteClientLog("[INFO] Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
+            if(debug == 1)
+                Logging.WriteClientLog("[INFO] Refuel-Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
         private void TelemetryRefuelEnd(object sender, EventArgs e)
         {
-            //Logging.WriteClientLog("[INFO] Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
+            if(debug == 1)
+                Logging.WriteClientLog("[INFO] Refuel-END Event - Liter: " + Truck_Daten.LITER_GETANKT.ToString());
         }
 
         private void TelemetryRefuelPayed(object sender, EventArgs e)
@@ -835,10 +866,11 @@ namespace TrucksLOG
                 };
 
                 string response = API.HTTPSRequestPost(API.tanken, post_param);
-                //Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
-            } catch
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] Telemetry Refuel Payed - EVENT: " + response);
+            } catch (Exception ex)
             {
-               // Logging.WriteClientLog("[ERROR] Fehler bei RefuelPayed " + ex.Message);
+               Logging.WriteClientLog("[ERROR] Fehler bei RefuelPayed " + ex.Message + ex.StackTrace);
             }
            
         }
@@ -1047,8 +1079,10 @@ namespace TrucksLOG
                     }
                 }
             }
-            catch
-            { }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler in TELE: " + ex.Message + ex.StackTrace);
+            }
         }
 
 
@@ -1095,75 +1129,98 @@ namespace TrucksLOG
         {
             try
             {
-
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "BG_OPACITY")))
                     REG.Schreiben("Config", "BG_OPACITY", "1.0"); Truck_Daten.BG_OPACITY = "1.0"; bg_opacity.SelectedValue = "1.0";
                 Truck_Daten.BG_OPACITY = REG.Lesen("Config", "BG_OPACITY"); bg_opacity.SelectedValue = REG.Lesen("Config", "BG_OPACITY");
-               
-                Logging.WriteClientLog("BG Opacity OK");
+
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Debug")))
+                    REG.Schreiben("Config", "Debug", "0");
+                    Logging.WriteClientLog("Debug auf 0 gesetzt");
+
+                if (REG.Lesen("Config", "Debug") == "1")
+                {
+                    debugging.IsChecked = REG.Lesen("Config", "Debug") == "1"; 
+                    debug = 1;
+                } else
+                {
+                    debug = 0;
+                }
+                  
+
+                if (debug == 1)
+                    Logging.WriteClientLog("BG Opacity OK");
 
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
-                Logging.WriteClientLog("Farbschema OK");
+                if(debug == 1)
+                    Logging.WriteClientLog("Farbschema OK");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "FIRST_RUN")))
                         REG.Schreiben("Config", "FIRST_RUN", "0"); 
-                Logging.WriteClientLog("FirstRun geschrieben");
+                if(debug == 1)
+                    Logging.WriteClientLog("FirstRun geschrieben");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
                     REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!"); 
-
-                Logging.WriteClientLog("ANTI AFK TEXT geschrieben");
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("ANTI AFK TEXT geschrieben");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     REG.Schreiben("Config", "ANTI_AFK_TIMER", "4"); 
-
-                Logging.WriteClientLog("Anti AFK Timer gesetzt");
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("Anti AFK Timer gesetzt");
 
                 antiafk_zeit.Value = Convert.ToInt32(REG.Lesen("Config", "ANTI_AFK_TIMER"));
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ETS2")))
                     REG.Schreiben("Config", "TOUR_ID_ETS2", ""); 
 
-                Logging.WriteClientLog("Tour ID ETS2 geleert");
+                if(debug == 1)
+                    Logging.WriteClientLog("Tour ID ETS2 geleert");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "TOUR_ID_ATS")))
                     REG.Schreiben("Config", "TOUR_ID_ATS", "");
-
-                Logging.WriteClientLog("Tour ID ATS geleert");
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("Tour ID ATS geleert");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "CLIENT_KEY")))
                     REG.Schreiben("Config", "CLIENT_KEY", ""); 
 
-                Logging.WriteClientLog("Client Key geschrieben");
+                if(debug == 1)
+                    Logging.WriteClientLog("Client Key geschrieben");
 
                 //if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TIMER")))
                     //REG.Schreiben("Config", "ANTI_AFK_TIMER", "4"); 
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Systemsounds")))
                     REG.Schreiben("Config", "Systemsounds", "An"); 
-                
-                Logging.WriteClientLog("System Sounds auf AN");
+                if(debug == 1)
+                    Logging.WriteClientLog("System Sounds auf AN");
 
                 Systemsounds.SelectedValue = REG.Lesen("Config", "Systemsounds");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Farbschema")))
                     REG.Schreiben("Config", "Farbschema", "Dark.Blue"); 
-                
-               Logging.WriteClientLog("Farbschema auf Dark.Blue");
+                if(debug == 1)
+                    Logging.WriteClientLog("Farbschema auf Dark.Blue");
 
                 Farbschema.SelectedValue = REG.Lesen("Config", "Farbschema");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Autorun")))
                     REG.Schreiben("Config", "Autorun", "Aus"); 
-
-                Logging.WriteClientLog("Autorun auf Aus");
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("Autorun auf Aus");
 
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Background")))
                 {
                     Background_WEchsler.SelectedValue = "lkw_1.jpg";
                     REG.Schreiben("Config", "Background", "lkw_1.jpg");
-                    Logging.WriteClientLog("Background auf LKW 1");
+                    if(debug == 1)
+                        Logging.WriteClientLog("Background auf LKW 1");
                 }
                 else
                 {
@@ -1180,63 +1237,83 @@ namespace TrucksLOG
                     tmp_content.Content = REG.Lesen("Pfade", "TMP_PFAD") != "" ? "OK" : "Fehlt";
            
                     status_bar_version.Content = "Client Version: " + CLIENT_VERSION;
-
-                    Logging.WriteClientLog("Status Bar Version gesetzt");
+                    if(debug == 1)
+                        Logging.WriteClientLog("Status Bar Version gesetzt");
                 }
-                catch {}
+                catch (Exception ex) 
+                { 
+                    Logging.WriteClientLog("[ERROR] Fehler bei Pfade auslesen: " + ex.Message + ex.StackTrace); 
+                }
                 // Pfade Auslesen Ende
 
                 try
                 {
                     this.DataContext = Truck_Daten;
-
-                    Logging.WriteClientLog("Data Context gesetzt");
+                    if(debug == 1)
+                        Logging.WriteClientLog("Data Context gesetzt");
+                } catch (Exception ex)
+                {
+                    Logging.WriteClientLog("[ERROR] Fehler beim setzen des DATA_CONTEXT: " + ex.Message + ex.StackTrace);
                 }
-                catch {}
 
                 ETS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ETS2"));
                 ATS_TOUR_delete.IsEnabled = !string.IsNullOrEmpty(REG.Lesen("Config", "TOUR_ID_ATS"));
-            } catch {}
 
-            // VOLUME EINTRAGEN
-            if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Volume")))
-                REG.Schreiben("Config", "Volume", "0.5");
-            VolumeSlider.Value = Convert.ToDouble(REG.Lesen("Config", "Volume"));
+                // VOLUME EINTRAGEN
+                if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "Volume")))
+                    REG.Schreiben("Config", "Volume", "0.5");
+                VolumeSlider.Value = Convert.ToDouble(REG.Lesen("Config", "Volume"));
 
-            try
-            {
-                Dictionary<string, string> post_param = new Dictionary<string, string>
+
+
+                try
+                {
+                    Dictionary<string, string> post_param = new Dictionary<string, string>
                 {
                     { "VERSION", CLIENT_VERSION }
                 };
-                string response = API.HTTPSRequestPost(API.updatetext_uri, post_param);
-                string response2 = response.Replace("<br/>", "");
-                string response3 = response2.Replace("<hr/>", "");
-                update_text.Text = response3;
+                    string response = API.HTTPSRequestPost(API.updatetext_uri, post_param);
+                    string response2 = response.Replace("<br/>", "");
+                    string response3 = response2.Replace("<hr/>", "");
+                    update_text.Text = response3;
+                    if(debug == 1)
+                        Logging.WriteClientLog("Client Version gesendet");
+                }
+                catch (Exception fehler_vor2)
+                {
+                    Logging.WriteClientLog("[ERROR] Fehler beim Anzeigen der Update News " + fehler_vor2.Message + fehler_vor2.StackTrace);
+                }
 
-                Logging.WriteClientLog("Client Version gesendet");
-            } catch
-            {
-                //Logging.WriteClientLog("[ERROR] Fehler beim Anzeigen der Update News " + ex.Message);
-            }
+                // LADE PATREON
+                Lade_Patreon();
 
-            Lade_Patreon();
-
+                // ANTI_AFK TEXT
                 anti_ak_text.Text = REG.Lesen("Config", "ANTI_AFK_TEXT");
                 anti_ak_text.MaxLength = 150;
                 laenge_antiafk_text.Content = "Max. 150 Zeichen";
 
-            Logging.WriteClientLog("AFK Text auf 150 Zeichen gesetzt");
+                anti_afk.SelectedValue = "Aus";
+                anti_afk_timer.Stop();
 
-            anti_afk.SelectedValue = "Aus";
-            anti_afk_timer.Stop();
+                // DLC ERKENNUNG
+                if(debug == 1)
+                    Logging.WriteClientLog("Starte ETS2 DLC Erkennung...");
+                DLC_ETS_Erkennung();
+                if(debug == 1)
+                    Logging.WriteClientLog("Starte ATS DLC Erkennung...");
+                DLC_ATS_Erkennung();
+
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Laden der Voreinstellungen: " + ex.Message + ex.StackTrace);
+            }
+
+           
 
 
-            // DLC ERKENNUNG
-            Logging.WriteClientLog("Starte ETS2 DLC Erkennung...");
-            DLC_ETS_Erkennung();
-            Logging.WriteClientLog("Starte ATS DLC Erkennung...");
-            DLC_ATS_Erkennung();
+
+
         }
 
         private void DLC_ATS_Erkennung()
@@ -1244,31 +1321,48 @@ namespace TrucksLOG
             try {
 
             string ordner_ats = REG.Lesen("Pfade", "ATS_PFAD").Substring(0, REG.Lesen("Pfade", "ATS_PFAD").Length - 24);
-            Logging.WriteClientLog("ATS-Ordner für DLC Abfrage: " + ordner_ats);
+            
+                if(debug == 1)
+                    Logging.WriteClientLog("ATS-Ordner für DLC Abfrage: " + ordner_ats);
 
             DLC_ARIZONA = File.Exists(ordner_ats + @"\dlc_arizona.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC ARIZ: " + DLC_ARIZONA);
+            
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC ARIZ: " + DLC_ARIZONA);
 
             DLC_MEXICO = File.Exists(ordner_ats + @"\dlc_nm.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC MEX: " + DLC_MEXICO);
+            
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC MEX: " + DLC_MEXICO);
 
             DLC_OREGON = File.Exists(ordner_ats + @"\dlc_or.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC ORE: " + DLC_OREGON);
+            
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC ORE: " + DLC_OREGON);
 
             DLC_WASHINGTON = File.Exists(ordner_ats + @"\dlc_wa.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Wash: " + DLC_WASHINGTON);
+            
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC Wash: " + DLC_WASHINGTON);
 
             DLC_IDAHO = File.Exists(ordner_ats + @"\dlc_id.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Idaho: " + DLC_IDAHO);
+            
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC Idaho: " + DLC_IDAHO);
 
             DLC_UTAH = File.Exists(ordner_ats + @"\dlc_ut.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Utah: " + DLC_UTAH);
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC Utah: " + DLC_UTAH);
 
             DLC_COLORADO = File.Exists(ordner_ats + @"\dlc_co.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Colorado: " + DLC_COLORADO);
+            
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC Colorado: " + DLC_COLORADO);
 
             DLC_WYOMING = File.Exists(ordner_ats + @"\dlc_wy.scs") ? "1" : "0";
-            Logging.WriteClientLog("DLC Wyoming: " + DLC_WYOMING);
+            
+            if(debug == 1)
+                Logging.WriteClientLog("DLC Wyoming: " + DLC_WYOMING);
 
             Dictionary<string, string> post_param_dlc = new Dictionary<string, string>
                 {
@@ -1283,10 +1377,12 @@ namespace TrucksLOG
                     { "DLC_WYOMING", DLC_WYOMING }
                 };
             API.HTTPSRequestPost(API.dlc_update_ats, post_param_dlc);
-            Logging.WriteClientLog("DLC ATS an Server gesendet !");
+            
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC ATS an Server gesendet !");
             } catch (Exception ex)
             {
-                Logging.WriteClientLog("Fehler bei ATS DLC Erkennung ! -> " + ex.Message);
+                Logging.WriteClientLog("Fehler bei ATS DLC Erkennung ! -> " + ex.Message + ex.StackTrace);
             }
         }
 
@@ -1296,28 +1392,44 @@ namespace TrucksLOG
             try
             {
                 string ordner_ets = REG.Lesen("Pfade", "ETS2_PFAD").Substring(0, REG.Lesen("Pfade", "ETS2_PFAD").Length - 27);
-                Logging.WriteClientLog("ETS2 Ordner für DLC Abfrage: " + ordner_ets);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("ETS2 Ordner für DLC Abfrage: " + ordner_ets);
 
                 DLC_GOING = File.Exists(ordner_ets + @"\dlc_east.scs") ? "1" : "0";
-                Logging.WriteClientLog("DLC Going: " + DLC_GOING);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC Going: " + DLC_GOING);
 
                 DLC_SCANDINAVIA = File.Exists(ordner_ets + @"\dlc_north.scs") ? "1" : "0";
-                Logging.WriteClientLog("DLC Scan: " + DLC_SCANDINAVIA);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC Scan: " + DLC_SCANDINAVIA);
 
                 DLC_FRANCE = File.Exists(ordner_ets + @"\dlc_fr.scs") ? "1" : "0";
-                Logging.WriteClientLog("DLC FR: " + DLC_FRANCE);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC FR: " + DLC_FRANCE);
 
                 DLC_ITALIA = File.Exists(ordner_ets + @"\dlc_it.scs") ? "1" : "0";
-                Logging.WriteClientLog("DLC ITA: " + DLC_ITALIA);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC ITA: " + DLC_ITALIA);
 
                 DLC_BALTIC = File.Exists(ordner_ets + @"\dlc_balt.scs") ? "1" : "0";
-                Logging.WriteClientLog("DLC Baltic: " + DLC_BALTIC);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC Baltic: " + DLC_BALTIC);
 
                 DLC_BLACK = File.Exists(ordner_ets + @"\dlc_balkan_e.scs") ? "1" : "0";
-                Logging.WriteClientLog("DLC BLACK: " + DLC_BLACK);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC BLACK: " + DLC_BLACK);
 
                 DLC_IBERIA = File.Exists(ordner_ets + @"\dlc_iberia.scs") ? "1" : "0";
-                Logging.WriteClientLog("DLC Iberia: " + DLC_IBERIA);
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC Iberia: " + DLC_IBERIA);
 
                 Dictionary<string, string> post_param_dlc = new Dictionary<string, string>
                 {
@@ -1331,26 +1443,15 @@ namespace TrucksLOG
                     { "DLC_IBERIA", DLC_IBERIA }
                 };
                 API.HTTPSRequestPost(API.dlc_update_ets, post_param_dlc);
-                Logging.WriteClientLog("DLC ETS an Server gesendet !");
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("DLC ETS an Server gesendet !");
             } catch (Exception ex)
             {
-                Logging.WriteClientLog("ETS DLC Update fehlgeschlagen ! -> " + ex.Message);
+                Logging.WriteClientLog("ETS DLC Update fehlgeschlagen ! -> " + ex.Message + ex.StackTrace);
             }
         }
 
-
-        private void Beta_Tester(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                //Process.Start("https://projekt-janus.de/beta_bewerbung.php");
-            }
-            catch (Exception ex)
-            {
-                Logging.WriteClientLog("[ERROR] Fehler Beta_Tester: " + ex.Message);
-                msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1010). Bitte versuche es später erneut oder gib uns diesen Fehlercode in Discord." + ex.Message);
-            }
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -1361,12 +1462,14 @@ namespace TrucksLOG
             try
             {
                 Process.Start("https://paypal.me/ErIstWiederDa/2,00");
-                //Logging.WriteClientLog("[INFO] PayPal Spenden Button geklickt");
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] PayPal Spenden Button geklickt");
             }
             catch (Exception ex)
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim Spende_Kaffee: " + ex.Message);
-                msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut..." + ex.Message);
+                if(debug == 1)
+                    Logging.WriteClientLog("[ERROR] Fehler beim Spende_Kaffee: " + ex.Message + ex.StackTrace);
+                msg.Schreiben("Fehler", "Diese Funktion wird bald eingebaut...");
             }
         }
 
@@ -1391,13 +1494,15 @@ namespace TrucksLOG
             }
             catch (Exception ex)
             {
+                Logging.WriteClientLog("[ERROR] Fehler beim Farbschema ändern" + ex.Message + ex.StackTrace);
                 msg.Schreiben("Fehler", "Es ist ein Fehler aufgetreten. Fehlernummer (F1020). Bitte versuche es später erneut oder gib uns diesen Fehlercode über Discord-Ticket." + ex.Message);
             }
         }
 
         private void Preis_eintragen_Click(object sender, RoutedEventArgs e)
         {
-            Logging.WriteClientLog("Preis eintragen CLICK-EVENT");
+            if(debug == 1)
+                Logging.WriteClientLog("Preis eintragen CLICK-EVENT");
         }
 
         private void Systemsounds_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1405,12 +1510,15 @@ namespace TrucksLOG
             if ((string)Systemsounds.SelectedValue == "An")
             {
                 REG.Schreiben("Config", "Systemsounds", "An");
-                Logging.WriteClientLog("Systemsounds Angeschaltet");
+                if(debug == 1)
+                    Logging.WriteClientLog("Systemsounds Angeschaltet");
             }
             if ((string)Systemsounds.SelectedValue == "Aus")
             {
                 REG.Schreiben("Config", "Systemsounds", "Aus");
-                Logging.WriteClientLog("Systemsounds Ausgeschaltet");
+                
+                if(debug == 1)
+                    Logging.WriteClientLog("Systemsounds Ausgeschaltet");
             }
         }
 
@@ -1440,18 +1548,23 @@ namespace TrucksLOG
 
         private void LOG_ORDNER_OEFFNEN(object sender, RoutedEventArgs e)
         {
+            if (debug == 1)
+                Logging.WriteClientLog("LOG_ORDNER ÖFFNEN wurde angeklickt!");
+
             Process.Start(Config.LogRoot);
         }
 
         private void Spende_paypal(object sender, RoutedEventArgs e)
         {
-            //Logging.WriteClientLog("[INFO] Spende_PayPal wurde angeklickt!");
+            if(debug == 1)
+                Logging.WriteClientLog("[INFO] Spende_PayPal wurde angeklickt!");
             Process.Start("https://paypal.me/ErIstWiederDa/2,00");
         }
 
         private void Patreon_link(object sender, RoutedEventArgs e)
         {
-            Logging.WriteClientLog("[INFO] Patreon Link wurde angeklickt!");
+            if(debug == 1)
+                Logging.WriteClientLog("[INFO] Patreon Link wurde angeklickt!");
             Process.Start("https://www.patreon.com/TrucksLOG");
         }
 
@@ -1484,7 +1597,10 @@ namespace TrucksLOG
                 { "USER", REG.Lesen("Config", "CLIENT_KEY") }
             };
             API.HTTPSRequestPost(API.link_click, post_param);
-            Logging.WriteClientLog("[INFO] Andras.TV wurde angeklickt!");
+
+            if(debug == 1)
+                Logging.WriteClientLog("[INFO] Andras.TV wurde angeklickt!");
+
             Process.Start("https://www.twitch.tv/andras_tv");
         }
 
@@ -1492,34 +1608,42 @@ namespace TrucksLOG
 
         private void OPEN_BG_FILE(object sender, RoutedEventArgs e)
         {
-            var bild = new Microsoft.Win32.OpenFileDialog
+            try
             {
-                Filter = "Alle Bilder|*.jpg;*.png;|Alle Dateien|*.*",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)
-            };
-            var result_bild = bild.ShowDialog();
-            if (result_bild == false) return;
+                var bild = new Microsoft.Win32.OpenFileDialog
+                {
+                    Filter = "Alle Bilder|*.jpg;*.png;|Alle Dateien|*.*",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.CommonPictures)
+                };
+                var result_bild = bild.ShowDialog();
+                if (result_bild == false) return;
 
-            REG.Schreiben("Config", "Background", bild.FileName);
+                REG.Schreiben("Config", "Background", bild.FileName);
 
-            ImageBrush myBrush = new ImageBrush
+                ImageBrush myBrush = new ImageBrush
+                {
+                    ImageSource = new BitmapImage(new Uri(bild.FileName))
+                };
+                this.Hauptfenster.Background = myBrush;
+            }
+            catch (Exception ex)
             {
-                ImageSource = new BitmapImage(new Uri(bild.FileName))
-            };
-            this.Hauptfenster.Background = myBrush;
+                Logging.WriteClientLog("[ERROR] Fehler beim Laden eines eigenen BG: " + ex.Message + ex.StackTrace);
+            }
         }
 
 
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Logging.WriteClientLog("[INFO] Programm wurde beendet!");
+            if(debug == 1)
+                Logging.WriteClientLog("[INFO] Programm wurde beendet!");
             try
             {
                Application.Current.Shutdown();
             } catch (Exception ex)
             {
-                Logging.WriteClientLog("[ERROR] Fehler beim herunterfahren des Client: " + ex.Message);
+                Logging.WriteClientLog("[ERROR] Fehler beim herunterfahren des Client: " + ex.Message + ex.StackTrace);
             }
           
         }
@@ -1528,10 +1652,14 @@ namespace TrucksLOG
         {
             Pfad_Angeben pf2 = new Pfad_Angeben();
             pf2.ShowDialog();
+
+            if (debug == 1)
+                Logging.WriteClientLog("[INFO] Setting Button geklickt");
         }
 
-        private void TMP_starten_Click(object sender, RoutedEventArgs e)
+        private async void TMP_starten_Click(object sender, RoutedEventArgs e)
         {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
             try
             {
                 if (!string.IsNullOrEmpty(REG.Lesen("Pfade", "TMP_PFAD")))
@@ -1540,18 +1668,20 @@ namespace TrucksLOG
                 }
                 else
                 {
-                    msg.Schreiben("Fehler bei der Pfadangabe - TruckersMP", "Der Pfad zu TruckersMP wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von TMP. Kein Pfad angegeben");
+                    await metroWindow.ShowMessageAsync("Fehler bei der Pfadangabe - TruckersMP", "Der Pfad zu TruckersMP wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
+                    if(debug == 1)
+                        Logging.WriteClientLog("[ERROR] Fehler beim Starten von TMP. Kein Pfad angegeben");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-               // Logging.WriteClientLog("[ERROR] Exception throw " + ex.Message + ex.StackTrace);
+                Logging.WriteClientLog("[ERROR] Fehler beim Öffnen von TMP: " + ex.Message + ex.StackTrace);
             }
         }
 
-        private void Ats_starten_Click(object sender, RoutedEventArgs e)
+        private async void Ats_starten_Click(object sender, RoutedEventArgs e)
         {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
             try
             {
                 if(!string.IsNullOrEmpty(REG.Lesen("Pfade", "ATS_PFAD")))
@@ -1559,8 +1689,9 @@ namespace TrucksLOG
                     Process.Start(REG.Lesen("Pfade", "ATS_PFAD"));
                 } else
                 {
-                    msg.Schreiben("Fehler bei der Pfadangabe ATS", "Der Pfad zu ATS wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer");
+                    await metroWindow.ShowMessageAsync("Fehler bei der Pfadangabe ATS", "Der Pfad zu ATS wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
+                    if(debug == 1)
+                        Logging.WriteClientLog("[ERROR] Fehler beim Starten von ATS im SinglePlayer");
                 }
             } catch (Exception ex)
             {
@@ -1569,8 +1700,9 @@ namespace TrucksLOG
            
         }
 
-        private void ETS_starten_Click(object sender, RoutedEventArgs e)
+        private async void ETS_starten_Click(object sender, RoutedEventArgs e)
         {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
             try
             {
                 if (!string.IsNullOrEmpty(REG.Lesen("Pfade", "ETS2_PFAD")))
@@ -1579,20 +1711,29 @@ namespace TrucksLOG
                 }
                 else
                 {
-                    msg.Schreiben("Fehler bei der Pfadangabe - ETS2", "Der Pfad zu Euro Truck Simulator 2 wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
-                    Logging.WriteClientLog("[ERROR] Fehler beim Starten von ETS2. Kein Pfad angegeben");
+                    await metroWindow.ShowMessageAsync("Fehler bei der Pfadangabe - ETS2", "Der Pfad zu Euro Truck Simulator 2 wurde nicht angegeben !" + Environment.NewLine + "Bitte klicke unter den Buttons auf das Zahnradsymbol.");
+                    
+                    if(debug == 1)
+                        Logging.WriteClientLog("[ERROR] Fehler beim Starten von ETS2. Kein Pfad angegeben");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-               // Logging.WriteClientLog("[ERROR] Exception throw " + ex.Message + ex.StackTrace);
+                Logging.WriteClientLog("[ERROR] Fehler bei ETS_Starten_Click " + ex.Message + ex.StackTrace);
             }
         }
 
         private void Spielpfade_aendern(object sender, RoutedEventArgs e)
         {
-            Pfad_Angeben pf3 = new Pfad_Angeben();
-            pf3.ShowDialog();
+            try
+            {
+                Pfad_Angeben pf3 = new Pfad_Angeben();
+                pf3.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Spielpfade ändern Button klick: " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void ContextMenu_Click(object sender, RoutedEventArgs e)
@@ -1603,21 +1744,30 @@ namespace TrucksLOG
 
         private void Hauptfenster_Loaded(object sender, RoutedEventArgs e)
         {
-            if(Updates_FUER() == "ALLE")
+            try
             {
-                AutoUpdater.ShowSkipButton = false;
-                AutoUpdater.ShowRemindLaterButton = false;
-                AutoUpdater.Start(UpdateString);
-            }
-
-            if (Updates_FUER() == "BETA")
-            {
-                if (Convert.ToInt32(Ist_BETA_Tester()) >= 1)
+                if (Updates_FUER() == "ALLE")
                 {
                     AutoUpdater.ShowSkipButton = false;
                     AutoUpdater.ShowRemindLaterButton = false;
                     AutoUpdater.Start(UpdateString);
                 }
+
+                if (Updates_FUER() == "BETA")
+                {
+                    if (Convert.ToInt32(Ist_BETA_Tester()) >= 1)
+                    {
+                        AutoUpdater.ShowSkipButton = false;
+                        AutoUpdater.ShowRemindLaterButton = false;
+                        AutoUpdater.Start(UpdateString);
+                    }
+                }
+                if (debug == 1)
+                    Logging.WriteClientLog("[INFO] Spielpfade ändern => OK");
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR]  Fehler bei Spielpfade ändern: " + ex.Message + ex.StackTrace);
             }
             Set_online();
             Lade_Punktekonto();
@@ -1625,8 +1775,8 @@ namespace TrucksLOG
 
         private async void OnlineCheck()
         {
-
-            Logging.WriteClientLog("Client ist das erste mal geöffnet worden...");
+            if(debug == 1)
+                Logging.WriteClientLog("Client ist das erste mal geöffnet worden...");
 
             var metroWindow = (Application.Current.MainWindow as MetroWindow);
 
@@ -1641,32 +1791,51 @@ namespace TrucksLOG
                 //Logging.WriteClientLog("[ERROR] -> Spielclient wurde mehrmals Ausgeführt");
                 Application.Current.Shutdown();
             }
-            Logging.WriteClientLog("Onlinecheck OK");
+            if(debug == 1)
+                Logging.WriteClientLog("Onlinecheck OK");
         }
 
         private static string Updates_FUER()
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>
             {
                 { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
             };
-            return API.HTTPSRequestPost(API.updates, post_param);
+                return API.HTTPSRequestPost(API.updates, post_param);
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Laden der Beta Berechtigung für Updates: " + ex.Message + ex.StackTrace);
+                return null;
+            }
         }
 
 
         private static string Ist_BETA_Tester()
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>
             {
                 { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") }
             };
-            return API.HTTPSRequestPost(API.beta_tester, post_param);
+                return API.HTTPSRequestPost(API.beta_tester, post_param);
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler bei der Abfrage ob Beta Tester: " + ex.Message + ex.StackTrace);
+                return null;
+            }
         }
 
 
         private void Set_online()
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>
             {
                 { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
                 { "STATUS", "ONLINE" },
@@ -1676,8 +1845,15 @@ namespace TrucksLOG
                 { "POS_Z", Truck_Daten.POS_Z.ToString() },
                 { "SPEDITION", Truck_Daten.SPEDITIONSNAME }
             };
-            API.HTTPSRequestPost(API.c_online, post_param);
-            Logging.WriteClientLog("Setze Online Status !");
+                API.HTTPSRequestPost(API.c_online, post_param);
+
+                if (debug == 1)
+                    Logging.WriteClientLog("Setze Online Status !");
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim SetOnline: " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void AntiAFK_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1695,12 +1871,13 @@ namespace TrucksLOG
                     anti_afk_timer.Stop();
                 }
                
-
-                Logging.WriteClientLog("[INFO] SendKeys gestartet...");
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] SendKeys gestartet...");
             } else
             {
                 anti_afk_timer.Stop();
-                Logging.WriteClientLog("[INFO] ANTI_AFK gestoppt");
+                if(debug == 1)
+                    Logging.WriteClientLog("[INFO] ANTI_AFK gestoppt");
             }
         }
 
@@ -1718,12 +1895,21 @@ namespace TrucksLOG
 
         private void Hauptfenster_Closed(object sender, EventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>
             {
                 { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
                 { "STATUS", "OFFLINE" }
             };
-            API.HTTPSRequestPost(API.c_online, post_param);
+                API.HTTPSRequestPost(API.c_online, post_param);
+                if (debug == 1)
+                    Logging.WriteClientLog("[INFO] Onlinestatus auf Offline gesetzt");
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Offline setzen des Onlinestatus: " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void Oeffne_Andras_TV(object sender, RoutedEventArgs e)
@@ -1733,22 +1919,29 @@ namespace TrucksLOG
 
         private async void Werksteinstellungen_Click(object sender, RoutedEventArgs e)
         {
-            var metroWindow = (Application.Current.MainWindow as MetroWindow);
-        
-            var result = await metroWindow.ShowMessageAsync("Client Reset durchführen ?", "Soll der Client wirklich Zurückgesetzt werden ?" + Environment.NewLine + "Du musst alle Pfade und den Client Key neu eintragen !", MessageDialogStyle.AffirmativeAndNegative);
-            
-            if (result == MessageDialogResult.Affirmative)
+            try
             {
-                if (SubKeyExist(@"Software\Projekt-Janus"))
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
+
+                var result = await metroWindow.ShowMessageAsync("Client Reset durchführen ?", "Soll der Client wirklich Zurückgesetzt werden ?" + Environment.NewLine + "Du musst alle Pfade und den Client Key neu eintragen !", MessageDialogStyle.AffirmativeAndNegative);
+
+                if (result == MessageDialogResult.Affirmative)
                 {
-                    Registry.CurrentUser.DeleteSubKeyTree(@"Software\Projekt-Janus");
+                    if (SubKeyExist(@"Software\Projekt-Janus"))
+                    {
+                        Registry.CurrentUser.DeleteSubKeyTree(@"Software\Projekt-Janus");
+                    }
+                    await metroWindow.ShowMessageAsync("Client Reset Erfolgreich durchgeführt !", "Der Client wird nun beendet. Bitte starte den Client einfach neu.", MessageDialogStyle.Affirmative);
+                    Application.Current.Shutdown();
                 }
-                await metroWindow.ShowMessageAsync("Client Reset Erfolgreich durchgeführt !", "Der Client wird nun beendet. Bitte starte den Client einfach neu.", MessageDialogStyle.Affirmative);
-                Application.Current.Shutdown();
+                else
+                {
+                    await metroWindow.ShowMessageAsync("Reset", "Der Reset wurde nicht durchgeführt !");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await metroWindow.ShowMessageAsync("Reset", "Der Reset wurde nicht durchgeführt !");
+                Logging.WriteClientLog("[ERROR] Fehler beim setzen der Werkseinstellungen: " + ex.Message + ex.StackTrace);
             }
 
 
@@ -1774,26 +1967,38 @@ namespace TrucksLOG
 
                 this.Hauptfenster.Opacity = (double)bg_opacity.SelectedValue;
 
-                MessageBox.Show(this.Hauptfenster.Opacity.ToString());
+                //MessageBox.Show(this.Hauptfenster.Opacity.ToString());
+                if (debug == 1)
+                    Logging.WriteClientLog("Setzen der Opacity auf: " + (double)bg_opacity.SelectedValue);
 
-            } catch
+            } catch (Exception ex)
             {
-
+                Logging.WriteClientLog("[ERROR] Fehler beim setzen der Opacity: " + ex.Message + ex.StackTrace);
             }
         }
 
         private void Hauptfenster_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Dictionary<string, string> post_param = new Dictionary<string, string>
+            try
+            {
+                Dictionary<string, string> post_param = new Dictionary<string, string>
             {
                 { "CLIENT_KEY", REG.Lesen("Config", "CLIENT_KEY") },
                 { "STATUS", "OFFLINE" }
             };
-            API.HTTPSRequestPost(API.c_online, post_param);
+                API.HTTPSRequestPost(API.c_online, post_param);
+                if (debug == 1)
+                    Logging.WriteClientLog("[INFO] Hauptfenster geschlossen !");
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim Hauptfenster schliessen: " + ex.Message + ex.StackTrace);
+            }
         }
 
-        private void ETS_tour_delete(object sender, RoutedEventArgs e)
+        private async void ETS_tour_delete(object sender, RoutedEventArgs e)
         {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
 
             Dictionary<string, string> post_param = new Dictionary<string, string>
             {
@@ -1804,13 +2009,14 @@ namespace TrucksLOG
 
                 REG.Schreiben("Config", "TOUR_ID_ETS2", "");
             ETS_TOUR_delete.IsEnabled = false;
-                msg.Schreiben("Tour ETS2 gelöscht", "Die Tour wurde in ETS2 entfernt. Du kannst jetzt einfach eine neue Tour starten...");
 
-            
+            await metroWindow.ShowMessageAsync("Tour ETS2 gelöscht", "Die Tour wurde in ETS2 entfernt. Du kannst jetzt einfach eine neue Tour starten...");
         }
 
-        private void Ats_tour_delete(object sender, RoutedEventArgs e)
+        private async void Ats_tour_delete(object sender, RoutedEventArgs e)
         {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
+
             Dictionary<string, string> post_param = new Dictionary<string, string>
             {
                 { "TOUR_ID", REG.Lesen("Config", "TOUR_ID_ATS") },
@@ -1820,13 +2026,14 @@ namespace TrucksLOG
     
                 REG.Schreiben("Config", "TOUR_ID_ATS", "");
             ATS_TOUR_delete.IsEnabled = false;
-                msg.Schreiben("Tour ATS gelöscht", "Die Tour wurde in ATS entfernt. Du kannst jetzt einfach eine neue Tour starten...");
+
+            await metroWindow.ShowMessageAsync("Tour ATS gelöscht", "Die Tour wurde in ATS entfernt. Du kannst jetzt einfach eine neue Tour starten...");
 
        }
 
         private void Client_Update_Manuell(object sender, RoutedEventArgs e)
         {
-                AutoUpdater.Start(UpdateString);
+            AutoUpdater.Start(UpdateString);
         }
 
         private void Spedv_anzeige_MouseDown(object sender, MouseButtonEventArgs e)
@@ -1841,36 +2048,43 @@ namespace TrucksLOG
 
         private async void Kopiere_telemetry(object sender, RoutedEventArgs e)
         {
-            LeftFlyOut.IsOpen = false;
-            var metroWindow = (Application.Current.MainWindow as MetroWindow);
-
-            string pfad_ats = REG.Lesen("Pfade", "ATS_PFAD");
-            string pfad_ets = REG.Lesen("Pfade", "ETS2_PFAD");
-
-            string ordner_ets = pfad_ets.Substring(0, pfad_ets.Length - 15);
-            string ordner_ats = pfad_ats.Substring(0, pfad_ats.Length - 12);
-
-            if (Directory.Exists(ordner_ets + "\\plugins"))
+            try
             {
-                File.Copy(@"Resources\scs-telemetry.dll", ordner_ets + @"\plugins\scs-telemetry.dll", true);
-            }
-            else
-            {
-                Directory.CreateDirectory(ordner_ets + "\\plugins");
-                File.Copy("Resources\\scs-telemetry.dll", ordner_ets + "\\plugins\\scs-telemetry.dll", true);
-            }
+                LeftFlyOut.IsOpen = false;
+                var metroWindow = (Application.Current.MainWindow as MetroWindow);
 
-            if (Directory.Exists(ordner_ats + "\\plugins"))
-            {
-                File.Copy("Resources\\scs-telemetry.dll", ordner_ats + "\\plugins\\scs-telemetry.dll", true);
-            }
-            else
-            {
-                Directory.CreateDirectory(ordner_ats + "\\plugins");
-                File.Copy("Resources\\scs-telemetry.dll", ordner_ats + "\\plugins\\scs-telemetry.dll", true);
-            }
+                string pfad_ats = REG.Lesen("Pfade", "ATS_PFAD");
+                string pfad_ets = REG.Lesen("Pfade", "ETS2_PFAD");
 
-            await metroWindow.ShowMessageAsync("Kopiert !", "Die DLL Dateien wurden ins Spielverzeichnis kopiert !");
+                string ordner_ets = pfad_ets.Substring(0, pfad_ets.Length - 15);
+                string ordner_ats = pfad_ats.Substring(0, pfad_ats.Length - 12);
+
+                if (Directory.Exists(ordner_ets + "\\plugins"))
+                {
+                    File.Copy(@"Resources\scs-telemetry.dll", ordner_ets + @"\plugins\scs-telemetry.dll", true);
+                }
+                else
+                {
+                    Directory.CreateDirectory(ordner_ets + "\\plugins");
+                    File.Copy("Resources\\scs-telemetry.dll", ordner_ets + "\\plugins\\scs-telemetry.dll", true);
+                }
+
+                if (Directory.Exists(ordner_ats + "\\plugins"))
+                {
+                    File.Copy("Resources\\scs-telemetry.dll", ordner_ats + "\\plugins\\scs-telemetry.dll", true);
+                }
+                else
+                {
+                    Directory.CreateDirectory(ordner_ats + "\\plugins");
+                    File.Copy("Resources\\scs-telemetry.dll", ordner_ats + "\\plugins\\scs-telemetry.dll", true);
+                }
+
+                await metroWindow.ShowMessageAsync("Kopiert !", "Die DLL Dateien wurden ins Spielverzeichnis kopiert !");
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim manuellen Kopieren der DLL: " + ex.Message + ex.StackTrace);
+            }
             
 
         }
@@ -1890,7 +2104,10 @@ namespace TrucksLOG
                     await metroWindow.ShowMessageAsync("Autostart Ein", "Der Client wird jetzt beim Systemstart ausgeführt.");
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Logging.WriteClientLog("[ERROR] Fehler beim setzen des Autostarts: " + ex.Message + ex.StackTrace);
+            }
         }
 
         private async void Autostart_AUS(object sender, RoutedEventArgs e)
@@ -1916,7 +2133,9 @@ namespace TrucksLOG
                     }
                 }
             }
-            catch { }
+            catch (Exception ex) {
+                Logging.WriteClientLog("[ERROR] Fehler beim Entfernen des Autostarts: " + ex.Message + ex.StackTrace);
+            }
         }
 
         private void Minimize_Window(object sender, RoutedEventArgs e)
@@ -1927,9 +2146,6 @@ namespace TrucksLOG
 
         private void Client_Zeigen_Event(object sender, RoutedEventArgs e)
         {
-
-            //Hauptfenster.WindowState = WindowState.Normal;
-            //Hauptfenster.Show();
             this.Show();
             this.Focus();
             
@@ -1991,6 +2207,8 @@ namespace TrucksLOG
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             REG.Schreiben("Config", "Volume", VolumeSlider.Value.ToString());
+            if (debug == 1)
+                Logging.WriteClientLog("[INFO] Setzen der Radiolautstärke auf: " + VolumeSlider.Value);
         }
 
         private void Radio_Stop(object sender, RoutedEventArgs e)
@@ -2003,6 +2221,28 @@ namespace TrucksLOG
             r_player.Open(new Uri(@"http://stream01.stream-webradiotechnik.de:8750/listen1"));
             r_player.Volume = Convert.ToDouble(REG.Lesen("Config", "Volume"));
             r_player.Play();
+        }
+
+        private async void Debug_An(object sender, RoutedEventArgs e)
+        {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
+            LeftFlyOut.IsOpen = false;
+            if (REG.Lesen("Config", "Debug") != "1")
+            {
+                REG.Schreiben("Config", "Debug", "1");
+                await metroWindow.ShowMessageAsync("Debugging -> EIN", "Der DEBUG Modus ist jetzt eingeschaltet." + Environment.NewLine + "Bitte starte den Client neu um das Debuggin zu starten");
+            }
+        }
+
+        private async void Debug_Aus(object sender, RoutedEventArgs e)
+        {
+            var metroWindow = (Application.Current.MainWindow as MetroWindow);
+            LeftFlyOut.IsOpen = false;
+            if (REG.Lesen("Config", "Debug") != "0")
+            {
+                REG.Schreiben("Config", "Debug", "0");
+                await metroWindow.ShowMessageAsync("Debugging -> AUS", "Der DEBUG Modus ist jetzt ausgeschaltet." + Environment.NewLine + "Bitte starte den Client neu um das Debuggin zu beenden");
+            }
         }
     }
 }

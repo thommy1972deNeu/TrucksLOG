@@ -23,7 +23,7 @@ namespace TrucksLOG.Klassen
             {
                 try
                 {
-                    File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, "<-------------------------   NEW START   ----------------------->" + Environment.NewLine);
+                    File.WriteAllText(Config.LogRoot + Config.ClientLogFileName, "<-----------------------------------------   NEW START   --------------------------------------->" + Environment.NewLine);
                 } catch { }
             }
 

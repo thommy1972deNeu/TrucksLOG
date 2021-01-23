@@ -127,6 +127,10 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="30,0,0,0">
                                 <CheckBox x:Name="autorun" Checked="AutoStart_AN" Unchecked="Autostart_AUS">Autostart</CheckBox>
                             </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="30,0,0,0">
+                                <CheckBox x:Name="debugging" Checked="Debug_An" Unchecked="Debug_Aus">Debugging</CheckBox>
+                            </StackPanel>
 
                         </StackPanel>
 
@@ -461,7 +465,7 @@
                                         <Setter TargetName="Border" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
-                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent5}" />
+                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
