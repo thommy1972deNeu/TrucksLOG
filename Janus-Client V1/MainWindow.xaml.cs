@@ -1160,6 +1160,38 @@ namespace TrucksLOG
                 if(debug == 1)
                     Logging.WriteClientLog("FirstRun geschrieben");
 
+
+                    REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!");
+
+                Logging.WriteClientLog("ANTI AFK TEXT geschrieben");
+
+
+                    REG.Schreiben("Config", "ANTI_AFK_TIMER", "4");
+
+                Logging.WriteClientLog("Anti AFK Timer gesetzt");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 if (string.IsNullOrWhiteSpace(REG.Lesen("Config", "ANTI_AFK_TEXT")))
                     REG.Schreiben("Config", "ANTI_AFK_TEXT", "TrucksLOG wünscht allen Truckern eine gute und sichere Fahrt!"); 
                 
@@ -1224,7 +1256,20 @@ namespace TrucksLOG
                 }
                 else
                 {
-                    Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
+                    if (REG.Lesen("Config", "Background").Contains(@":\"))
+                    {
+                        Background_WEchsler.SelectedValue = "";
+
+                        ImageBrush myBrush = new ImageBrush
+                        {
+                            ImageSource = new BitmapImage(new Uri(BaseUriHelper.GetBaseUri(this), REG.Lesen("Config", "Background")))
+                        };
+                        this.Hauptfenster.Background = myBrush;
+                    }
+                    else
+                    {
+                        Background_WEchsler.SelectedValue = REG.Lesen("Config", "Background");
+                    }
                 }
 
                 autorun.IsChecked = REG.Lesen("Config", "Autorun") == "An";
