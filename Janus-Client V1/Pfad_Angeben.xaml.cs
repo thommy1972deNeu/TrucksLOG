@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Security.Cryptography;
 
 namespace TrucksLOG
 {
@@ -17,8 +16,6 @@ namespace TrucksLOG
         private string initial_ETS;
         private string initial_ATS;
         private string initial_TMP;
-        private static string file_original;
-        private static byte[] file_orig_bytes;
 
         public Pfad_Angeben()
         {
@@ -210,27 +207,5 @@ namespace TrucksLOG
         {
             this.Close();
         }
-
-        private void Autosave_suchen_btn_Click(object sender, RoutedEventArgs e)
-        {
-            var autosave_dialog = new Microsoft.Win32.OpenFileDialog
-            {
-                Filter = "SII (.sii)|game.sii|All Files (*.*)|*.*",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Euro Truck Simulator 2\profiles"
-            };
-
-            var result_autosave = autosave_dialog.ShowDialog();
-            if (result_autosave == false) return;
-
-            REG.Schreiben("Pfade", "Autosave_Path", autosave_dialog.FileName);
-            pfad_autosave.Text = autosave_dialog.FileName;
-            string pfad_backup = autosave_dialog.FileName + ".backup";
-
-            File.Copy(autosave_dialog.FileName, pfad_backup);
-
-        }
-
-
-
     }
 }
