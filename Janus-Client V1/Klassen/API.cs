@@ -8,7 +8,7 @@ namespace TrucksLOG.Klassen
 {
     public class API
     {
-        public static string server = "https://truckslog.org/";
+        public static string server = "###";
         public static string job_delivered = server + "job_delivered.php";
         public static string job_started = server + "start_tour.php";
         public static string job_cancel = "https://truckslog.org/job_cancel.php";
